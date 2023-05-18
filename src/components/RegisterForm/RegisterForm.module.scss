@@ -1,0 +1,51 @@
+.wrap {
+  border: 1px solid #ccc;
+  padding: 20px;
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+
+    .form-group {
+      margin-bottom: 4px;
+
+      .err {
+        font-size: 14px;
+        color: red;
+        display: block;
+      }
+
+      .form-group-label {
+        display: block;
+        font-size: 16px;
+        color: blue;
+        margin-bottom: 8px;
+      }
+
+      input {
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid gray;
+        outline: none;
+        font-size: 16px;
+        transition: all 0.2s linear;
+
+        &:placeholder-shown {
+          color: #092cf6;
+        }
+
+        &::placeholder {
+          font-size: 14px;
+          color: rgba(97, 96, 96, 0.364);
+        }
+
+        &:hover {
+          border-color: blue;
+        }
+      }
+    }
+  }
+}
