@@ -10,6 +10,11 @@ const userServices = {
     const res = await axios.post("/api/v1/user/login", { phone, pass });
     return res.data;
   },
+
+  async getAllUsers() {
+    const res = await axios.get("/api/v1/users/all-users");
+    return res.data;
+  },
 };
 
 export default userServices;

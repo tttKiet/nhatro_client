@@ -83,7 +83,7 @@ function RegisterForm() {
       fullName: fullName,
       email: email,
       password: password,
-      sdt: phone,
+      phone: phone,
       address: address,
     };
 
@@ -113,7 +113,7 @@ function RegisterForm() {
           </div>
 
           <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>email:</label>
+            <label className={cx("form-group-label")}>Email:</label>
             <input
               type="text"
               value={email}

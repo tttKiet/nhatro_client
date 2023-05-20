@@ -1,4 +1,10 @@
-import { HomePage, AboutPage, LoginPage } from "../pages";
+import {
+  HomePage,
+  AboutPage,
+  LoginPage,
+  AdminAccount,
+  AdminAddAccount,
+} from "../pages";
 
 const router = [
   {
@@ -13,6 +19,14 @@ const router = [
     path: "/login",
     element: LoginPage,
     layout: "None",
+  },
+  {
+    path: "/admin/user/accounts",
+    element: AdminAccount,
+  },
+  {
+    path: "/admin/user/accounts/create",
+    element: AdminAddAccount,
   },
 ];
 

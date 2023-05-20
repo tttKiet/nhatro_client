@@ -30,10 +30,7 @@ function Nav() {
           Accounts
         </Link>
 
-        <button
-          className={cx("link", { active: url.includes("accounts") })}
-          onClick={handleLogout}
-        >
+        <button className={cx("link")} onClick={handleLogout}>
           Logout
         </button>
       </div>
