@@ -1,0 +1,18 @@
+.wrap {
+  display: flex;
+  height: 100vh;
+
+  .nav {
+    background-color: #fff;
+    min-width: 360px;
+  }
+
+  .child {
+    padding-top: 20px;
+    background-color: #33ccff;
+    flex: 1;
+    margin: 20px;
+    margin-left: 0;
+    border-radius: 8px;
+  }
+}

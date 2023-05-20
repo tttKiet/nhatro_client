@@ -12,6 +12,7 @@ const router = [
   {
     path: "/login",
     element: LoginPage,
+    layout: "None",
   },
 ];
 

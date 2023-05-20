@@ -1,0 +1,16 @@
+.wrap {
+  padding-top: 80px;
+  padding-left: 20px;
+
+  .link {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px 0 0 8px;
+    color: blue;
+
+    &.active {
+      background-color: #33ccff;
+      color: #fff;
+    }
+  }
+}

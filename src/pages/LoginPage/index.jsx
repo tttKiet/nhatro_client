@@ -4,6 +4,9 @@ import classNames from "classNames/bind";
 import { useState } from "react";
 import userServices from "../../services/userServices";
 import Snipper from "../../components/Snipper";
+import { useDispatch } from "react-redux";
+import { userSlice } from "../../redux/reducers";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +17,8 @@ function LoginPage() {
   const [err, setErr] = useState("");
   const [errPhone, setErrPhone] = useState("");
   const [errPass, setErrPass] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function validate() {
     let isErr = false;
@@ -41,7 +46,12 @@ function LoginPage() {
     const data = { phone, pass };
     setloading(true);
     const response = await userServices.login(data);
-    console.log(response);
+    if (response.err === 0) {
+      dispatch(userSlice.actions.handleLogin(response.dataUser));
+      navigate("/");
+    } else {
+      setErr(response.message);
+    }
     setloading(false);
   }
 
