@@ -1,8 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
 
-console.log(router);
-
 const route = createBrowserRouter(
   router.map((route) => {
     const Element = route.element;

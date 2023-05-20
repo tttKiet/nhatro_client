@@ -1,4 +1,4 @@
-import { HomePage, AboutPage } from "../pages";
+import { HomePage, AboutPage, LoginPage } from "../pages";
 
 const router = [
   {
@@ -8,6 +8,10 @@ const router = [
   {
     path: "/about",
     element: AboutPage,
+  },
+  {
+    path: "/login",
+    element: LoginPage,
   },
 ];
 

@@ -88,7 +88,6 @@ function RegisterForm() {
     };
 
     if (!validateForm()) {
-      console.log(data);
       const res = await userServices.createUser(data);
       if (res.err === 0) {
         setmessage(res.message);
