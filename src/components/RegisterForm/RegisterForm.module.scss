@@ -16,19 +16,21 @@
 
       .form-group-label {
         display: block;
+        cursor: pointer;
         font-size: 16px;
         color: blue;
         margin-bottom: 4px;
       }
 
-      input {
+      input,
+      textarea {
         padding: 4px 12px;
         border-radius: 2px;
         border: none;
         background-color: transparent !important;
         border-bottom: 1px solid gray;
         outline: none;
-        font-size: 16px;
+        font-size: 14px;
         transition: all 0.2s linear;
         min-width: 400px;
 
@@ -45,7 +47,7 @@
           border-color: blue;
         }
 
-        .err {
+        &.errInput {
           border-color: rgb(255, 23, 46);
         }
       }

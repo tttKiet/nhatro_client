@@ -1,13 +1,14 @@
 import { userServices } from "../../services";
 import { useFormik } from "formik";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-
 import styles from "./RegisterForm.module.scss";
 import classNames from "classNames/bind";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
-function RegisterForm() {
+function RegisterForm({ _id }) {
   const navigation = useNavigate();
   const validate = (values) => {
     const errors = {};
@@ -60,17 +61,35 @@ function RegisterForm() {
       address: "",
     },
     onSubmit: (values) => {
-      handleRegister(values);
+      handleSubmit(values);
     },
     validate,
   });
 
-  async function handleRegister(values) {
-    const res = await userServices.createUser(values);
+  async function handleSubmit(values) {
+    let res;
+    if (_id) {
+      res = await userServices.updateUser(_id, values);
+      console.log(res);
+    } else {
+      res = await userServices.createUser(values);
+    }
     if (res.err === 0) {
       navigation("/root/user/accounts");
     }
   }
+
+  useEffect(() => {
+    if (_id) {
+      userServices.getUserById(_id).then((user) => {
+        formik.setValues({
+          ...user.dataUser,
+          cpassword: user.dataUser.password,
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={cx("wrap")}>
@@ -78,12 +97,15 @@ function RegisterForm() {
         <div className="d-flex gap-5 flex-wrap">
           <div>
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>Họ & Tên:</label>
+              <label htmlFor="fullName" className={cx("form-group-label")}>
+                Họ & Tên:
+              </label>
               <input
                 id="fullName"
                 type="text"
                 name="fullName"
-                placeholder="Full Name"
+                placeholder="Vd: Nguyễn Văn A"
+                className={cx({ errInput: !!formik.errors.fullName })}
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
               />
@@ -93,12 +115,15 @@ function RegisterForm() {
             </div>
 
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>Email:</label>
+              <label className={cx("form-group-label")} htmlFor="email">
+                Email:
+              </label>
               <input
+                id="email"
                 type="text"
                 name="email"
-                placeholder="Input your Full Name.."
-                className={cx("")}
+                className={cx({ errInput: !!formik.errors.email })}
+                placeholder="abcxyz@gmail.com"
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
@@ -107,11 +132,15 @@ function RegisterForm() {
               )}
             </div>
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>Phone:</label>
+              <label htmlFor="phone" className={cx("form-group-label")}>
+                Phone:
+              </label>
               <input
+                id="phone"
                 type="text"
                 name="phone"
-                placeholder="Input your Phone.."
+                className={cx({ errInput: !!formik.errors.phone })}
+                placeholder="vd: 0123456789"
                 onChange={formik.handleChange}
                 value={formik.values.phone}
               />
@@ -122,10 +151,14 @@ function RegisterForm() {
           </div>
           <div>
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>Password:</label>
+              <label htmlFor="pass" className={cx("form-group-label")}>
+                Mật khẩu:
+              </label>
               <input
-                type="text"
-                placeholder="Input your Password.."
+                id="pass"
+                type="password"
+                className={cx({ errInput: !!formik.errors.password })}
+                placeholder="Mật khẩu của bạn"
                 name="password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
@@ -136,12 +169,14 @@ function RegisterForm() {
             </div>
 
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>
-                Confirm password:
+              <label htmlFor="cpass" className={cx("form-group-label")}>
+                Nhập lại mật khẩu:
               </label>
               <input
+                id="cpass"
                 type="text"
-                placeholder="Repeat your Password.."
+                className={cx({ errInput: !!formik.errors.cpassword })}
+                placeholder="Nhập lại mật khẩu của bạn"
                 name="cpassword"
                 onChange={formik.handleChange}
                 value={formik.values.cpassword}
@@ -152,10 +187,14 @@ function RegisterForm() {
             </div>
 
             <div className={cx("form-group")}>
-              <label className={cx("form-group-label")}>Address:</label>
-              <input
+              <label htmlFor="address" className={cx("form-group-label")}>
+                Địa chỉ:
+              </label>
+              <textarea
+                id="address"
                 type="text"
-                placeholder="Input your Address.."
+                className={cx({ errInput: !!formik.errors.address })}
+                placeholder="Địa chỉ của bạn"
                 name="address"
                 onChange={formik.handleChange}
                 value={formik.values.address}
@@ -175,17 +214,25 @@ function RegisterForm() {
             Reset
           </button>
 
-          <button className={cx("btn")} type="button">
+          <button
+            className={cx("btn")}
+            type="button"
+            onClick={() => navigation(-1)}
+          >
             Hủy
           </button>
 
           <button className={cx("btn", "btn-primary")} type="submit">
-            Đăng ký
+            {_id ? "Lưu" : "Đăng ký"}
           </button>
         </div>
       </form>
     </div>
   );
 }
+
+RegisterForm.propTypes = {
+  _id: PropTypes.string.isRequired,
+};
 
 export default RegisterForm;

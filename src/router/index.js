@@ -3,7 +3,7 @@ import {
   AboutPage,
   LoginPage,
   RootAccount,
-  AdminAddAccount,
+  RootAddAccount,
   RootEditAccount,
 } from "../pages";
 
@@ -26,8 +26,8 @@ const router = [
     element: RootAccount,
   },
   {
-    path: "/admin/user/accounts/create",
-    element: AdminAddAccount,
+    path: "/root/user/accounts/create",
+    element: RootAddAccount,
   },
   {
     path: "/root/user/account/edit/:id",

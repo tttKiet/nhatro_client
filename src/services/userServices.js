@@ -15,6 +15,16 @@ const userServices = {
     const res = await axios.get("/api/v1/users/all-users");
     return res.data;
   },
+
+  async getUserById(id) {
+    const res = await axios.get(`/api/v1/user?_id=${id}`);
+    return res.data;
+  },
+
+  async updateUser(id, data) {
+    const res = await axios.patch(`/api/v1/user?_id=${id}`, data);
+    return res.data;
+  },
 };
 
 export default userServices;

@@ -22,7 +22,7 @@ function RootAccount() {
   return (
     <div className={cx("wrap")}>
       <Link
-        to={"/admin/user/accounts/create"}
+        to={"/root/user/accounts/create"}
         className={cx("btn btn-outline-primary", "button")}
       >
         <svg
