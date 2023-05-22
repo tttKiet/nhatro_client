@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userSlice } from "../../redux/reducers";
 import Logo from "../Logo";
+import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
 function Nav() {
@@ -13,9 +14,28 @@ function Nav() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // function handleLogout() {
+  //   dispatch(userSlice.actions.toggleLogin());
+  //   navigate("/login");
+  // }
+
   function handleLogout() {
-    dispatch(userSlice.actions.toggleLogin());
-    navigate("/login");
+    Swal.fire({
+      title: "Are you sure to logout?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Hủy",
+      text: "Bạn có thật sự muốn đăng xuất?",
+      confirmButtonText: "Đăng xuất ngay",
+      reverseButtons: true,
+      confirmButtonColor: "#d55",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        dispatch(userSlice.actions.toggleLogin());
+        navigate("/login");
+      }
+    });
   }
 
   return (
