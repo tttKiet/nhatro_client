@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
 import Layout from "./components/Layout";
+import GlobalStyles from "./components/GlobalStyles";
 
 const route = createBrowserRouter(
   router.map((route) => {
@@ -39,7 +40,11 @@ const route = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={route} />;
+  return (
+    <GlobalStyles>
+      <RouterProvider router={route} />
+    </GlobalStyles>
+  );
 }
 
 export default App;

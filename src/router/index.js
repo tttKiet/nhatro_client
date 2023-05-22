@@ -1,15 +1,16 @@
 import {
-  HomePage,
+  RootHomePage,
   AboutPage,
   LoginPage,
-  AdminAccount,
+  RootAccount,
   AdminAddAccount,
+  RootEditAccount,
 } from "../pages";
 
 const router = [
   {
     path: "/",
-    element: HomePage,
+    element: RootHomePage,
   },
   {
     path: "/about",
@@ -21,12 +22,16 @@ const router = [
     layout: "None",
   },
   {
-    path: "/admin/user/accounts",
-    element: AdminAccount,
+    path: "/root/user/accounts",
+    element: RootAccount,
   },
   {
     path: "/admin/user/accounts/create",
     element: AdminAddAccount,
+  },
+  {
+    path: "/root/user/account/edit/:id",
+    element: RootEditAccount,
   },
 ];
 

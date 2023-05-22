@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
-import styles from "./HomePage.module.scss";
+import styles from "./RootHomePage.module.scss";
 import classNames from "classNames/bind";
 import { userSelector } from "../../redux/selectors";
 
 const cx = classNames.bind(styles);
 
-function HomePage() {
+function RootHomePage() {
   const currUser = useSelector(userSelector.curUserLogin);
   console.log(currUser);
 
@@ -21,4 +21,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default RootHomePage;
