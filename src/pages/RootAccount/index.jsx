@@ -3,6 +3,8 @@ import styles from "./RootAccount.module.scss";
 import classNames from "classNames/bind";
 import { useEffect, useState } from "react";
 import userServices from "../../services/userServices";
+import Swal from "sweetalert2";
+
 const cx = classNames.bind(styles);
 
 function RootAccount() {
@@ -13,6 +15,34 @@ function RootAccount() {
     if (res.err === 0) {
       setUsers(res.dataUser);
     }
+  };
+
+  const handleClickDelete = (_id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Hủy",
+      text: `Bạn có chắc muốn xóa tài khoản ${_id}?`,
+      confirmButtonText: "Đúng, xóa nó",
+      reverseButtons: true,
+      confirmButtonColor: "#d55",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await userServices.deleteUser(_id);
+        if (res.err === 0) {
+          Swal.fire("Đã xóa!", "Root deleted account!", "success");
+          await getUsers();
+        } else {
+          Swal.fire(
+            "Có lỗi xảy ra!",
+            "Id người dùng không tìm thấy hay sai cú pháp!",
+            "error"
+          );
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -47,12 +77,11 @@ function RootAccount() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Fullname</th>
+              <th scope="col">Họ & Tên</th>
               <th scope="col">Email</th>
-              <th scope="col">Password</th>
-              <th scope="col">Type</th>
-              <th scope="col">SDT</th>
-              <th scope="col"></th>
+              <th scope="col">Mật khẩu:</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -64,7 +93,6 @@ function RootAccount() {
                     <td>{user.fullName}</td>
                     <td>{user.email}</td>
                     <td>{user.password}</td>
-                    <td>{user.type}</td>
                     <td>{user.phone}</td>
                     <td>
                       <div className="d-flex gap-3">
@@ -89,7 +117,10 @@ function RootAccount() {
                           Edit
                         </Link>
 
-                        <button className={cx("btn", "btn-danger")}>
+                        <button
+                          className={cx("btn", "btn-danger")}
+                          onClick={() => handleClickDelete(user._id)}
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"

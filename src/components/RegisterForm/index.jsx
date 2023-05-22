@@ -174,7 +174,7 @@ function RegisterForm({ _id }) {
               </label>
               <input
                 id="cpass"
-                type="text"
+                type="password"
                 className={cx({ errInput: !!formik.errors.cpassword })}
                 placeholder="Nhập lại mật khẩu của bạn"
                 name="cpassword"

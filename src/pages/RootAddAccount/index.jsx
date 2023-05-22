@@ -8,7 +8,7 @@ function RootAddAccount() {
   return (
     <div className={cx("wrap")}>
       <h2 className={cx("header")}>Create account</h2>
-      <RegisterForm />
+      <RegisterForm _id="" />
     </div>
   );
 }

@@ -23,7 +23,8 @@
     "react-router-dom": "^6.11.2",
     "react-spinners": "^0.13.8",
     "redux-persist": "^6.0.0",
-    "sass": "^1.62.1"
+    "sass": "^1.62.1",
+    "sweetalert2": "^11.7.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

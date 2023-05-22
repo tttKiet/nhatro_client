@@ -25,6 +25,11 @@ const userServices = {
     const res = await axios.patch(`/api/v1/user?_id=${id}`, data);
     return res.data;
   },
+
+  async deleteUser(_id) {
+    const res = await axios.delete(`/api/v1/user/delete/${_id}`);
+    return res.data;
+  },
 };
 
 export default userServices;
