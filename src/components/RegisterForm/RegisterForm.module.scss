@@ -1,37 +1,38 @@
 .wrap {
-  border: 1px solid #ccc;
   padding: 20px;
 
   .form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin-top: 30px;
 
     .form-group {
-      margin-bottom: 4px;
+      margin-bottom: 22px;
 
       .err {
         font-size: 14px;
         color: red;
         display: block;
+        margin-top: 6px;
       }
 
       .form-group-label {
         display: block;
+        cursor: pointer;
         font-size: 16px;
         color: blue;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
       }
 
-      input {
-        padding: 4px 8px;
-        border-radius: 6px;
-        border: 1px solid gray;
+      input,
+      textarea {
+        padding: 4px 12px;
+        border-radius: 2px;
+        border: none;
+        background-color: transparent !important;
+        border-bottom: 1px solid gray;
         outline: none;
-        font-size: 16px;
+        font-size: 14px;
         transition: all 0.2s linear;
+        min-width: 400px;
 
         &:placeholder-shown {
           color: #092cf6;
@@ -45,7 +46,15 @@
         &:hover {
           border-color: blue;
         }
+
+        &.errInput {
+          border-color: rgb(255, 23, 46);
+        }
       }
+    }
+
+    button {
+      margin-top: 20px;
     }
   }
 }

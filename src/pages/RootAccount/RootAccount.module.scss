@@ -1,0 +1,59 @@
+.wrap {
+  padding: 0 20px;
+
+  .cus {
+    padding-top: 18px;
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+      border: none;
+      background-color: inherit;
+      text-decoration: none;
+      transition: all 0.2s linear;
+
+      svg {
+        width: 20px;
+      }
+
+      &.btn-danger {
+        color: rgba(255, 37, 37, 0.936);
+        svg {
+          color: rgba(255, 0, 0, 0.681);
+        }
+
+        &:hover {
+          opacity: 0.7;
+        }
+      }
+    }
+
+    table {
+      thead {
+        th {
+          color: 16px !important;
+        }
+      }
+
+      tbody {
+        td,
+        th {
+          font-size: 14px !important;
+        }
+      }
+    }
+  }
+
+  .button {
+    display: inline-flex;
+    min-width: 90px;
+
+    .svg {
+      width: 30px;
+      padding-right: 8px;
+    }
+  }
+}

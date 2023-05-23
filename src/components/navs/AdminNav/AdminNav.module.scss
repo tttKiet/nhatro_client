@@ -1,0 +1,32 @@
+.wrap {
+  padding: 30px 8px 20px 20px;
+
+  .link {
+    padding: 10px 80px 10px 20px;
+    font-size: 16px;
+    border-radius: 8px 0 0 8px;
+    color: #000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    margin-bottom: 12px;
+
+    svg {
+      width: 24px;
+    }
+
+    &.active {
+      background-color: #095eff1a;
+      color: #000000e9;
+      font-weight: 500;
+    }
+  }
+
+  .btn {
+    outline: none;
+    border: none;
+    background-color: inherit;
+  }
+}

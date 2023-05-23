@@ -4,7 +4,7 @@ import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function AboutPage() {
-  return <div className={cx("wrap")}>AboutPage</div>;
+  return <div className={cx("wrap")}>About Page</div>;
 }
 
 export default AboutPage;

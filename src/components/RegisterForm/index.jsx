@@ -1,183 +1,252 @@
-import { useState } from "react";
 import { userServices } from "../../services";
-
+import { useFormik } from "formik";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 import styles from "./RegisterForm.module.scss";
 import classNames from "classNames/bind";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
-function RegisterForm() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordRepeat, setPasswordRepeat] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [message, setmessage] = useState("");
+function RegisterForm({ _id }) {
+  const navigation = useNavigate();
+  const validate = (values) => {
+    const errors = {};
 
-  const [fullNameErr, setFullNameErr] = useState("");
-  const [emailErr, setEmailErr] = useState("");
-  const [passwordErr, setPasswordErr] = useState("");
-  const [passwordRepeatErr, setPasswordRepeatErr] = useState("");
-  const [phoneErr, setPhoneErr] = useState("");
-  const [addressErr, setAddressErr] = useState("");
-
-  const validateForm = () => {
-    let isErr = false;
-    if (!fullName) {
-      setFullNameErr("Bạn phải điền Họ & Tên!");
-      isErr = true;
-    } else {
-      setFullNameErr("");
-    }
-    if (!email) {
-      setEmailErr("Bạn phải điền Email!");
-      isErr = true;
-    } else {
-      setEmailErr("");
+    if (!values.fullName) {
+      errors.fullName = "Nhập dùm cái!";
     }
 
-    if (!passwordRepeat) {
-      setPasswordErr("Bạn phải điền Mật khẩu!");
-      isErr = true;
-    } else if (passwordRepeat !== password) {
-      setPasswordErr();
-      setPasswordRepeatErr("Nhập lại mật khẩu không chính xác!");
-      isErr = true;
-    } else {
-      setPasswordRepeatErr("");
-      setPasswordErr();
+    if (!values.email) {
+      errors.email = "Nhập dùm cái!";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Email sai định dạng!";
     }
 
-    if (!phone) {
-      setPhoneErr("Bạn phải điền Số điện thoại!");
-      isErr = true;
-    } else {
-      setPhoneErr("");
+    if (!values.phone) {
+      errors.phone = "Nhập dùm cái!";
+    } else if (!/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(values.phone)) {
+      errors.phone = "Số điện thoại sai định dạng!";
     }
 
-    if (!address) {
-      setAddressErr("Bạn phải điền địa chỉ!");
-      isErr = true;
-    } else {
-      setAddressErr("");
-    }
-    if (!isErr) {
-      setDefaultErr();
+    if (!values.password) {
+      errors.password = "Nhập dùm cái!";
+    } else if (values.password.length < 8 || values.password.length > 16) {
+      errors.password =
+        "Mật khẩu không được nhỏ hơn 8 ký tự hay lớn hơn 16 ký tự!";
     }
 
-    return isErr;
+    if (!values.cpassword) {
+      errors.cpassword = "Nhập dùm cái!";
+    } else if (values.password !== values.cpassword) {
+      errors.cpassword = "Nhập lại mật khẩu không chính xác!";
+    }
+
+    if (!values.address) {
+      errors.address = "Nhập dùm cái!";
+    }
+
+    return errors;
   };
 
-  const setDefaultErr = () => {
-    setFullNameErr("");
-    setEmailErr("");
-    setPasswordErr("");
-    setPasswordRepeatErr("");
-    setPhoneErr("");
-    setAddressErr("");
-  };
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+      password: "",
+      cpassword: "",
+      address: "",
+    },
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+    validate,
+  });
 
-  async function register() {
-    const data = {
-      fullName: fullName,
-      email: email,
-      password: password,
-      sdt: phone,
-      address: address,
-    };
-
-    if (!validateForm()) {
-      console.log(data);
-      const res = await userServices.createUser(data);
-      if (res.err === 0) {
-        setmessage(res.message);
-      }
+  async function handleSubmit(values) {
+    let res;
+    if (_id) {
+      res = await userServices.updateUser(_id, values);
     } else {
-      return;
+      res = await userServices.createUser(values);
+    }
+    if (res.err === 0) {
+      navigation("/root/user/accounts");
     }
   }
 
+  useEffect(() => {
+    if (_id) {
+      userServices.getUserById(_id).then((user) => {
+        formik.setValues({
+          ...user.dataUser,
+          cpassword: user.dataUser.password,
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className={cx("wrap")}>
-      <form className={cx("form")}>
-        <div>
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>Full name:</label>
-            <input
-              type="text"
-              value={fullName}
-              placeholder="Full Name"
-              onChange={(ev) => setFullName(ev.target.value)}
-            />
-            <span className={cx("err")}>{fullNameErr}</span>
-          </div>
+      <form className={cx("form")} onSubmit={formik.handleSubmit}>
+        <div className="d-flex gap-md-5 gap-sm-0 flex-wrap">
+          <div>
+            <div className={cx("form-group")}>
+              <label htmlFor="fullName" className={cx("form-group-label")}>
+                Họ & Tên:
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                name="fullName"
+                placeholder="Vd: Nguyễn Văn A"
+                className={cx({
+                  errInput: !!formik.errors.fullName && formik.touched.fullName,
+                })}
+                onChange={formik.handleChange}
+                value={formik.values.fullName}
+              />
+              {formik.errors.fullName && formik.touched.fullName && (
+                <span className={cx("err")}>{formik.errors.fullName}</span>
+              )}
+            </div>
 
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>email:</label>
-            <input
-              type="text"
-              value={email}
-              placeholder="Input your Full Name.."
-              onChange={(ev) => setEmail(ev.target.value)}
-            />
-            <span className={cx("err")}>{emailErr}</span>
+            <div className={cx("form-group")}>
+              <label className={cx("form-group-label")} htmlFor="email">
+                Email:
+              </label>
+              <input
+                id="email"
+                type="text"
+                name="email"
+                className={cx({
+                  errInput: !!formik.errors.email && formik.touched.email,
+                })}
+                placeholder="abcxyz@gmail.com"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+              />
+              {formik.errors.email && formik.touched.email && (
+                <span className={cx("err")}>{formik.errors.email}</span>
+              )}
+            </div>
+            <div className={cx("form-group")}>
+              <label htmlFor="phone" className={cx("form-group-label")}>
+                Phone:
+              </label>
+              <input
+                id="phone"
+                type="text"
+                name="phone"
+                className={cx({
+                  errInput: !!formik.errors.phone && formik.touched.phone,
+                })}
+                placeholder="vd: 0123456789"
+                onChange={formik.handleChange}
+                value={formik.values.phone}
+              />
+              {formik.errors.phone && formik.touched.phone && (
+                <span className={cx("err")}>{formik.errors.phone}</span>
+              )}
+            </div>
           </div>
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>Phone:</label>
-            <input
-              type="text"
-              value={phone}
-              placeholder="Input your Phone.."
-              onChange={(ev) => setPhone(ev.target.value)}
-            />
-            <span className={cx("err")}>{phoneErr}</span>
-          </div>
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>Password:</label>
-            <input
-              type="text"
-              value={password}
-              placeholder="Input your Password.."
-              onChange={(ev) => setPassword(ev.target.value)}
-            />
-            <span className={cx("err")}>{passwordErr}</span>
-          </div>
+          <div>
+            <div className={cx("form-group")}>
+              <label htmlFor="pass" className={cx("form-group-label")}>
+                Mật khẩu:
+              </label>
+              <input
+                id="pass"
+                type="password"
+                className={cx({
+                  errInput: !!formik.errors.password && formik.touched.password,
+                })}
+                placeholder="Mật khẩu của bạn"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+              />
+              {formik.errors.password && formik.touched.password && (
+                <span className={cx("err")}>{formik.errors.password}</span>
+              )}
+            </div>
 
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}> Password Repeat :</label>
-            <input
-              type="text"
-              value={passwordRepeat}
-              placeholder="Repeat your Password.."
-              onChange={(ev) => setPasswordRepeat(ev.target.value)}
-            />
-            <span className={cx("err")}>{passwordRepeatErr}</span>
-          </div>
+            <div className={cx("form-group")}>
+              <label htmlFor="cpass" className={cx("form-group-label")}>
+                Nhập lại mật khẩu:
+              </label>
+              <input
+                id="cpass"
+                type="password"
+                className={cx({
+                  errInput:
+                    !!formik.errors.cpassword && formik.touched.cpassword,
+                })}
+                placeholder="Nhập lại mật khẩu của bạn"
+                name="cpassword"
+                onChange={formik.handleChange}
+                value={formik.values.cpassword}
+              />
+              {formik.errors.cpassword && formik.touched.cpassword && (
+                <span className={cx("err")}>{formik.errors.cpassword}</span>
+              )}
+            </div>
 
-          <div className={cx("form-group")}>
-            <label className={cx("form-group-label")}>Address:</label>
-            <input
-              type="text"
-              value={address}
-              placeholder="Input your Address.."
-              onChange={(ev) => setAddress(ev.target.value)}
-            />
-            <span className={cx("err")}>{addressErr}</span>
+            <div className={cx("form-group")}>
+              <label htmlFor="address" className={cx("form-group-label")}>
+                Địa chỉ:
+              </label>
+              <textarea
+                id="address"
+                type="text"
+                className={cx({
+                  errInput: !!formik.errors.address && formik.touched.address,
+                })}
+                placeholder="Địa chỉ của bạn"
+                name="address"
+                onChange={formik.handleChange}
+                value={formik.values.address}
+              />
+              {console.log(formik.errors)}
+
+              {formik.errors.address && formik.touched.address && (
+                <span className={cx("err")}>{formik.errors.address}</span>
+              )}
+            </div>
           </div>
-          <p>{message}</p>
+        </div>
+        <div className="d-flex gap-4">
+          <button
+            className={cx("btn")}
+            type="reset"
+            onClick={formik.handleReset}
+          >
+            Reset
+          </button>
 
           <button
-            className={cx("btn", "btn-primary")}
+            className={cx("btn")}
             type="button"
-            onClick={register}
+            onClick={() => navigation(-1)}
           >
-            Đăng ký
+            Hủy
+          </button>
+
+          <button className={cx("btn", "btn-primary")} type="submit">
+            {_id ? "Lưu" : "Đăng ký"}
           </button>
         </div>
       </form>
     </div>
   );
 }
+
+RegisterForm.propTypes = {
+  _id: PropTypes.string.isRequired,
+};
 
 export default RegisterForm;
