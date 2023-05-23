@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
+import RegisterForm from "./components/RegisterForm";
 
 console.log(router);
 
