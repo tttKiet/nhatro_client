@@ -3,8 +3,8 @@ import styles from "./Nav.module.scss";
 import classNames from "classNames/bind";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userSlice } from "../../redux/reducers";
-import Logo from "../Logo";
+import { userSlice } from "../../../redux/reducers";
+import Logo from "../../Logo";
 import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);

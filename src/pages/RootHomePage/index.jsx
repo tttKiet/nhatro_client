@@ -1,13 +1,11 @@
-import { useSelector } from "react-redux";
 import styles from "./RootHomePage.module.scss";
 import classNames from "classNames/bind";
-import { userSelector } from "../../redux/selectors";
+import { useAuth } from "../../hooks";
 
 const cx = classNames.bind(styles);
 
 function RootHomePage() {
-  const currUser = useSelector(userSelector.curUserLogin);
-  console.log(currUser);
+  const [, , currUser] = useAuth();
 
   return (
     <div className={cx("wrap", "flex")}>

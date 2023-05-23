@@ -6,8 +6,11 @@ const userServices = {
     return res.data;
   },
 
-  async login({ phone, pass }) {
-    const res = await axios.post("/api/v1/user/login", { phone, pass });
+  async login(data) {
+    const res = await axios.post("/api/v1/user/login", {
+      email: data.email,
+      password: data.password,
+    });
     return res.data;
   },
 

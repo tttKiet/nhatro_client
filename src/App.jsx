@@ -1,17 +1,22 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
-import Layout from "./components/Layout";
 import GlobalStyles from "./components/GlobalStyles";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const route = createBrowserRouter(
   router.map((route) => {
     const Element = route.element;
     const MappingLayout = route.layout;
+    const isProtected = route.isProtected;
     if (MappingLayout) {
       if (MappingLayout === "None") {
         return {
           path: route.path,
-          element: (
+          element: isProtected ? (
+            <ProtectedRoute>
+              <Element />
+            </ProtectedRoute>
+          ) : (
             <>
               <Element />
             </>
@@ -20,7 +25,13 @@ const route = createBrowserRouter(
       }
       return {
         path: route.path,
-        element: (
+        element: isProtected ? (
+          <ProtectedRoute>
+            <MappingLayout>
+              <Element />
+            </MappingLayout>
+          </ProtectedRoute>
+        ) : (
           <MappingLayout>
             <Element />
           </MappingLayout>
@@ -29,10 +40,12 @@ const route = createBrowserRouter(
     } else {
       return {
         path: route.path,
-        element: (
-          <Layout>
+        element: isProtected ? (
+          <ProtectedRoute>
             <Element />
-          </Layout>
+          </ProtectedRoute>
+        ) : (
+          <Element />
         ),
       };
     }

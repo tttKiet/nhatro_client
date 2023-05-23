@@ -11,7 +11,7 @@ const userSlice = createSlice({
   reducers: {
     handleLogin: (state, payload) => {
       state.isLoggedIn = true;
-      state.userData = { ...payload };
+      state.userData = payload;
     },
     toggleLogin: (state) => {
       state.isLoggedIn = !state.isLoggedIn;

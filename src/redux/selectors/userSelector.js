@@ -1,8 +1,9 @@
 const isLoginSelector = (state) => {
-  return state.isLogined;
+  return state.user.isLoggedIn;
 };
 
 const curUserLogin = (state) => {
+  console.log(state);
   return state.user.userData.payload;
 };
 

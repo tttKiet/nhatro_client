@@ -70,7 +70,6 @@ function RegisterForm({ _id }) {
     let res;
     if (_id) {
       res = await userServices.updateUser(_id, values);
-      console.log(res);
     } else {
       res = await userServices.createUser(values);
     }
@@ -94,7 +93,7 @@ function RegisterForm({ _id }) {
   return (
     <div className={cx("wrap")}>
       <form className={cx("form")} onSubmit={formik.handleSubmit}>
-        <div className="d-flex gap-5 flex-wrap">
+        <div className="d-flex gap-md-5 gap-sm-0 flex-wrap">
           <div>
             <div className={cx("form-group")}>
               <label htmlFor="fullName" className={cx("form-group-label")}>
@@ -105,7 +104,9 @@ function RegisterForm({ _id }) {
                 type="text"
                 name="fullName"
                 placeholder="Vd: Nguyễn Văn A"
-                className={cx({ errInput: !!formik.errors.fullName })}
+                className={cx({
+                  errInput: !!formik.errors.fullName && formik.touched.fullName,
+                })}
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
               />
@@ -122,7 +123,9 @@ function RegisterForm({ _id }) {
                 id="email"
                 type="text"
                 name="email"
-                className={cx({ errInput: !!formik.errors.email })}
+                className={cx({
+                  errInput: !!formik.errors.email && formik.touched.email,
+                })}
                 placeholder="abcxyz@gmail.com"
                 onChange={formik.handleChange}
                 value={formik.values.email}
@@ -139,7 +142,9 @@ function RegisterForm({ _id }) {
                 id="phone"
                 type="text"
                 name="phone"
-                className={cx({ errInput: !!formik.errors.phone })}
+                className={cx({
+                  errInput: !!formik.errors.phone && formik.touched.phone,
+                })}
                 placeholder="vd: 0123456789"
                 onChange={formik.handleChange}
                 value={formik.values.phone}
@@ -157,7 +162,9 @@ function RegisterForm({ _id }) {
               <input
                 id="pass"
                 type="password"
-                className={cx({ errInput: !!formik.errors.password })}
+                className={cx({
+                  errInput: !!formik.errors.password && formik.touched.password,
+                })}
                 placeholder="Mật khẩu của bạn"
                 name="password"
                 onChange={formik.handleChange}
@@ -175,7 +182,10 @@ function RegisterForm({ _id }) {
               <input
                 id="cpass"
                 type="password"
-                className={cx({ errInput: !!formik.errors.cpassword })}
+                className={cx({
+                  errInput:
+                    !!formik.errors.cpassword && formik.touched.cpassword,
+                })}
                 placeholder="Nhập lại mật khẩu của bạn"
                 name="cpassword"
                 onChange={formik.handleChange}
@@ -193,12 +203,16 @@ function RegisterForm({ _id }) {
               <textarea
                 id="address"
                 type="text"
-                className={cx({ errInput: !!formik.errors.address })}
+                className={cx({
+                  errInput: !!formik.errors.address && formik.touched.address,
+                })}
                 placeholder="Địa chỉ của bạn"
                 name="address"
                 onChange={formik.handleChange}
                 value={formik.values.address}
               />
+              {console.log(formik.errors)}
+
               {formik.errors.address && formik.touched.address && (
                 <span className={cx("err")}>{formik.errors.address}</span>
               )}

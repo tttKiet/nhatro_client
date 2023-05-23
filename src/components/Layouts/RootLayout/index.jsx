@@ -1,23 +1,23 @@
-import Nav from "../Nav";
+import { RootNav } from "../../navs";
 import PropTypes from "prop-types";
-import styles from "./Layout.module.scss";
+import styles from "./RootLayout.module.scss";
 import classNames from "classNames/bind";
 
 const cx = classNames.bind(styles);
 
-function Layout({ children }) {
+function RootLayout({ children }) {
   return (
     <div className={cx("wrap")}>
       <div className={cx("nav")}>
-        <Nav />
+        <RootNav />
       </div>
       <div className={cx("child")}>{children}</div>
     </div>
   );
 }
 
-Layout.propTypes = {
+RootLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default Layout;
+export default RootLayout;

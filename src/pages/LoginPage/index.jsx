@@ -7,59 +7,52 @@ import Snipper from "../../components/Snipper";
 import { useDispatch } from "react-redux";
 import { userSlice } from "../../redux/reducers";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
 
 const cx = classNames.bind(styles);
 
 function LoginPage() {
-  const [phone, setPhone] = useState("");
-  const [pass, setPass] = useState("");
-  const [loading, setloading] = useState(false);
-  const [err, setErr] = useState("");
-  const [errPhone, setErrPhone] = useState("");
-  const [errPass, setErrPass] = useState("");
-  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const [resMessage, setResMessage] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  function validate() {
-    let isErr = false;
-    if (!phone) {
-      setErr("Vui lòng nhập thông tin!!!");
-      setErrPhone("Chưa nhập số điện thoại!");
-      isErr = true;
-    } else {
-      setErrPhone("");
+  const validate = (values) => {
+    const errors = {};
+    if (!values.email) {
+      errors.email = "Chưa nhập email sao đăng nhập?";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = "Nhập sai định dạng email!";
     }
 
-    if (!pass) {
-      setErr("Vui lòng nhập thông tin!!!");
-      setErrPass("Vui lòng nhập mật khẩu!");
-      isErr = true;
-    } else {
-      setErrPass("");
+    if (!values.password) {
+      errors.password = "Mật khẩu còn chưa nhập?";
     }
+    return errors;
+  };
 
-    if (!isErr) setErr("");
-    return isErr;
-  }
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: handleLogin,
+    validate,
+  });
 
-  async function handleLogin() {
-    const data = { phone, pass };
-    setloading(true);
-    const response = await userServices.login(data);
+  async function handleLogin(values) {
+    setLoading(true);
+    const response = await userServices.login(values);
+
     if (response.err === 0) {
       dispatch(userSlice.actions.handleLogin(response.dataUser));
       navigate("/");
     } else {
-      setErr(response.message);
+      setResMessage(response.message);
     }
-    setloading(false);
-  }
-
-  function handleSubmit(ev) {
-    ev.preventDefault();
-    if (!validate()) {
-      handleLogin();
-    }
+    setLoading(false);
   }
 
   return (
@@ -72,11 +65,8 @@ function LoginPage() {
             </div>
             <div className={cx("col-6 ", "form-login")}>
               <form
-                className={cx(
-                  "form",
-                  "d-flex flex-column justify-content-between "
-                )}
-                onSubmit={(ev) => handleSubmit(ev)}
+                onSubmit={formik.handleSubmit}
+                className={cx("form", "d-flex flex-column ")}
               >
                 <div className="flex-1">
                   <h3>
@@ -87,27 +77,34 @@ function LoginPage() {
                   </h3>
 
                   <div className={cx("form-gr")}>
-                    <label htmlFor="phone">Số điện thoại</label>
                     <input
-                      className={cx({ iserr: errPhone.length > 0 })}
+                      className={cx({})}
                       type="text"
-                      name="phone"
-                      id="phone"
-                      value={phone}
-                      onChange={(ev) => setPhone(ev.target.value)}
+                      name="email"
+                      placeholder="Email của bạn"
+                      onChange={formik.handleChange}
+                      value={formik.values.fullName}
                     />
+                    {formik.errors.email && formik.touched.email && (
+                      <span className={cx("err")}>{formik.errors.email}</span>
+                    )}
                   </div>
 
                   <div className={cx("form-gr")}>
-                    <label htmlFor="password">Mật khẩu</label>
                     <input
-                      type="text"
-                      id="password"
-                      className={cx({ iserr: errPass.length > 0 })}
-                      value={pass}
-                      onChange={(ev) => setPass(ev.target.value)}
+                      type="password"
+                      name="password"
+                      placeholder="Mật khẩu của bạn"
+                      onChange={formik.handleChange}
+                      value={formik.values.password}
                     />
+                    {formik.errors.password && formik.touched.password && (
+                      <span className={cx("err")}>
+                        {formik.errors.password}
+                      </span>
+                    )}
                   </div>
+                  <div className={cx("res-Err", "err")}>{resMessage}</div>
 
                   <div
                     className={cx(
@@ -122,9 +119,9 @@ function LoginPage() {
                     <a href="#"> Quên mật khẩu?</a>
                   </div>
 
-                  <span className={cx("err")}>{err}</span>
+                  <span className={cx("err")}>{}</span>
                 </div>
-                <div className={cx("form-gr", "mt-5")}>
+                <div className={cx("form-btn", "mt-5")}>
                   <button
                     type="submit"
                     className="btn btn-primary d-flex justify-content-center"
@@ -132,7 +129,7 @@ function LoginPage() {
                     {loading ? <Snipper /> : "Đăng nhập"}
                   </button>
                   <hr />
-                  <Link to="/register" className="btn btn-secondary">
+                  <Link to="/register" className="btn ">
                     Đăng ký
                   </Link>
                 </div>
