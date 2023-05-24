@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import styles from "./Logo.module.scss";
 import classNames from "classNames/bind";
+import useAuth from "../../hooks/useAuth";
 
 const cx = classNames.bind(styles);
 function Logo() {
+  const [, type] = useAuth();
   return (
     <div className={cx("wrap")}>
       <Link className={cx("link")}>
@@ -24,7 +26,7 @@ function Logo() {
         Nhà trọ online
       </Link>
       <p className={cx("des")}>
-        <b>Root</b>
+        <b>{type}</b>
       </p>
     </div>
   );

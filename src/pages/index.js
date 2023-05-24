@@ -7,3 +7,6 @@ export { default as RootEditAccount } from "./RootEditAccount";
 export { default as UserHomePage } from "./UserHomePage";
 export { default as AdminHomePage } from "./AdminHomePage";
 export { default as HomePage } from "./HomePage";
+
+// Admin page
+export { default as AdminProfilePage } from "./AdminProfilePage";
