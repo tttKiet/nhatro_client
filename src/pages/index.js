@@ -10,3 +10,4 @@ export { default as HomePage } from "./HomePage";
 
 // Admin page
 export { default as AdminProfilePage } from "./AdminProfilePage";
+export { default as AdminAllMembersPage } from "./AdminAllMembersPage";

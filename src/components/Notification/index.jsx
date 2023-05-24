@@ -1,11 +1,8 @@
-import { Link } from "react-router-dom";
 import styles from "./Notification.module.scss";
 import classNames from "classNames/bind";
-import useAuth from "../../hooks/useAuth";
 
 const cx = classNames.bind(styles);
 function Notification() {
-  const [, type] = useAuth();
   return (
     <div className={cx("wrap")}>
       <div className="list-group">
@@ -14,13 +11,6 @@ function Notification() {
           className="list-group-item list-group-item-action d-flex gap-3 py-3"
           aria-current="true"
         >
-          {/* <img
-            src="https://github.com/twbs.png"
-            alt="twbs"
-            width="32"
-            height="32"
-            className="rounded-circle flex-shrink-0"
-          /> */}
           <svg
             width="28"
             height="28"
@@ -40,8 +30,8 @@ function Notification() {
 
           <div className="d-flex gap-2 w-100 justify-content-between">
             <div>
-              <h6 className="mb-0">Thông báo 1</h6>
-              <p className="mb-0 opacity-75">Nội dung thông báo ở đây nè</p>
+              <h6 className="mb-0">Notification 1</h6>
+              <p className="mb-0 opacity-75">You have a new notification</p>
             </div>
             <small className="opacity-50 text-nowrap">now</small>
           </div>
@@ -51,13 +41,6 @@ function Notification() {
           className="list-group-item list-group-item-action d-flex gap-3 py-3"
           aria-current="true"
         >
-          {/* <img
-            src="https://github.com/twbs.png"
-            alt="twbs"
-            width="32"
-            height="32"
-            className="rounded-circle flex-shrink-0"
-          /> */}
           <svg
             width="28"
             height="28"
@@ -77,8 +60,8 @@ function Notification() {
 
           <div className="d-flex gap-2 w-100 justify-content-between">
             <div>
-              <h6 className="mb-0">Thông báo 1</h6>
-              <p className="mb-0 opacity-75">Nội dung thông báo ở đây nè</p>
+              <h6 className="mb-0">Notification 1</h6>
+              <p className="mb-0 opacity-75">You have a new notification</p>
             </div>
             <small className="opacity-50 text-nowrap">3d</small>
           </div>
@@ -88,13 +71,6 @@ function Notification() {
           className="list-group-item list-group-item-action d-flex gap-3 py-3"
           aria-current="true"
         >
-          {/* <img
-            src="https://github.com/twbs.png"
-            alt="twbs"
-            width="32"
-            height="32"
-            className="rounded-circle flex-shrink-0"
-          /> */}
           <svg
             width="28"
             height="28"
@@ -114,8 +90,8 @@ function Notification() {
 
           <div className="d-flex gap-2 w-100 justify-content-between">
             <div>
-              <h6 className="mb-0">Thông báo 1</h6>
-              <p className="mb-0 opacity-75">Nội dung thông báo ở đây nè</p>
+              <h6 className="mb-0">Notification 1</h6>
+              <p className="mb-0 opacity-75">You have a new notification</p>
             </div>
             <small className="opacity-50 text-nowrap">1w</small>
           </div>

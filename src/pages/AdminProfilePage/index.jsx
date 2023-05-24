@@ -5,17 +5,25 @@ import classNames from "classNames/bind";
 import { userServices } from "../../services";
 import { useAuth } from "../../hooks";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function AdminProfilePage() {
   const [showUpdateInformation, setShowUpdateInformation] = useState(false);
   const [dataAdmin, setAdminData] = useState([]);
+  const [error, setError] = useState(false);
   const [, , admin] = useAuth();
+  const { id } = useParams();
+
   const getAdmin = async () => {
-    const res = await userServices.getUserById(admin._id);
-    if (res.err === 0) {
-      setAdminData(res.dataUser);
+    if (id === admin._id) {
+      const res = await userServices.getUserById(id);
+      if (res.err === 0) {
+        setAdminData(res.dataUser);
+      }
+    } else {
+      setError(true);
     }
   };
 
@@ -26,6 +34,11 @@ function AdminProfilePage() {
   useEffect(() => {
     getAdmin();
   }, []);
+
+  if (error) {
+    return <h1>Loi roi</h1>;
+  }
+
   return (
     <div className={cx("wrap")}>
       <div className="container pt-3">
@@ -108,7 +121,7 @@ function AdminProfilePage() {
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
-                    width={20 + "px"}
+                    width={30 + "px"}
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
