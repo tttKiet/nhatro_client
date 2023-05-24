@@ -1,8 +1,9 @@
 .wrap {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
   background: linear-gradient(
     45deg,
     rgba(0, 0, 0, 0.052),
@@ -11,7 +12,7 @@
 
   .contai {
     background-color: #ffffff;
-    width: 60vw;
+    min-width: 60vw;
     border-radius: 12px;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 
@@ -60,55 +61,11 @@
     .form-login {
       padding: 30px;
 
-      .form {
-        height: 100%;
-
-        .err {
-          font-size: 16px;
-          color: red;
-          margin-top: 4px;
-          &.res-Err {
-            margin-bottom: 12px;
-          }
-        }
-
-        h3 {
-          font-size: 22px;
-          margin-bottom: 40px;
-
-          .highlight {
-            display: block;
-            margin-top: 12px;
-            color: rgb(90, 90, 255);
-          }
-        }
-
-        .form-btn {
-          display: flex;
-          flex-direction: column;
-          padding-top: 12px;
-        }
-
-        .form-gr {
-          margin-bottom: 24px;
-          display: flex;
-          flex-direction: column;
-
-          label {
-            font-size: 18px;
-            cursor: pointer;
-          }
-          input {
-            outline: none;
-            border: 1px solid transparent;
-            border-bottom: 1px solid #ccc;
-            padding: 8px 10px;
-
-            &.iserr {
-              border-bottom: 1px solid #f70808;
-            }
-          }
-        }
+      .control-login {
+        padding: 0 20px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
       }
     }
   }
