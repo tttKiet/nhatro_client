@@ -5,11 +5,16 @@ import { useNavigate } from "react-router-dom";
 import styles from "./RegisterForm.module.scss";
 import classNames from "classNames/bind";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
+import { useAuth } from "../../hooks";
+import imgSuccess from "../../assets/images/trees.png";
+import gifSuccess from "../../assets/gifs/nyan-cat.gif";
 
 const cx = classNames.bind(styles);
 
 function RegisterForm({ _id }) {
   const navigation = useNavigate();
+  const [, type] = useAuth();
   const validate = (values) => {
     const errors = {};
 
@@ -74,7 +79,26 @@ function RegisterForm({ _id }) {
       res = await userServices.createUser(values);
     }
     if (res.err === 0) {
-      navigation("/root/user/accounts");
+      if (type == "root") {
+        navigation("/root/user/accounts");
+      } else if (type === "user") {
+        Swal.fire({
+          title:
+            "Đăng ký thành công! Giờ đây bạn có thể đăng nhập vào hệ thống.",
+          width: 600,
+          padding: "3em",
+          color: "#716add",
+          background: `#fff url(${imgSuccess})`,
+          backdrop: `
+              rgba(0,0,123,0.4)
+              url(${gifSuccess})
+              left top
+              no-repeat
+            `,
+        }).then(() => {
+          navigation("/login");
+        });
+      }
     }
   }
 
@@ -93,7 +117,7 @@ function RegisterForm({ _id }) {
   return (
     <div className={cx("wrap")}>
       <form className={cx("form")} onSubmit={formik.handleSubmit}>
-        <div className="d-flex gap-md-5 gap-sm-0 flex-wrap">
+        <div className="d-flex gap-md-0 gap-lg-5 gap-xl-5 gap-sm-0 flex-wrap">
           <div>
             <div className={cx("form-group")}>
               <label htmlFor="fullName" className={cx("form-group-label")}>

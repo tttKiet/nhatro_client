@@ -3,25 +3,62 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(148, 148, 255, 0.852);
+  background: linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.052),
+    rgba(0, 0, 0, 0.367)
+  );
 
   .contai {
-    min-height: 80vh;
+    background-color: #ffffff;
     width: 60vw;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 
     .img {
-      border-top-left-radius: 6px;
-      border-bottom-left-radius: 6px;
-      border-top-right-radius: 2px;
-      border-bottom-right-radius: 2px;
-      min-height: 80vh;
-      background: url("../../assets/images/bg-login.jpg") no-repeat center,
-        linear-gradient(to right, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4));
+      border-radius: 12px;
+      background-color: rgba(51, 51, 255, 0.855);
+      height: 100%;
+      min-height: 580px;
+      padding: 24px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+
+      .title {
+      }
+
+      .content {
+        margin-top: 60px;
+        font-size: 24px;
+
+        .des-blur {
+          font-size: 16px;
+          opacity: 0.8;
+        }
+      }
+
+      .card-footer {
+        border-radius: 8px;
+        background-color: rgb(0 0 0 / 10%);
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+          width: 30px;
+          margin-right: 12px;
+        }
+
+        img {
+          width: 300px;
+        }
+      }
     }
 
     .form-login {
       padding: 30px;
-      background-color: #ffffff;
 
       .form {
         height: 100%;

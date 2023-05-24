@@ -5,6 +5,7 @@ import {
   RootAccount,
   RootAddAccount,
   RootEditAccount,
+  RegisterPage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout } from "../components/Layouts";
@@ -25,6 +26,12 @@ const router = [
   {
     path: "/login",
     element: LoginPage,
+    isProtected: false,
+    layout: "None",
+  },
+  {
+    path: "/register",
+    element: RegisterPage,
     isProtected: false,
     layout: "None",
   },
