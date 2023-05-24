@@ -5,10 +5,10 @@ import {
   RootAccount,
   RootAddAccount,
   RootEditAccount,
+  AdminProfilePage,
   RegisterPage,
-} from "../pages";
 
-import { DefaultLayout, RootLayout } from "../components/Layouts";
+import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
 
 const router = [
   {
@@ -52,6 +52,14 @@ const router = [
     layout: RootLayout,
     element: RootEditAccount,
     isProtected: true,
+  },
+
+  // Admin router [The Van]
+  {
+    path: "/admin/profile",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminProfilePage,
   },
 ];
 
