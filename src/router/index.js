@@ -9,6 +9,10 @@ import {
   RegisterPage,
   RootViewAccountPermissions,
 } from "../pages";
+  AdminAllMembersPage,
+  AdminAllRoomsPage,
+  ErrorPage,
+} from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
 
@@ -64,10 +68,30 @@ const router = [
 
   // Admin router [The Van]
   {
-    path: "/admin/profile",
+    path: "/admin/profile/:id",
     isProtected: true,
     layout: AdminLayout,
     element: AdminProfilePage,
+  },
+  {
+    path: "/admin/:id/all-members",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminAllMembersPage,
+  },
+  {
+    path: "/admin/:id/all-rooms",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminAllRoomsPage,
+  },
+
+  // Error page
+  {
+    path: "/error/404",
+    isProtected: false,
+    layout: "none",
+    element: ErrorPage,
   },
 ];
 

@@ -3,40 +3,51 @@ import styles from "./AdminHomePage.module.scss";
 import classNames from "classNames/bind";
 import { useAuth } from "../../hooks";
 import Notification from "../../components/Notification";
+import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function AdminHomePage() {
   const [, , dataAdmin] = useAuth();
+  if (dataAdmin.type !== "admin") {
+    return <h1>You are not admin</h1>;
+  }
   return (
     <div className={cx("wrap", "flex")}>
       <div className={cx("d-flex justify-content-between ", "heading")}>
-        <span className="badge d-flex align-items-center p-2 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill">
+        <span className="fs-s badge d-flex align-items-center p-2 pe-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-pill">
           <img
-            className="rounded-circle me-2 border border-light border-3"
+            className="rounded-circle me-2 border border-light border-3 "
             width="40"
             height="40"
             src="https://kynguyenlamdep.com/wp-content/uploads/2022/06/avatar-cute-meo-con-than-chet.jpg"
             alt=""
           />
-          Xin chào {dataAdmin.fullName}! Hãy quản lý nhà trọ của bạn
+          Welcome {dataAdmin.fullName}! Let&apos;s manage your motel
         </span>
+        <Link
+          className={cx("btn-view-profile", "fs-m")}
+          to={`/admin/profile/${dataAdmin._id}`}
+        >
+          View Profile{" "}
+          <svg
+            width={20 + "px"}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6 ms-2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+        </Link>
       </div>
-      <nav aria-label="breadcrumb">
-        <ol className="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
-          <li className="breadcrumb-item">
-            <a
-              className="link-body-emphasis fw-semibold text-decoration-none"
-              href="#"
-            >
-              Admin
-            </a>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            DashBoard
-          </li>
-        </ol>
-      </nav>
-      <div className="row">
+
+      <div className="row mt-5">
         <div className="col-md-7">
           <AdminCard></AdminCard>
         </div>

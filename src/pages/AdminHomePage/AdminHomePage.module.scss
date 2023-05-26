@@ -6,4 +6,19 @@
         display: flex;
         margin-left: 50px;
     }
+    .btn-view-profile{
+        background-color: rgb(89, 89, 255);
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        height: 35px;
+        padding: 0 10px;
+        color: #fff;
+        transition: all 0.2 linear;
+    }
+    .btn-view-profile:hover{
+        opacity: 0.8;
+    }
 }
