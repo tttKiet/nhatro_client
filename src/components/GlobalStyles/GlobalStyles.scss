@@ -5,6 +5,14 @@
   color: #000000dd;
   outline: none;
   transition: all 0.2s linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  svg {
+    width: 20px;
+  }
 
   &:active {
     outline: none;
@@ -17,6 +25,7 @@
 
   &:hover {
     opacity: 0.7;
+    border-color: inherit;
   }
 }
 
@@ -28,6 +37,20 @@
 .btn.btn-danger {
   background-color: rgba(255, 66, 66, 0.97);
   color: #f5f5f5;
+}
+
+.btn.btn-warning {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: #000;
+}
+
+.swal2-title {
+  font-size: 24px !important;
+}
+
+.fw-600 {
+  font-weight: 600;
 }
 
 .fs-s{

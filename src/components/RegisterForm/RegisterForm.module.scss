@@ -22,6 +22,19 @@
         margin-bottom: 4px;
       }
 
+      .input-eye {
+        position: relative;
+
+        .eye {
+          width: 18px;
+          position: absolute;
+          right: 18px;
+          cursor: pointer;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+
       input,
       textarea {
         padding: 4px 12px;
@@ -57,4 +70,8 @@
       margin-top: 20px;
     }
   }
+}
+
+.custom-font-size {
+  font-size: 24px;
 }

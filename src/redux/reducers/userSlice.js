@@ -13,7 +13,8 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
       state.userData = payload;
     },
-    toggleLogin: (state) => {
+    toggleLogin: (state, payload) => {
+      state.userData = state.isLoggedIn == true ? {} : payload;
       state.isLoggedIn = !state.isLoggedIn;
     },
   },

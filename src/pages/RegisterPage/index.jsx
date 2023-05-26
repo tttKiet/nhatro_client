@@ -56,7 +56,7 @@ function RegisterPage() {
                     &quot;Nhà trọ Online!&quot;
                   </span>
                 </h3>
-                <RegisterForm />
+                <RegisterForm _id="" />
 
                 <div className={cx("form-btn", "control-login")}>
                   <span>Bạn đã có tài khoản? </span>

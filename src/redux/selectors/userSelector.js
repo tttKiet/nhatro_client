@@ -3,7 +3,6 @@ const isLoginSelector = (state) => {
 };
 
 const curUserLogin = (state) => {
-  console.log(state);
   return state.user.userData.payload;
 };
 

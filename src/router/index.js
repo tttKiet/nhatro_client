@@ -7,6 +7,8 @@ import {
   RootEditAccount,
   AdminProfilePage,
   RegisterPage,
+  RootViewAccountPermissions,
+} from "../pages";
   AdminAllMembersPage,
   AdminAllRoomsPage,
   ErrorPage,
@@ -55,6 +57,12 @@ const router = [
     path: "/root/user/account/edit/:id",
     layout: RootLayout,
     element: RootEditAccount,
+    isProtected: true,
+  },
+  {
+    path: "/root/permissions",
+    layout: RootLayout,
+    element: RootViewAccountPermissions,
     isProtected: true,
   },
 

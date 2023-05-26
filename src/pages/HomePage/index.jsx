@@ -12,8 +12,6 @@ import { RootLayout, DefaultLayout } from "../../components/Layouts";
 function HomePage() {
   const [, type] = useAuth();
 
-  console.log("type:", type);
-
   return (
     <>
       {type === "root" ? (
