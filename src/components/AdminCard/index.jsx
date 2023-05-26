@@ -8,7 +8,7 @@ function AdminCard() {
       <div className="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-3">
         <div className="col d-flex flex-column align-items-start gap-2">
           <h3 className="fw-bold">
-            Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi{" "}
+            Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi
           </h3>
 
           <p className="text-body-secondary">

@@ -8,6 +8,5 @@ export { default as UserHomePage } from "./UserHomePage";
 export { default as AdminHomePage } from "./AdminHomePage";
 export { default as RegisterPage } from "./RegisterPage";
 export { default as HomePage } from "./HomePage";
-
-// Admin page
+export { default as RootViewAccountPermissions } from "./RootViewAccountPermissions";
 export { default as AdminProfilePage } from "./AdminProfilePage";
