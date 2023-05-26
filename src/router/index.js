@@ -8,7 +8,6 @@ import {
   AdminProfilePage,
   RegisterPage,
   RootViewAccountPermissions,
-} from "../pages";
   AdminAllMembersPage,
   AdminAllRoomsPage,
   ErrorPage,
