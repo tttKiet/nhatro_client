@@ -20,8 +20,10 @@
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.11.2",
     "react-spinners": "^0.13.8",
+    "react-table": "^7.8.0",
     "redux-persist": "^6.0.0",
     "sass": "^1.62.1",
     "sweetalert2": "^11.7.5"

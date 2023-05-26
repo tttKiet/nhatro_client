@@ -1,80 +1,368 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import styles from "./AdminAllMembersPage.module.scss";
 import classNames from "classNames/bind";
+import SearchBar from "../../components/SearchBar";
+import React from "react";
+import { useTable, usePagination } from "react-table";
 
 const cx = classNames.bind(styles);
 
 function AdminAllMembersPage() {
   const [, , dataAdmin] = useAuth();
   const { id } = useParams();
-  if (dataAdmin.type != "admin" || dataAdmin._id != id) {
-    return <h1>Loi roi</h1>;
+  const navigate = useNavigate();
+
+  function Table({ columns, data }) {
+    // Use the state and functions returned from useTable to build your UI
+    const {
+      getTableProps,
+      getTableBodyProps,
+      headerGroups,
+      prepareRow,
+      page, // Instead of using 'rows', we'll use page,
+      // which has only the rows for the active page
+
+      // The rest of these things are super handy, too ;)
+      canPreviousPage,
+      canNextPage,
+      pageOptions,
+      pageCount,
+      gotoPage,
+      nextPage,
+      previousPage,
+      setPageSize,
+      state: { pageIndex, pageSize },
+    } = useTable(
+      {
+        columns,
+        data,
+        initialState: { pageIndex: 0, pageSize: 5 },
+      },
+      usePagination
+    );
+
+    // Render the UI for your table
+    return (
+      <>
+        <table
+          className="table align-middle mb-0 bg-white"
+          {...getTableProps()}
+        >
+          <thead className="bg-light">
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()} className="fs-m">
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {/* 
+          Pagination can be built however you'd like. 
+          This is just a very basic UI implementation:
+        */}
+        <div className="pagination">
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            {"<<"}
+          </button>{" "}
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {"<"}
+          </button>{" "}
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {">"}
+          </button>{" "}
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}
+          </button>{" "}
+          <span>
+            Page{" "}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>{" "}
+          </span>
+          <span>
+            | Go to page:{" "}
+            <input
+              type="number"
+              defaultValue={pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                gotoPage(page);
+              }}
+              style={{ width: "100px" }}
+            />
+          </span>{" "}
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[5, 10, 15, 20, 25].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      </>
+    );
   }
+
+  if (dataAdmin.type != "admin" || dataAdmin._id != id) {
+    navigate("/error/404");
+  }
+
+  const columns = [
+    {
+      Header: "Information",
+      accessor: "information",
+      Cell: ({ value }) => (
+        <div className="d-flex align-items-center">
+          <img
+            src={value.avatar}
+            alt=""
+            style={{ width: "45px", height: "45px" }}
+            className="rounded-circle"
+          />
+          <div className="ms-3 fs-m">
+            <p className="fw-bold mb-1">{value.name}</p>
+            <p className="text-muted mb-0">{value.email}</p>
+            <p className="text-muted mb-0">{value.phone}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      Header: "Address",
+      accessor: "address",
+      Cell: ({ value }) => <p className="fw-normal mb-1">{value}</p>,
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      Cell: ({ value }) => (
+        <span className="badge text-bg-warning rounded-pill d-inline">
+          {value}
+        </span>
+      ),
+    },
+    {
+      Header: "Room's number",
+      accessor: "roomNumber",
+    },
+    {
+      Header: "Start date",
+      accessor: "startDate",
+    },
+    {
+      Header: "Actions",
+      Cell: () => (
+        <div>
+          <button
+            style={{ minWidth: "60px" }}
+            type="button"
+            className="btn btn-primary btn-sm me-2"
+          >
+            Edit
+          </button>
+          <button
+            style={{ minWidth: "60px" }}
+            type="button"
+            className="btn btn-danger btn-sm "
+          >
+            Delete
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const data = [
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+    {
+      information: {
+        name: "The Van",
+        email: "thevan@gmail.com",
+        phone: "012345678",
+        avatar:
+          "https://catscanman.net/wp-content/uploads/2021/09/anh-meo-ngau-13.jpg",
+      },
+      address: "Ninh Kieu, Can Tho",
+      status: "Not pay",
+      roomNumber: 12,
+      startDate: "10/10/2023",
+    },
+  ];
 
   return (
     <div className={cx("wrap")}>
       <div className="container">
-        <div className={cx("search-filter", "mx-auto")}>
-          <div className={cx("filter")}>
-            <div className="btn-group">
-              <button
-                type="button"
-                className={cx("btn-dropdown", "dropdown-toggle ", "fs-m")}
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Choose filter
-              </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Filter 1
-                  </a>
-                </li>
-
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Filter 2
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Filter 3
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="vr"></div>
-          <div className={cx("search-box")}>
-            <input
-              className={cx("input-search")}
-              type="search"
-              placeholder="Type here to search..."
-            />
-            <button className={cx("search-btn", "btn btn-primary")}>
-              <svg
-                width={22 + "px"}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <SearchBar></SearchBar>
         <div className="row mt-5">
           <div className={cx("table-wrap", "col-md-12")}>
-            <table className="table align-middle mb-0 bg-white">
+            {/* <table className="table align-middle mb-0 bg-white">
               <thead className="bg-light">
                 <tr className="fs-m">
                   <th>Information</th>
@@ -216,7 +504,9 @@ function AdminAllMembersPage() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> */}
+
+            <Table columns={columns} data={data} />
           </div>
         </div>
       </div>

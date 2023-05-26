@@ -6,6 +6,10 @@ import {
   RootAddAccount,
   RootEditAccount,
   AdminProfilePage,
+  RegisterPage,
+  AdminAllMembersPage,
+  AdminAllRoomsPage,
+  ErrorPage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -66,6 +70,20 @@ const router = [
     isProtected: true,
     layout: AdminLayout,
     element: AdminAllMembersPage,
+  },
+  {
+    path: "/admin/:id/all-rooms",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminAllRoomsPage,
+  },
+
+  // Error page
+  {
+    path: "/error/404",
+    isProtected: false,
+    layout: "none",
+    element: ErrorPage,
   },
 ];
 

@@ -80,8 +80,8 @@ function AdminNav() {
         </Link>
 
         <Link
-          className={cx("link", { active: url.includes("accounts") })}
-          to={"/root/user/accounts"}
+          className={cx("link", { active: url.includes("all-rooms") })}
+          to={`/admin/${dataAdmin._id}/all-rooms`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
