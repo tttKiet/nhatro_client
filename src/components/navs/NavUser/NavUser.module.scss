@@ -1,32 +1,67 @@
-.wrap {
-  padding: 30px 8px 20px 20px;
-
-  .link {
-    padding: 10px 80px 10px 20px;
-    font-size: 16px;
-    border-radius: 8px 0 0 8px;
-    color: #000;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 16px;
+.wrap-all{
+  display: flex;
+  width: 100%;
+  // border: 1px solid #fff;
+  justify-content: space-between;
+  padding: 10px 20px;
+  position: relative;
+  background-color: #000;
+  a{
     text-decoration: none;
-    margin-bottom: 12px;
-
-    svg {
-      width: 24px;
+    .logo{
+      color: #fff;
+      font-family: "Lucida Console", "Courier New", monospace;
     }
+    &:hover{
+      .logo{
+        border-radius: 8px;
+        box-shadow:0 0 10px #fff , 0 0 20px #fff , 0 0 50px #fff , 0 0 60px #eee ;
+      }
+      }
+  }
+  .wrap-nav-user{
+    // border: 1px solid #fff;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    // padding-top: 10px;
+    .wrap-list-nav{
+      display: flex;
+      gap: 10px;
+      list-style: none;
+      margin-bottom: 0;
+      padding: 0;
+      .item-nav{
+        height: 100%;
+        .text-nav-user{
+          text-decoration: none;
+          color: #fff;
+          padding: 5px 10px;
+          &:hover{
+            border-radius: 8px;
+          box-shadow:0 0 10px #fff , 0 0 20px #fff , 0 0 50px #fff , 0 0 60px #eee ;
+          }
+        }
 
-    &.active {
-      background-color: #095eff1a;
-      color: #000000e9;
-      font-weight: 500;
+      }
     }
   }
-
-  .btn {
-    outline: none;
-    border: none;
-    background-color: inherit;
+  .user{
+    // border: 1px solid #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .user-item{
+      svg{
+        color: #fff;
+        min-width: 30px;
+      }
+      &:hover{
+        svg{
+          border-radius: 8px;
+          box-shadow:0 0 10px #fff , 0 0 20px #fff , 0 0 50px #fff , 0 0 60px #eee ; 
+        }
+      }
+    }
   }
 }

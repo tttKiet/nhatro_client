@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
+
 import GlobalStyles from "./components/GlobalStyles";
 import ProtectedRoute from "./components/ProtectedRoute";
-
 const route = createBrowserRouter(
   router.map((route) => {
     const Element = route.element;
