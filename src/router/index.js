@@ -10,6 +10,7 @@ import {
   RootViewAccountPermissions,
   AdminAllMembersPage,
   AdminAllRoomsPage,
+  PostPage,
   ErrorPage,
 } from "../pages";
 
@@ -21,6 +22,12 @@ const router = [
     isProtected: true,
     layout: "None",
     element: HomePage,
+  },
+  {
+    path: "/post",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: PostPage,
   },
   {
     path: "/about",
