@@ -1,13 +1,27 @@
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classNames/bind";
 import styles from "./NavUser.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(styles);
 function NavControl() {
   const [isShowSearch, setIsShowSearch] = useState(false);
   const location = useLocation();
   const url = location.pathname;
+
+  useEffect(() => {
+    const handleClickWindow = (e) => {
+      const isClickThis = e.target.closest(".nav_control-search");
+      if (!isClickThis) {
+        setIsShowSearch(false);
+      }
+    };
+    window.addEventListener("click", handleClickWindow);
+
+    return () => {
+      window.removeEventListener("click", handleClickWindow);
+    };
+  }, []);
 
   return (
     <div className={cx("nav_middle")}>
@@ -40,7 +54,13 @@ function NavControl() {
           >
             Contact
           </Link>
-          <div className={cx("search", { show: isShowSearch })}>
+          <div
+            className={cx(
+              "search",
+              { show: isShowSearch },
+              "nav_control-search"
+            )}
+          >
             <div className={cx("input")}>
               <input type="text" placeholder="Looking for motel name... " />
             </div>

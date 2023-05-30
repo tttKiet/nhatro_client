@@ -1,9 +1,9 @@
 import "./NavUser.module.scss";
 import PropTypes from "prop-types";
 
-function MenuItem({ svg, onClick, title }) {
+function MenuItem({ svg, title, ...props }) {
   return (
-    <li onClick={onClick}>
+    <li {...props}>
       {svg}
       {title}
     </li>

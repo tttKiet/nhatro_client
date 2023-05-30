@@ -154,75 +154,104 @@
 
   .more_user {
     border: 1px solid $gray-400;
-    padding: 4px 12px;
+    padding: 0px 18px;
     border-radius: 0.9rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: 2px;
     transition: all 0.2s ease-in;
     position: relative;
+
+    .more_user-item {
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 6px;
+      cursor: pointer;
+
+      &:hover {
+        .icon {
+          color: $blue-400;
+        }
+      }
+    }
 
     &:hover {
       border: 1px solid $blue-400;
     }
 
-    svg {
-      cursor: pointer;
-      transition: all 0.2s linear;
-      width: 20px;
+    .wrap-avt {
+      position: relative;
+      .avt {
+        width: 32px;
+        height: 32px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100px;
+        position: relative;
+        background: #fff;
+        border: 1px solid transparent;
+        box-sizing: border-box;
+        background: linear-gradient(white, white) padding-box,
+          linear-gradient(to right, #ea4c89, #ea4c89) border-box;
+        border: 2px solid transparent;
+        overflow: hidden;
+        cursor: pointer;
 
-      &:hover {
-        color: $blue-400;
+        img {
+          width: 32px;
+          height: 32px;
+          object-fit: cover;
+          border-radius: 100px;
+        }
       }
     }
 
-    // menu
-    .menu {
-      position: absolute;
-      top: calc(100% + 10px);
-      right: 0;
-      background-color: rgba(255, 255, 255, 0.46);
-      backdrop-filter: blur(8px);
-      border-radius: 0.4rem;
-      border: 1px solid #ccc;
-      z-index: 1;
-      overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
-        0 8px 10px -6px rgb(0 0 0 / 0.1);
-      filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.05));
-      ul {
-        min-width: 216px;
-        padding-left: 0;
-        margin-bottom: 0;
+    .name {
+      font-size: 14px;
+    }
+    svg {
+      transition: all 0.2s linear;
+      width: 24px;
+    }
+  }
 
-        li {
-          font-size: 14px;
-          padding: 8px 16px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 12px;
-          color: #000;
-          transition: all 0.2s linear;
-          cursor: pointer;
+  ul {
+    min-width: 216px;
+    padding-left: 0;
+    margin-bottom: 0;
+    li {
+      font-size: 14px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+      color: #000;
+      transition: all 0.2s linear;
 
-          &:hover {
-            color: #fff;
-            background-color: #606060;
-          }
+      &:hover:not(:first-child) {
+        cursor: pointer;
+        color: #fff;
+        background-color: #606060;
 
-          svg {
-            width: 20px;
-          }
-
-          &:first-child {
-            border-bottom: 2px solid #ccc;
-          }
-          &:last-child {
-            border-top: 2px solid #ccc;
-          }
+        svg {
+          color: $blue-400;
         }
+      }
+
+      svg {
+        width: 20px;
+      }
+
+      &:first-child {
+        border-bottom: 2px solid #ccc;
+      }
+      &:last-child {
+        border-top: 2px solid #ccc;
       }
     }
   }

@@ -14,11 +14,6 @@ function Nav() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // function handleLogout() {
-  //   dispatch(userSlice.actions.toggleLogin());
-  //   navigate("/login");
-  // }
-
   function handleLogout() {
     Swal.fire({
       title: "Are you sure to logout?",

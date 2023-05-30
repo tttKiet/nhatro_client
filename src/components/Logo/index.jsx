@@ -9,7 +9,7 @@ function Logo() {
   const content = type === "user" ? "" : type;
   return (
     <div className={cx("wrap")}>
-      <Link className={cx("link")}>
+      <Link to={"/"} className={cx("link")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
