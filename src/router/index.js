@@ -12,6 +12,7 @@ import {
   AdminAllRoomsPage,
   PostPage,
   ErrorPage,
+  ContactPage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -91,6 +92,12 @@ const router = [
     layout: AdminLayout,
     element: AdminAllRoomsPage,
   },
+  {
+    path: "/contact",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: ContactPage,
+  },
 
   // Error page
   {
@@ -98,7 +105,7 @@ const router = [
     isProtected: false,
     layout: "none",
     element: ErrorPage,
-  },
+  },  
 ];
 
 export default router;

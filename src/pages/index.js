@@ -13,6 +13,10 @@ export { default as PostPage } from "./PostPage";
 export { default as RootViewAccountPermissions } from "./RootViewAccountPermissions";
 export { default as ErrorPage } from "./ErrorPage";
 
+export { default as ContactPage } from "./ContactPage";
+
+
+
 // Admin page
 export { default as AdminProfilePage } from "./AdminProfilePage";
 export { default as AdminAllMembersPage } from "./AdminAllMembersPage";

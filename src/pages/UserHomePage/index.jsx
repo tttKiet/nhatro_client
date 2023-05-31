@@ -9,10 +9,11 @@ import imglv3_2 from "../../assets/images/titlelv3_2.png";
 // scss
 import styles from "./UserHomePage.module.scss";
 import classNames from "classNames/bind";
-
+import ContentUser from "../../components/ContentUser"
 const cx = classNames.bind(styles);
 
 function UserHomePage() {
+
   const bodyTitleContent1 = useMemo(
     () => [
       {
@@ -126,6 +127,7 @@ function UserHomePage() {
       </div>
     </div>
   );
+
 }
 
 export default UserHomePage;
