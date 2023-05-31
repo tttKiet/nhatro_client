@@ -3,6 +3,8 @@ import router from "./router";
 
 import GlobalStyles from "./components/GlobalStyles";
 import ProtectedRoute from "./components/ProtectedRoute";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 const route = createBrowserRouter(
   router.map((route) => {
     const Element = route.element;
