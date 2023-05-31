@@ -1,15 +1,40 @@
 .menu {
   min-width: 240px;
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 20px);
   right: -20px;
   background-color: rgba(255, 255, 255, 0.46);
   backdrop-filter: blur(8px);
   border-radius: 0.4rem;
   border: 1px solid #ccc;
   z-index: 1;
-  overflow: hidden;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.05));
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: show 0.2s ease-in-out forwards;
+
+  @keyframes show {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &::before {
+    position: absolute;
+    bottom: 100%;
+    right: 24px;
+    content: "";
+    display: block;
+    border-color: transparent transparent rgb(228 228 228 / 98%) transparent;
+
+    border-style: solid;
+    border-width: 12px;
+  }
 }
