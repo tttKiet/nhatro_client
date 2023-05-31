@@ -13,7 +13,6 @@ function DefaultLayout({ children }) {
         <UserNav />
       </div>
       <div>
-        <ContentUser></ContentUser>
       </div>
       <div className={cx("child")}>{children}</div>
 
