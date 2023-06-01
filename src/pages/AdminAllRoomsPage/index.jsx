@@ -203,7 +203,7 @@ function AdminAllRoomsPage() {
         <SearchBar></SearchBar>
       </div>
       <div className="row mt-5">
-        <Table columns={columns} data={data} />
+        <RoomCard></RoomCard>
       </div>
     </div>
   );
