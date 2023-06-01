@@ -2,41 +2,36 @@ import { useEffect, useState } from "react";
 import RegisterForm from "../../components/RegisterForm";
 import styles from "./AdminProfilePage.module.scss";
 import classNames from "classNames/bind";
-import { userServices } from "../../services";
+import { boardHouseServices, userServices } from "../../services";
 import { useAuth } from "../../hooks";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import AdminCardRoom from "../../components/AdminCardRoom";
 
 const cx = classNames.bind(styles);
 
 function AdminProfilePage() {
   const [showUpdateInformation, setShowUpdateInformation] = useState(false);
-  const [dataAdmin, setAdminData] = useState([]);
-  const [error, setError] = useState(false);
-  const [, , admin] = useAuth();
+  const navigate = useNavigate();
+  const [, , dataAdmin] = useAuth();
+  const [rooms, setRooms] = useState([]);
   const { id } = useParams();
-
-  const getAdmin = async () => {
-    if (id === admin._id) {
-      const res = await userServices.getUserById(id);
-      if (res.err === 0) {
-        setAdminData(res.dataUser);
-      }
-    } else {
-      setError(true);
-    }
-  };
 
   function handleShowUpdateInformation() {
     setShowUpdateInformation(!showUpdateInformation);
   }
 
   useEffect(() => {
-    getAdmin();
+    if (dataAdmin._id !== id || dataAdmin.type !== "admin") {
+      navigate("/error/404");
+      return null;
+    }
+    getBoardHouse(id);
   }, []);
 
-  if (error) {
-    return <h1>Loi roi</h1>;
+  async function getBoardHouse(adminId) {
+    const res = await boardHouseServices.getBoardHouseById(adminId);
+    setRooms(res.data);
   }
 
   return (
@@ -173,102 +168,10 @@ function AdminProfilePage() {
             </div>
           </div>
           <div className="col-md-9">
-            <div className="card shadow p-2 mb-5 bg-body-tertiary rounded">
-              <img
-                src="https://truongthang.vn/wp-content/uploads/2020/02/truong-thang-5-y-tuong-trang-tri-noi-that-phong-tro-cao-cap-cuc-don-gian.jpg"
-                className={cx("img-profile-admin", "card-img-top ")}
-                alt="your-motel"
-              />
-              <div className="card-body">
-                <h5 className="card-title">Dãy trọ abc</h5>
-                <div className="info-box d-flex align-items-center mb-2">
-                  <svg
-                    width={20 + "px"}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6 me-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                    />
-                  </svg>
+            {rooms.map((room, index) => (
+              <AdminCardRoom key={index} room={room}></AdminCardRoom>
+            ))}
 
-                  <p className="card-text">Địa chỉ: Ninh Kiều, Cần Thơ</p>
-                </div>
-                <div className="info-box d-flex align-items-center mb-2">
-                  <svg
-                    width={20 + "px"}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6 me-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819"
-                    />
-                  </svg>
-
-                  <p className="card-text">Tổng số phòng: 109</p>
-                </div>
-                <div className="info-box d-flex align-items-center mb-2">
-                  <svg
-                    width={20 + "px"}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6 me-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-
-                  <p className="card-text">Giá điện: 3000 VNĐ</p>
-                </div>
-                <div className="info-box d-flex align-items-center mb-2">
-                  <svg
-                    width={20 + "px"}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6 me-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-
-                  <p className="card-text">Giá nước: 3000 VNĐ</p>
-                </div>
-                <p className="card-text">
-                  <small className="text-body-secondary">
-                    Chỉnh sửa vào ngày: 11/11/2034
-                  </small>
-                </p>
-              </div>
-            </div>
             {showUpdateInformation && (
               <div
                 className={
