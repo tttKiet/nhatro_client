@@ -9,6 +9,7 @@ import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MenuPropDown from "../../MenuDropDowns";
+import { userServices } from "../../../services";
 
 const cx = classNames.bind(styles);
 function UserControl() {
@@ -19,8 +20,8 @@ function UserControl() {
     more: false,
   });
   const [, , userCur] = useAuth();
-  const lastNameSplit = userCur.fullName.split(" ");
-  const lastName = lastNameSplit[lastNameSplit.length - 1];
+  const lastNameSplit = userCur?.fullName?.split(" ");
+  const lastName = lastNameSplit && lastNameSplit[lastNameSplit.length - 1];
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const bodyMenuUser = useMemo(() => {
@@ -135,8 +136,12 @@ function UserControl() {
       confirmButtonColor: "#d55",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        dispatch(userSlice.actions.toggleLogin());
-        navigate("/login");
+        const res = await userServices.loggout();
+        console.log(res);
+        if (res === "ok") {
+          navigate("/login");
+          dispatch(userSlice.actions.toggleLogin());
+        }
       }
     });
   }
@@ -248,8 +253,13 @@ function UserControl() {
           )}
         >
           <span className={cx("wrap-avt")}>
-            <span className={cx("avt")} onClick={() => toggleOpen("user")}>
-              {userCur?.avatar.includes("https:") ? (
+            <span
+              className={cx("avt", {
+                border: !userCur?.avatar?.includes("https:"),
+              })}
+              onClick={() => toggleOpen("user")}
+            >
+              {userCur?.avatar?.includes("https:") ? (
                 <Image src={userCur.avatar} />
               ) : (
                 <svg

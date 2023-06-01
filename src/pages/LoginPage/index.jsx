@@ -4,8 +4,7 @@ import classNames from "classNames/bind";
 import { useState } from "react";
 import userServices from "../../services/userServices";
 import Snipper from "../../components/Snipper";
-import { useDispatch } from "react-redux";
-import { userSlice } from "../../redux/reducers";
+
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 
@@ -16,20 +15,19 @@ function LoginPage() {
   const [resMessage, setResMessage] = useState("");
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const validate = (values) => {
     const errors = {};
     if (!values.email) {
-      errors.email = "Chưa nhập email sao đăng nhập?";
+      errors.email = "Please! Enter input email!";
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
     ) {
-      errors.email = "Nhập sai định dạng email!";
+      errors.email = "Inlalic email!";
     }
 
     if (!values.password) {
-      errors.password = "Mật khẩu còn chưa nhập?";
+      errors.password = "Please! Enter input password!";
     }
     return errors;
   };
@@ -48,7 +46,6 @@ function LoginPage() {
     const response = await userServices.login(values);
 
     if (response.err === 0) {
-      dispatch(userSlice.actions.handleLogin(response.dataUser));
       navigate("/");
     } else {
       setResMessage(response.message);

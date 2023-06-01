@@ -201,6 +201,15 @@
         overflow: hidden;
         cursor: pointer;
 
+        &.border {
+          background: linear-gradient(white, white) padding-box,
+            linear-gradient(to right, #0863ff, #4c8bea) border-box;
+        }
+
+        svg {
+          width: 24px;
+        }
+
         img {
           width: 32px;
           height: 32px;

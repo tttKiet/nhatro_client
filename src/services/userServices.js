@@ -14,6 +14,16 @@ const userServices = {
     return res.data;
   },
 
+  async loggout() {
+    const res = await axios.get("/api/v1/loggout");
+    return res.data;
+  },
+
+  async getProfile() {
+    const res = await axios.get("/api/v1/profile");
+    return res.data;
+  },
+
   async getAllUsers() {
     const res = await axios.get("/api/v1/users/all-users");
     return res.data;

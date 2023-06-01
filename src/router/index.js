@@ -105,7 +105,7 @@ const router = [
     isProtected: false,
     layout: "none",
     element: ErrorPage,
-  },  
+  },
 ];
 
 export default router;
