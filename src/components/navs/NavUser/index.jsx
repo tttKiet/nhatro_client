@@ -1,8 +1,8 @@
 import Logo from "../../Logo";
 import NavControl from "./NavControl";
+import UserControl from "./UserControl";
 import classNames from "classNames/bind";
 import styles from "./NavUser.module.scss";
-import UserControl from "./UserControl";
 
 const cx = classNames.bind(styles);
 function NavUser() {
