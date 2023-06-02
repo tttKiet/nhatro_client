@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import RegisterForm from "../../components/RegisterForm";
 import styles from "./AdminProfilePage.module.scss";
 import classNames from "classNames/bind";
-import { boardHouseServices, userServices } from "../../services";
+import { boardHouseServices } from "../../services";
 import { useAuth } from "../../hooks";
-import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminCardRoom from "../../components/AdminCardRoom";
+import ModalCustom from "../../components/ModalCustom";
 
 const cx = classNames.bind(styles);
 
@@ -27,7 +27,7 @@ function AdminProfilePage() {
       return null;
     }
     getBoardHouse(id);
-  }, []);
+  }, [dataAdmin._id, dataAdmin.type, id, navigate]);
 
   async function getBoardHouse(adminId) {
     const res = await boardHouseServices.getBoardHouseById(adminId);
@@ -172,6 +172,14 @@ function AdminProfilePage() {
               <AdminCardRoom key={index} room={room}></AdminCardRoom>
             ))}
 
+            <ModalCustom
+              show={showUpdateInformation}
+              onHide={() => setShowUpdateInformation(false)}
+              data={dataAdmin}
+              Component={RegisterForm}
+              action="Update information"
+              _id={dataAdmin._id}
+            ></ModalCustom>
             {showUpdateInformation && (
               <div
                 className={

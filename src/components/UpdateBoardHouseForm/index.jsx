@@ -12,8 +12,7 @@ import { useEffect } from "react";
 import { useAuth } from "../../hooks";
 
 const cx = classNames.bind(styles);
-function UpdateBoardHouseForm({ ...props }) {
-  console.log(`UpdateBoard`, props);
+function UpdateBoardHouseForm({ data, id, isCreate }) {
   const navigate = useNavigate();
   const validate = (values) => {
     const errors = {};
@@ -49,7 +48,6 @@ function UpdateBoardHouseForm({ ...props }) {
   const [, , adminData] = useAuth();
 
   async function handleSubmit(adminId, boardHouseId, data) {
-    console.log("data");
     const res = await boardHouseServices.updateBoardHouse(
       adminId,
       boardHouseId,
@@ -62,12 +60,13 @@ function UpdateBoardHouseForm({ ...props }) {
         confirmButtonText: "Yes!",
         confirmButtonColor: "rgb(89, 89, 255)",
       }).then((result) => {
-        if (result.isConfirmed) {
-          navigate(`admin/profile/${adminData?._id}`);
+        if (result.isConfirmed && isCreate) {
+          navigate(`/admin/profile/${adminData?._id}`);
+        } else {
+          navigate("/");
         }
       });
     }
-    console.log("res");
   }
   const formik = useFormik({
     initialValues: {
@@ -80,15 +79,15 @@ function UpdateBoardHouseForm({ ...props }) {
     },
     onSubmit: (values) => {
       console.log(values);
-      handleSubmit(adminData?._id, props?.id, values);
+      handleSubmit(adminData?._id, id, values);
     },
     validate,
   });
 
   useEffect(() => {
-    if (props.room) {
+    if (data && !isCreate) {
       formik.setValues({
-        ...props.room,
+        ...data,
       });
     }
   }, []);
@@ -182,7 +181,7 @@ function UpdateBoardHouseForm({ ...props }) {
         )}
 
         <div className="my-3">
-          {/* <WidgetCloudinary formik={formik}></WidgetCloudinary> */}
+          <WidgetCloudinary formik={formik}></WidgetCloudinary>
         </div>
 
         <button className="btn btn-primary m-auto" type="submit">
@@ -190,7 +189,7 @@ function UpdateBoardHouseForm({ ...props }) {
         </button>
       </form>
       <div className="col-md-7 d-flex justify-content-center align-items-center">
-        {formik.values.images.length > 0 ? (
+        {formik.values.images?.length > 0 ? (
           <Carousel
             className={cx("carousel-control")}
             showArrows={true}
@@ -218,7 +217,10 @@ function UpdateBoardHouseForm({ ...props }) {
 }
 
 UpdateBoardHouseForm.propTypes = {
-  props: PropTypes.object,
+  data: PropTypes.object,
+  id: PropTypes.string,
+  room: PropTypes.object,
+  isCreate: PropTypes.bool,
 };
 
 export default UpdateBoardHouseForm;

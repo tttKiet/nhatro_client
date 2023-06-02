@@ -1,7 +1,6 @@
 import axios from "../axios";
 const boardHouseServices = {
   async getBoardHouseById(adminId) {
-    console.log(adminId);
     const res = await axios.get(`/api/v1/board-house?adminId=${adminId}`);
     return res.data;
   },

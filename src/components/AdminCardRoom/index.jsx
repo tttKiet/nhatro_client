@@ -29,7 +29,7 @@ function AdminCardRoom({ room }) {
               <img
                 key={index}
                 src={image}
-                className={cx("img-profile-admin", "card-img-top ")}
+                className={cx("img-profile-admin")}
                 alt="your-motel"
               />
             </div>
@@ -137,8 +137,9 @@ function AdminCardRoom({ room }) {
       <ModalCustom
         show={showModal}
         onHide={() => setShowModal(false)}
-        room={room}
-        component={UpdateBoardHouseForm}
+        data={room}
+        Component={UpdateBoardHouseForm}
+        action="Edit board house"
       />
     </div>
   );
