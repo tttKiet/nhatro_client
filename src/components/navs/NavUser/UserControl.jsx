@@ -29,7 +29,8 @@ function UserControl() {
       <div className={cx("menu", "User_Control-user-menu")}>
         <ul>
           <MenuItem
-            title={userCur.email}
+            title={userCur.email ? userCur.email : "Email not available!"}
+            onlyView
             svg={
               <svg
                 xmlns="http://www.w3.org/2000/svg"

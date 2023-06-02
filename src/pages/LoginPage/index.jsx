@@ -4,9 +4,15 @@ import classNames from "classNames/bind";
 import { useState } from "react";
 import userServices from "../../services/userServices";
 import Snipper from "../../components/Snipper";
-
+import { GrGoogle, GrFacebookOption } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import firebaseAuth from "../../untils/firebaseConfig";
 
 const cx = classNames.bind(styles);
 
@@ -44,13 +50,42 @@ function LoginPage() {
   async function handleLogin(values) {
     setLoading(true);
     const response = await userServices.login(values);
-
     if (response.err === 0) {
       navigate("/");
     } else {
       setResMessage(response.message);
     }
     setLoading(false);
+  }
+
+  // test
+  const providers = {
+    google: new GoogleAuthProvider(),
+    facebook: new FacebookAuthProvider(),
+  };
+  const firebaseLogin = async (loginType) => {
+    try {
+      const provider = providers[loginType];
+      const userData = await signInWithPopup(firebaseAuth, provider);
+      console.log(userData);
+      const token = userData.user.accessToken;
+      const res = await userServices.loginWithSocial(token);
+      if (res?.response?.status === 401) {
+        // handle error
+      } else if (res.status === 200) {
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  function handleClickLoginGoogle() {
+    firebaseLogin("google");
+  }
+
+  function handleClickLoginFacebook() {
+    firebaseLogin("facebook");
   }
 
   return (
@@ -112,7 +147,7 @@ function LoginPage() {
                       className={cx({})}
                       type="text"
                       name="email"
-                      placeholder="Email của bạn"
+                      placeholder="Your email"
                       onChange={formik.handleChange}
                       value={formik.values.fullName}
                     />
@@ -126,7 +161,7 @@ function LoginPage() {
                       <input
                         type={showPass ? "text" : "password"}
                         name="password"
-                        placeholder="Mật khẩu của bạn"
+                        placeholder="Your password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
                       />
@@ -185,26 +220,51 @@ function LoginPage() {
                     <div className="d-flex justify-content-center align-items-center">
                       <input type="checkbox" id="remember" defaultChecked />
                       <label htmlFor="remember" className="mb-0 mx-2">
-                        Ghi nhớ đăng nhập
+                        Remember me.
                       </label>
                     </div>
 
-                    <a href="#"> Quên mật khẩu?</a>
+                    <a href="#"> Missing password?</a>
                   </div>
 
                   <span className={cx("err")}>{}</span>
                 </div>
-                <div className={cx("form-btn", "mt-5")}>
-                  <button
-                    type="submit"
-                    className="btn btn-primary d-flex justify-content-center"
-                  >
-                    {loading ? <Snipper /> : "Đăng nhập"}
-                  </button>
-                  <hr />
-                  <Link to="/register" className="btn ">
-                    Đăng ký
-                  </Link>
+                <div className={cx("form-btn")}>
+                  <div className={cx("login")}>
+                    <button
+                      type="submit"
+                      className="btn-default btn btn-primary d-flex justify-content-center"
+                    >
+                      {loading ? <Snipper /> : "Continues"}
+                    </button>
+                  </div>
+                  <span className="border-span my-3" data-text="Or"></span>
+
+                  <div className={cx("social")}>
+                    <button
+                      type="button"
+                      className="btn-default google"
+                      onClick={handleClickLoginGoogle}
+                    >
+                      <GrGoogle />
+                      Login with google
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-default facebook"
+                      onClick={handleClickLoginFacebook}
+                    >
+                      <GrFacebookOption />
+                      Login with facebook
+                    </button>
+                  </div>
+                  <span className="mt-2">
+                    You dont have account? You can
+                    <Link to="/register" className="mx-1">
+                      register
+                    </Link>
+                    here!
+                  </span>
                 </div>
               </form>
             </div>

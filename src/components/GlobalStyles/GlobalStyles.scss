@@ -86,6 +86,73 @@ body {
   color: #000;
 }
 
+button {
+  transition: all 0.3s linear;
+}
+
+button.btn-default {
+  border: 1px solid rgba(128, 128, 128, 0.479);
+  min-width: 120px;
+  font-size: 16px;
+  color: #000000dd;
+  outline: none;
+  transition: all 0.2s linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 0.3rem;
+  padding: 4px;
+  background-color: #fff;
+  position: relative;
+  min-height: 40px;
+  svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+    width: 20px;
+    font-size: 20px;
+  }
+}
+
+button.facebook {
+  background-color: blue;
+  color: #fff;
+
+  &:hover {
+    background-color: rgb(47, 47, 154);
+  }
+}
+
+.border-span {
+  width: 100%;
+  height: 1px;
+  position: relative;
+  border-bottom: 1px solid #ccc;
+
+  &::before {
+    content: attr(data-text);
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: transparent !important;
+    padding: 12px;
+    backdrop-filter: blur(8px);
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+button.google {
+  background-color: rgb(220, 60, 60);
+  color: #fff;
+
+  &:hover {
+    background-color: rgb(180, 51, 51);
+  }
+}
+
 .swal2-title {
   font-size: 24px !important;
 }

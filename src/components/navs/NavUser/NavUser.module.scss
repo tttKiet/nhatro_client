@@ -241,6 +241,9 @@
       gap: 12px;
       color: #000;
       transition: all 0.2s linear;
+      &.notcursor {
+        cursor: text;
+      }
 
       &:hover:not(:first-child) {
         cursor: pointer;

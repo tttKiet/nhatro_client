@@ -14,6 +14,13 @@ const userServices = {
     return res.data;
   },
 
+  async loginWithSocial(token) {
+    const res = await axios.post("/api/v1/user/login/social", {
+      token,
+    });
+    return res;
+  },
+
   async loggout() {
     const res = await axios.get("/api/v1/loggout");
     return res.data;

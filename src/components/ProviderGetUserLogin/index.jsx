@@ -22,6 +22,7 @@ function ProviderGetUserLogin({ children }) {
             email: token.email,
             type: token.type,
             fullName: token.fullName,
+            avatar: token.avatar,
           })
         );
         setLogin(true);
