@@ -14,7 +14,6 @@ function AdminLayout({ children }) {
 
   async function handleGetBoardHouse(adminId) {
     const response = await boardHouseServices.getBoardHouseById(adminId);
-    console.log(response);
     if (response.err == 0) {
       setBoardHouse(response.data);
     } else {
