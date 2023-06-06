@@ -208,7 +208,7 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
           </Carousel>
         ) : (
           <div className="alert alert-light shadow">
-            Img were uploaded will show here!
+            Imgs were uploaded will show here!
           </div>
         )}
       </div>
