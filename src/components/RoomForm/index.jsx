@@ -58,6 +58,8 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
         handleSubmit(values.boardHouseId, values);
       }
     },
+    validate,
+    validateOnChange: false,
   });
 
   async function handleSubmit(id, dataRoom) {
