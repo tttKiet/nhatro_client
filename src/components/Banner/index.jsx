@@ -14,6 +14,8 @@ function Banner() {
         nterval={2000}
         infiniteLoop={true}
         transitionTime={1000}
+        showStatus={false}
+        emulateTouch={true}
       >
         <BannerSlide
           title={"quick room search"}
