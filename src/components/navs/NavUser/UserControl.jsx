@@ -254,6 +254,7 @@ function UserControl() {
           )}
         >
           <span className={cx("wrap-avt")}>
+
             <span
               className={cx("avt", {
                 border: !userCur?.avatar?.includes("https:"),
