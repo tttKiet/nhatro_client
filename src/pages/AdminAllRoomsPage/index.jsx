@@ -1,210 +1,294 @@
-import RoomCard from "../../components/RoomCard";
-import SearchBar from "../../components/SearchBar";
 import styles from "./AdminAllRoomsPage.module.scss";
 import classNames from "classNames/bind";
-import { useTable, usePagination } from "react-table";
+import { createColumnHelper } from "@tanstack/react-table";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../hooks";
+import roomServices from "../../services/roomServices";
+import boardHouseServices from "../../services/boardHouseServices";
+import TableSort from "../../components/TableSort";
+import ModalCustom from "../../components/ModalCustom";
+import RoomForm from "../../components/RoomForm";
+import toast, { Toaster } from "react-hot-toast";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+import InfoToDelete from "../../components/InfoToDelete";
 
 const cx = classNames.bind(styles);
 
 function AdminAllRoomsPage() {
-  function Table({ columns, data }) {
-    // Use the state and functions returned from useTable to build your UI
-    const {
-      getTableProps,
-      getTableBodyProps,
-      headerGroups,
-      prepareRow,
-      page, // Instead of using 'rows', we'll use page,
-      // which has only the rows for the active page
+  const columnHelper = createColumnHelper();
+  const [rooms, setRooms] = useState([]);
+  const [, , adminData] = useAuth();
+  const [boardHouse, setBoardHouse] = useState("");
+  const [dataRoom, setDataRoom] = useState([]);
+  const [isChanged, setIsChanged] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const [dataRoomToEdit, setDataRoomToEdit] = useState([]);
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
 
-      // The rest of these things are super handy, too ;)
-      canPreviousPage,
-      canNextPage,
-      pageOptions,
-      pageCount,
-      gotoPage,
-      nextPage,
-      previousPage,
-      setPageSize,
-      state: { pageIndex, pageSize },
-    } = useTable(
-      {
-        columns,
-        data,
-        initialState: { pageIndex: 0, pageSize: 5 },
-      },
-      usePagination
-    );
-
-    // Render the UI for your table
-    return (
-      <>
-        <table
-          className="table align-middle mb-0 bg-white"
-          {...getTableProps()}
-        >
-          <thead className="bg-light">
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="fs-m">
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {/* 
-          Pagination can be built however you'd like. 
-          This is just a very basic UI implementation:
-        */}
-        <div className="pagination">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {"<<"}
-          </button>{" "}
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {"<"}
-          </button>{" "}
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {">"}
-          </button>{" "}
-          <button
-            onClick={() => gotoPage(pageCount - 1)}
-            disabled={!canNextPage}
-          >
-            {">>"}
-          </button>{" "}
-          <span>
-            Page{" "}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{" "}
-          </span>
-          <span>
-            | Go to page:{" "}
-            <input
-              type="number"
-              defaultValue={pageIndex + 1}
-              onChange={(e) => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0;
-                gotoPage(page);
-              }}
-              style={{ width: "100px" }}
-            />
-          </span>{" "}
-          <select
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-            }}
-          >
-            {[5, 10, 15, 20, 25].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-      </>
-    );
+  async function handleGetBoardHouseById(adminId) {
+    const res = await boardHouseServices.getBoardHouseById(adminId);
+    if (res.err === 0) {
+      setBoardHouse(
+        res.data.map((boardHouse) => ({
+          boardHouseId: boardHouse._id,
+          boardHouseName: boardHouse.name,
+        }))
+      );
+    }
   }
 
-  const columns = [
-    {
-      Header: "Room's number",
-      accessor: "roomNumber",
-    },
-    {
-      Header: "Size",
-      accessor: "size",
-    },
-    {
-      Header: "Has Layout",
-      accessor: "hasLayout",
-    },
-    {
-      Header: "Board houses",
-      accessor: "boardHouse",
-    },
-    {
-      Header: "Price",
-      accessor: "price",
-    },
-    {
-      Header: "Actions",
-      Cell: () => (
-        <div>
-          <button
-            style={{ minWidth: "60px" }}
-            type="button"
-            className="btn btn-primary btn-sm me-2"
-          >
-            Edit
-          </button>
-          <button
-            style={{ minWidth: "60px" }}
-            type="button"
-            className="btn btn-danger btn-sm "
-          >
-            Delete
-          </button>
-        </div>
-      ),
-    },
-  ];
+  async function handleGetRoom(adminID) {
+    if (adminData.type === "admin") {
+      const res = await roomServices.getAllRoomsByAdminId(adminID);
+      if (res.err === 0) {
+        // console.log("res ddata", res.data);
+        setDataRoom(res.data);
+      }
+    }
+  }
 
-  const data = [
-    {
-      roomNumber: 1,
-      size: 4,
-      hasLayout: "yes",
-      boardHouse: 2,
-      price: "2.000.000 VND/ Month",
-    },
-    {
-      roomNumber: 2,
-      size: 4,
-      hasLayout: "yes",
-      boardHouse: 2,
-      price: "2.000.000 VND/ Month",
-    },
-    {
-      roomNumber: 3,
-      size: 4,
-      hasLayout: "yes",
-      boardHouse: 2,
-      price: "2.000.000 VND/ Month",
-    },
-    {
-      roomNumber: 4,
-      size: 4,
-      hasLayout: "yes",
-      boardHouse: 2,
-      price: "2.000.000 VND/ Month",
-    },
-  ];
+  const handleUpdateData = async () => {
+    const res = await roomServices.getAllRoomsByAdminId(adminData._id);
+    if (res.err === 0) {
+      console.log("res ddata", res.data);
+      setDataRoom(res.data);
+    }
+  };
+
+  function formatNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function handleSelectChange(e) {
+    const filterDataRoom = dataRoom.filter(
+      (boardHouse) => boardHouse.boardHouseId === e.target.value
+    );
+    // console.log("filterDataRoom", filterDataRoom);
+    setRooms(
+      filterDataRoom[0].rooms?.map((room) => ({
+        _id: room._id,
+        Number: room.number,
+        Size: room.size,
+        "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
+        Price: room.price,
+        Description: room.description,
+        Status: "Loading...",
+        Images: room.images,
+        boardHouseId: e.target.value,
+      }))
+    );
+    toast.success("Changed Board House");
+    setIsChanged(e.target.value);
+  }
+
+  function handleOpenModalEdit(data, action) {
+    if (action === "delete") {
+      setShowModalDelete(true);
+    } else if (action === "update") {
+      setShowModalUpdate(true);
+    }
+    setDataRoomToEdit(data);
+  }
+
+  // console.log("rooms", rooms);
+  console.log("boardHouse", boardHouse);
+
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("Number", {
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("Size", {
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("Has Layout", {
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor("Price", {
+        cell: (info) => <div>{formatNumber(info.getValue())} VND</div>,
+      }),
+      columnHelper.accessor("Description", {
+        cell: (info) => (
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>{info.getValue()}</Tooltip>}
+          >
+            <div className={cx("text-description")}>{info.getValue()}</div>
+          </OverlayTrigger>
+        ),
+      }),
+      columnHelper.accessor("Status", {
+        cell: (info) => info.getValue(),
+      }),
+
+      columnHelper.accessor("Action", {
+        cell: (info) => {
+          return (
+            <div className="d-flex gap-2">
+              <svg
+                onClick={() => handleOpenModalEdit(info.row.original, "update")}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                style={{ color: "#0079FF" }}
+                className={cx("icon-action")}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+
+              <svg
+                onClick={() => handleOpenModalEdit(info.row.original, "delete")}
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                style={{ color: "#EB5353" }}
+                className={cx("icon-action")}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+          );
+        },
+      }),
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
+  useEffect(() => {
+    handleGetBoardHouseById(adminData._id);
+    handleGetRoom(adminData._id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (dataRoom?.length > 0 && isChanged?.length == 0) {
+      const filterDataRoom = dataRoom.filter(
+        (item) => item.boardHouseId === boardHouse[0]?.boardHouseId
+      );
+      setRooms(
+        filterDataRoom[0]?.rooms.map((room) => ({
+          _id: room._id,
+          Number: room.number,
+          Size: room.size,
+          "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
+          Price: room.price,
+          Description: room.description,
+          Status: "Loading...",
+          Images: room.images,
+          boardHouseId: boardHouse[0]?.boardHouseId,
+        }))
+      );
+      setIsChanged(boardHouse[0]?.boardHouseId);
+    } else if (isChanged?.length > 0) {
+      const filterDataRoom = dataRoom.filter(
+        (item) => item.boardHouseId === isChanged
+      );
+      setRooms(
+        filterDataRoom[0]?.rooms.map((room) => ({
+          _id: room._id,
+          Number: room.number,
+          Size: room.size,
+          "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
+          Price: room.price,
+          Description: room.description,
+          Status: "Loading...",
+          Images: room.images,
+          boardHouseId: isChanged,
+        }))
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataRoom, boardHouse, isChanged]);
 
   return (
     <div className={cx("wrap")}>
-      <div className="row">
-        <SearchBar></SearchBar>
+      <button
+        onClick={() => setShowModal(true)}
+        className="btn btn-primary ms-1"
+      >
+        Create a new room
+      </button>
+
+      <div className="row mt-3 ms-1 ">
+        <div
+          style={{ width: "250px" }}
+          className="p-2 rounded-3 border border-primary-subtle shadow border-2"
+        >
+          <p className="fs-m">Select your board house here: </p>
+
+          <select
+            className="form-select"
+            aria-label="Default select example"
+            defaultValue={
+              boardHouse?.length > 0 ? boardHouse[0]?.boardHouseId : ""
+            }
+            onChange={handleSelectChange}
+          >
+            {boardHouse &&
+              boardHouse.map((bh, index) => (
+                <option key={index} value={bh.boardHouseId}>
+                  {bh.boardHouseName}
+                </option>
+              ))}
+          </select>
+        </div>
       </div>
-      <div className="row mt-5">
-        <Table columns={columns} data={data} />
+
+      <div className="row mt-2">
+        <TableSort data={rooms} columns={columns}></TableSort>
       </div>
+
+      {/* Modal create a new room */}
+      <ModalCustom
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        data={boardHouse}
+        Component={RoomForm}
+        action="Create a new room"
+        _id={""}
+        updateData={handleUpdateData}
+      ></ModalCustom>
+
+      {/* Modal delete a room */}
+      <ModalCustom
+        show={showModalDelete}
+        onHide={() => setShowModalDelete(false)}
+        data={dataRoomToEdit}
+        Component={InfoToDelete}
+        action="Delete room: "
+        _id={""}
+        updateData={handleUpdateData}
+      ></ModalCustom>
+
+      {/* Modal edit a room */}
+      <ModalCustom
+        show={showModalUpdate}
+        onHide={() => setShowModalUpdate(false)}
+        data={boardHouse}
+        dataExisted={dataRoomToEdit}
+        Component={RoomForm}
+        action="Update room: "
+        _id={""}
+        isUpdate={true}
+        updateData={handleUpdateData}
+      ></ModalCustom>
+
+      <Toaster></Toaster>
     </div>
   );
 }

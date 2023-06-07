@@ -4,13 +4,16 @@ import classNames from "classNames/bind";
 import { useAuth } from "../../hooks";
 import Notification from "../../components/Notification";
 import { Link } from "react-router-dom";
+
 const cx = classNames.bind(styles);
 
 function AdminHomePage() {
   const [, , dataAdmin] = useAuth();
+
   if (dataAdmin.type !== "admin") {
     return <h1>You are not admin</h1>;
   }
+
   return (
     <div className={cx("wrap", "flex")}>
       <div className={cx("d-flex justify-content-between ", "heading")}>
@@ -46,7 +49,12 @@ function AdminHomePage() {
           </svg>
         </Link>
       </div>
-
+      {/* {!dataAdmin.emailVerified && (
+        <Alert variant="danger">
+          This is a alert with <Alert.Link href="#">an example link</Alert.Link>
+          . Give it a click if you like.
+        </Alert>
+      )} */}
       <div className="row mt-5">
         <div className="col-md-7">
           <AdminCard></AdminCard>

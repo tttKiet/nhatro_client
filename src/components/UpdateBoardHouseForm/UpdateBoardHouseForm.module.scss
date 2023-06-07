@@ -1,0 +1,16 @@
+.wrap{ 
+    border-radius: 10px;
+    .carousel-control{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .img-uploaded{
+        width: 140px;
+        height: 320px;
+        object-fit: cover;
+    }
+}
