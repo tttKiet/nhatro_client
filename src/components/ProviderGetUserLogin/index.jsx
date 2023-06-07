@@ -16,15 +16,29 @@ function ProviderGetUserLogin({ children }) {
       const res = await userServices.getProfile();
       if (res.err === 0) {
         const { token } = res;
-        dispatch(
-          userSlice.actions.handleLogin({
-            _id: token.id,
-            email: token.email,
-            type: token.type,
-            fullName: token.fullName,
-            avatar: token.avatar,
-          })
-        );
+
+        const resInfo = await userServices.getUserById(token.id);
+        if (resInfo.err === 0) {
+          dispatch(
+            userSlice.actions.handleLogin({
+              _id: resInfo.dataUser._id,
+              email: resInfo.dataUser.email,
+              type: resInfo.dataUser.type,
+              fullName: resInfo.dataUser.fullName,
+              avatar: resInfo.dataUser.avatar,
+            })
+          );
+        } else {
+          dispatch(
+            userSlice.actions.handleLogin({
+              _id: token.id,
+              email: token.email,
+              type: token.type,
+              fullName: token.fullName,
+              avatar: token.avatar,
+            })
+          );
+        }
         setLogin(true);
       } else {
         navigate("/login");

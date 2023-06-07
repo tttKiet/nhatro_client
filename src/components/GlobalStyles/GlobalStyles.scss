@@ -40,12 +40,12 @@ body {
 }
 
 .btn {
-  border: 1px solid rgba(128, 128, 128, 0.479);
-  min-width: 120px;
-  font-size: 16px;
+  border: 1px solid rgba(128, 128, 128, 0.479) !important;
+  min-width: 128px !important;
+  font-size: 16px !important;
   color: #000000dd;
   outline: none;
-  transition: all 0.2s linear;
+  transition: all 0.1s linear !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,8 +65,8 @@ body {
   }
 
   &:hover {
-    opacity: 0.7;
     border-color: inherit;
+    opacity: 0.8;
   }
 }
 

@@ -13,9 +13,15 @@ import {
   PostPage,
   ErrorPage,
   ContactPage,
+  UserProfilePage,
 } from "../pages";
 
-import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
+import {
+  DefaultLayout,
+  RootLayout,
+  AdminLayout,
+  NavLeftLayout,
+} from "../components/Layouts";
 
 const router = [
   {
@@ -71,6 +77,14 @@ const router = [
     layout: RootLayout,
     element: RootViewAccountPermissions,
     isProtected: true,
+  },
+
+  // user
+  {
+    path: "/profile/:user_id",
+    isProtected: true,
+    layout: NavLeftLayout,
+    element: UserProfilePage,
   },
 
   // Admin router [The Van]

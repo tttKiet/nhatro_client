@@ -24,6 +24,28 @@ function UserControl() {
   const lastName = lastNameSplit && lastNameSplit[lastNameSplit.length - 1];
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    Swal.fire({
+      title: "Are you sure to logout?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Hủy",
+      text: "Bạn có thật sự muốn đăng xuất?",
+      confirmButtonText: "Đăng xuất ngay",
+      reverseButtons: true,
+      confirmButtonColor: "#d55",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await userServices.loggout();
+        if (res === "ok") {
+          navigate("/login");
+          dispatch(userSlice.actions.toggleLogin());
+        }
+      }
+    });
+  }, [dispatch, navigate]);
   const bodyMenuUser = useMemo(() => {
     return (
       <div className={cx("menu", "User_Control-user-menu")}>
@@ -49,6 +71,7 @@ function UserControl() {
             }
           />
           <MenuItem
+            to={`/profile/${userCur?._id}`}
             title="Personal page"
             svg={
               <svg
@@ -110,7 +133,7 @@ function UserControl() {
         </ul>
       </div>
     );
-  }, []);
+  }, [handleLogout, userCur?._id, userCur.email]);
 
   const toggleOpen = useCallback((type) => {
     setIsOpen((prev) => {
@@ -123,29 +146,6 @@ function UserControl() {
       return newOb;
     });
   }, []);
-
-  function handleLogout() {
-    Swal.fire({
-      title: "Are you sure to logout?",
-      showConfirmButton: true,
-      showDenyButton: false,
-      showCancelButton: true,
-      cancelButtonText: "Hủy",
-      text: "Bạn có thật sự muốn đăng xuất?",
-      confirmButtonText: "Đăng xuất ngay",
-      reverseButtons: true,
-      confirmButtonColor: "#d55",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await userServices.loggout();
-        console.log(res);
-        if (res === "ok") {
-          navigate("/login");
-          dispatch(userSlice.actions.toggleLogin());
-        }
-      }
-    });
-  }
 
   useEffect(() => {
     const handleClickWindow = (e) => {

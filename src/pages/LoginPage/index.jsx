@@ -67,7 +67,6 @@ function LoginPage() {
     try {
       const provider = providers[loginType];
       const userData = await signInWithPopup(firebaseAuth, provider);
-      console.log(userData);
       const token = userData.user.accessToken;
       const res = await userServices.loginWithSocial(token);
       if (res?.response?.status === 401) {
