@@ -249,7 +249,7 @@ function UserControl() {
         >
           <span className={cx("wrap-avt")}>
             <span className={cx("avt")} onClick={() => toggleOpen("user")}>
-              {userCur?.avatar.includes("https:") ? (
+              {userCur?.avatar?.includes("https:") ? (
                 <Image src={userCur.avatar} />
               ) : (
                 <svg
