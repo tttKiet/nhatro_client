@@ -14,6 +14,28 @@ const userServices = {
     return res.data;
   },
 
+  async loginWithSocial(token) {
+    const res = await axios.post("/api/v1/user/login/social", {
+      token,
+    });
+    return res;
+  },
+
+  async loggout() {
+    const res = await axios.get("/api/v1/loggout");
+    return res.data;
+  },
+
+  async getProfile() {
+    const res = await axios.get("/api/v1/profile");
+    return res.data;
+  },
+
+  async updateProfile(_id, data) {
+    const res = await axios.patch(`/api/v1/users/${_id}`, data);
+    return res;
+  },
+
   async getAllUsers() {
     const res = await axios.get("/api/v1/users/all-users");
     return res.data;

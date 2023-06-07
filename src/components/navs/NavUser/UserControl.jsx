@@ -9,6 +9,7 @@ import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MenuPropDown from "../../MenuDropDowns";
+import { userServices } from "../../../services";
 
 const cx = classNames.bind(styles);
 function UserControl() {
@@ -19,16 +20,39 @@ function UserControl() {
     more: false,
   });
   const [, , userCur] = useAuth();
-  const lastNameSplit = userCur.fullName.split(" ");
-  const lastName = lastNameSplit[lastNameSplit.length - 1];
+  const lastNameSplit = userCur?.fullName?.split(" ");
+  const lastName = lastNameSplit && lastNameSplit[lastNameSplit.length - 1];
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    Swal.fire({
+      title: "Are you sure to logout?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Hủy",
+      text: "Bạn có thật sự muốn đăng xuất?",
+      confirmButtonText: "Đăng xuất ngay",
+      reverseButtons: true,
+      confirmButtonColor: "#d55",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await userServices.loggout();
+        if (res === "ok") {
+          navigate("/login");
+          dispatch(userSlice.actions.toggleLogin());
+        }
+      }
+    });
+  }, [dispatch, navigate]);
   const bodyMenuUser = useMemo(() => {
     return (
       <div className={cx("menu", "User_Control-user-menu")}>
         <ul>
           <MenuItem
-            title={userCur.email}
+            title={userCur.email ? userCur.email : "Email not available!"}
+            onlyView
             svg={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -47,6 +71,7 @@ function UserControl() {
             }
           />
           <MenuItem
+            to={`/profile/${userCur?._id}`}
             title="Personal page"
             svg={
               <svg
@@ -108,7 +133,7 @@ function UserControl() {
         </ul>
       </div>
     );
-  }, []);
+  }, [handleLogout, userCur?._id, userCur.email]);
 
   const toggleOpen = useCallback((type) => {
     setIsOpen((prev) => {
@@ -121,25 +146,6 @@ function UserControl() {
       return newOb;
     });
   }, []);
-
-  function handleLogout() {
-    Swal.fire({
-      title: "Are you sure to logout?",
-      showConfirmButton: true,
-      showDenyButton: false,
-      showCancelButton: true,
-      cancelButtonText: "Hủy",
-      text: "Bạn có thật sự muốn đăng xuất?",
-      confirmButtonText: "Đăng xuất ngay",
-      reverseButtons: true,
-      confirmButtonColor: "#d55",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        dispatch(userSlice.actions.toggleLogin());
-        navigate("/login");
-      }
-    });
-  }
 
   useEffect(() => {
     const handleClickWindow = (e) => {
@@ -248,7 +254,13 @@ function UserControl() {
           )}
         >
           <span className={cx("wrap-avt")}>
-            <span className={cx("avt")} onClick={() => toggleOpen("user")}>
+
+            <span
+              className={cx("avt", {
+                border: !userCur?.avatar?.includes("https:"),
+              })}
+              onClick={() => toggleOpen("user")}
+            >
               {userCur?.avatar?.includes("https:") ? (
                 <Image src={userCur.avatar} />
               ) : (
