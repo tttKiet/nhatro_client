@@ -14,7 +14,7 @@ import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 
 const cx = classNames.bind(styles);
-function NavControlLeft() {
+function NavControlLeft({ setActive, active }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -52,11 +52,17 @@ function NavControlLeft() {
       <ul className={cx("list-menu-control")}>
         <hr />
 
-        <li className={cx("active")}>
+        <li
+          className={cx({ active: active === "my-profile" })}
+          onClick={() => setActive("my-profile")}
+        >
           <GiCaptainHatProfile />
           My profile
         </li>
-        <li>
+        <li
+          onClick={() => setActive("verify-email")}
+          className={cx({ active: active === "verify-email" })}
+        >
           <HiOutlineMail />
           Verify email
         </li>

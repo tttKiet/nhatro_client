@@ -3,10 +3,10 @@ import styles from "./NavLeft.module.scss";
 import NavControlLeft from "./NavControLeft";
 
 const cx = classNames.bind(styles);
-function NavLeft() {
+function NavLeft({ active, setActive }) {
   return (
     <div className={cx("wrap")}>
-      <NavControlLeft />
+      <NavControlLeft setActive={setActive} active={active} />
     </div>
   );
 }

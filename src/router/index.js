@@ -16,12 +16,7 @@ import {
   UserProfilePage,
 } from "../pages";
 
-import {
-  DefaultLayout,
-  RootLayout,
-  AdminLayout,
-  NavLeftLayout,
-} from "../components/Layouts";
+import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
 
 const router = [
   {
@@ -83,7 +78,7 @@ const router = [
   {
     path: "/profile/:user_id",
     isProtected: true,
-    layout: NavLeftLayout,
+    layout: "None",
     element: UserProfilePage,
   },
 
