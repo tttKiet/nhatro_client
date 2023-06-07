@@ -1,10 +1,51 @@
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+
+  & *::-webkit-scrollbar {
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    width: 8px;
+  }
+
+  & *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(22, 24, 35, 0.06);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(22, 24, 35, 0.4);
+    }
+  }
+
+  &* ::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+body {
+  box-sizing: inherit;
+  font-family: "Josefin Sans", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-family: "Montserrat", sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+
 .btn {
-  border: 1px solid rgba(128, 128, 128, 0.479);
-  min-width: 120px;
-  font-size: 16px;
+  border: 1px solid rgba(128, 128, 128, 0.479) !important;
+  min-width: 128px !important;
+  font-size: 16px !important;
   color: #000000dd;
   outline: none;
-  transition: all 0.2s linear;
+  transition: all 0.1s linear !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,8 +65,8 @@
   }
 
   &:hover {
-    opacity: 0.7;
     border-color: inherit;
+    opacity: 0.8;
   }
 }
 
@@ -45,6 +86,73 @@
   color: #000;
 }
 
+button {
+  transition: all 0.3s linear;
+}
+
+button.btn-default {
+  border: 1px solid rgba(128, 128, 128, 0.479);
+  min-width: 120px;
+  font-size: 16px;
+  color: #000000dd;
+  outline: none;
+  transition: all 0.2s linear;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 0.3rem;
+  padding: 4px;
+  background-color: #fff;
+  position: relative;
+  min-height: 40px;
+  svg {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 12px;
+    width: 20px;
+    font-size: 20px;
+  }
+}
+
+button.facebook {
+  background-color: blue;
+  color: #fff;
+
+  &:hover {
+    background-color: rgb(47, 47, 154);
+  }
+}
+
+.border-span {
+  width: 100%;
+  height: 1px;
+  position: relative;
+  border-bottom: 1px solid #ccc;
+
+  &::before {
+    content: attr(data-text);
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background-color: transparent !important;
+    padding: 12px;
+    backdrop-filter: blur(8px);
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
+button.google {
+  background-color: rgb(220, 60, 60);
+  color: #fff;
+
+  &:hover {
+    background-color: rgb(180, 51, 51);
+  }
+}
+
 .swal2-title {
   font-size: 24px !important;
 }
@@ -53,23 +161,44 @@
   font-weight: 600;
 }
 
-.fs-s{
+.fs-s {
   font-size: 14px;
 }
 
-
-.fs-m{
+.fs-m {
   font-size: 16px;
 }
 
-.fs-l{
+.fs-l {
   font-size: 18px;
 }
 
-.fs-xl{
+.fs-xl {
   font-size: 22px;
 }
 
-.fs-xxl{
+.fs-xxl {
   font-size: 26px;
+}
+
+.hight-pink {
+  color: #ea4c89;
+}
+
+h4 {
+  font-size: 12px;
+  color: $gray-600;
+  margin-bottom: 0;
+}
+
+h3 {
+  font-size: 16px;
+  color: $gray-700;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 18px;
+  color: $gray-900;
+  margin-bottom: 0;
 }

@@ -10,7 +10,10 @@ import {
   RootViewAccountPermissions,
   AdminAllMembersPage,
   AdminAllRoomsPage,
+  PostPage,
   ErrorPage,
+  ContactPage,
+  UserProfilePage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -21,6 +24,12 @@ const router = [
     isProtected: true,
     layout: "None",
     element: HomePage,
+  },
+  {
+    path: "/post",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: PostPage,
   },
   {
     path: "/about",
@@ -65,6 +74,14 @@ const router = [
     isProtected: true,
   },
 
+  // user
+  {
+    path: "/profile/:user_id",
+    isProtected: true,
+    layout: "None",
+    element: UserProfilePage,
+  },
+
   // Admin router [The Van]
   {
     path: "/admin/profile/:id",
@@ -83,6 +100,12 @@ const router = [
     isProtected: true,
     layout: AdminLayout,
     element: AdminAllRoomsPage,
+  },
+  {
+    path: "/contact",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: ContactPage,
   },
 
   // Error page
