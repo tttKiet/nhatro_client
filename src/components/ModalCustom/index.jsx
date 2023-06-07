@@ -10,6 +10,8 @@ function ModalCustom({
   action,
   _id,
   updateData,
+  dataExisted,
+  isUpdate,
 }) {
   function handleCloseModal() {
     if (updateData) {
@@ -37,6 +39,8 @@ function ModalCustom({
         _id={_id}
         updateData={updateData}
         onHide={onHide}
+        dataExisted={dataExisted}
+        isUpdate={isUpdate}
       ></Component>
       <Modal.Footer>
         <Button variant="warning" onClick={handleCloseModal}>
@@ -54,11 +58,17 @@ ModalCustom.propTypes = {
     PropTypes.array,
     PropTypes.string,
   ]),
+  dataExisted: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+  ]),
   show: PropTypes.bool,
   onHide: PropTypes.func,
   action: PropTypes.string,
   _id: PropTypes.string,
   updateData: PropTypes.func,
+  isUpdate: PropTypes.bool,
 };
 
 export default ModalCustom;

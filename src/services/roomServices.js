@@ -15,6 +15,13 @@ const roomServices = {
     const res = await axios.delete(`/api/v1/board-house/room/delete/${roomId}`);
     return res.data;
   },
+  async updateRoom(roomId, dataRoom) {
+    const res = await axios.patch(
+      `/api/v1/board-house/room/update/${roomId}`,
+      dataRoom
+    );
+    return res.data;
+  },
 };
 
 export default roomServices;

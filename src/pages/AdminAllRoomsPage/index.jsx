@@ -24,7 +24,8 @@ function AdminAllRoomsPage() {
   const [isChanged, setIsChanged] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
-  const [dataRoomToDelete, setDataRoomToDelete] = useState([]);
+  const [dataRoomToEdit, setDataRoomToEdit] = useState([]);
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
 
   async function handleGetBoardHouseById(adminId) {
     const res = await boardHouseServices.getBoardHouseById(adminId);
@@ -71,18 +72,24 @@ function AdminAllRoomsPage() {
         Number: room.number,
         Size: room.size,
         "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-        Price: `${formatNumber(room.price)} VND`,
+        Price: room.price,
         Description: room.description,
         Status: "Loading...",
+        Images: room.images,
+        boardHouseId: e.target.value,
       }))
     );
     toast.success("Changed Board House");
     setIsChanged(e.target.value);
   }
 
-  function handleOpenModalDelete(data) {
-    setShowModalDelete(true);
-    setDataRoomToDelete(data);
+  function handleOpenModalEdit(data, action) {
+    if (action === "delete") {
+      setShowModalDelete(true);
+    } else if (action === "update") {
+      setShowModalUpdate(true);
+    }
+    setDataRoomToEdit(data);
   }
 
   // console.log("rooms", rooms);
@@ -100,12 +107,10 @@ function AdminAllRoomsPage() {
         cell: (info) => info.getValue(),
       }),
       columnHelper.accessor("Price", {
-        cell: (info) => info.getValue(),
+        cell: (info) => <div>{formatNumber(info.getValue())} VND</div>,
       }),
       columnHelper.accessor("Description", {
         cell: (info) => (
-          // <div className={cx("text-description")}>{info.getValue()}</div>
-
           <OverlayTrigger
             placement="top"
             overlay={<Tooltip>{info.getValue()}</Tooltip>}
@@ -120,11 +125,10 @@ function AdminAllRoomsPage() {
 
       columnHelper.accessor("Action", {
         cell: (info) => {
-          // const _id = info.row.original._id;
-          // console.log("id", info.row.original);
           return (
             <div className="d-flex gap-2">
               <svg
+                onClick={() => handleOpenModalEdit(info.row.original, "update")}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -141,7 +145,7 @@ function AdminAllRoomsPage() {
               </svg>
 
               <svg
-                onClick={() => handleOpenModalDelete(info.row.original)}
+                onClick={() => handleOpenModalEdit(info.row.original, "delete")}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -182,9 +186,11 @@ function AdminAllRoomsPage() {
           Number: room.number,
           Size: room.size,
           "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-          Price: `${formatNumber(room.price)} VND`,
+          Price: room.price,
           Description: room.description,
           Status: "Loading...",
+          Images: room.images,
+          boardHouseId: boardHouse[0]?.boardHouseId,
         }))
       );
       setIsChanged(boardHouse[0]?.boardHouseId);
@@ -198,9 +204,11 @@ function AdminAllRoomsPage() {
           Number: room.number,
           Size: room.size,
           "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-          Price: `${formatNumber(room.price)} VND`,
+          Price: room.price,
           Description: room.description,
           Status: "Loading...",
+          Images: room.images,
+          boardHouseId: isChanged,
         }))
       );
     }
@@ -260,12 +268,26 @@ function AdminAllRoomsPage() {
       <ModalCustom
         show={showModalDelete}
         onHide={() => setShowModalDelete(false)}
-        data={dataRoomToDelete}
+        data={dataRoomToEdit}
         Component={InfoToDelete}
         action="Delete room: "
         _id={""}
         updateData={handleUpdateData}
       ></ModalCustom>
+
+      {/* Modal edit a room */}
+      <ModalCustom
+        show={showModalUpdate}
+        onHide={() => setShowModalUpdate(false)}
+        data={boardHouse}
+        dataExisted={dataRoomToEdit}
+        Component={RoomForm}
+        action="Update room: "
+        _id={""}
+        isUpdate={true}
+        updateData={handleUpdateData}
+      ></ModalCustom>
+
       <Toaster></Toaster>
     </div>
   );

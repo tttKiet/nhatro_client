@@ -63,7 +63,7 @@ function InfoToDelete({ data, updateData, onHide }) {
 }
 
 InfoToDelete.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   updateData: PropTypes.func,
   onHide: PropTypes.func,
 };
