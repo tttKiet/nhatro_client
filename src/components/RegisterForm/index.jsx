@@ -127,6 +127,7 @@ function RegisterForm({ _id }) {
                 id="fullName"
                 type="text"
                 name="fullName"
+                spellCheck={false}
                 placeholder="exam: Nguyen Van A"
                 className={cx({
                   errInput: !!formik.errors.fullName && formik.touched.fullName,
@@ -134,6 +135,7 @@ function RegisterForm({ _id }) {
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
               />
+              {console.log(formik)}
               {formik.errors.fullName && formik.touched.fullName && (
                 <span className={cx("err")}>{formik.errors.fullName}</span>
               )}
@@ -144,6 +146,7 @@ function RegisterForm({ _id }) {
                 Email:
               </label>
               <input
+                spellCheck={false}
                 id="email"
                 type="text"
                 name="email"
@@ -164,6 +167,7 @@ function RegisterForm({ _id }) {
               </label>
               <input
                 id="phone"
+                spellCheck={false}
                 type="text"
                 name="phone"
                 className={cx({
@@ -185,6 +189,7 @@ function RegisterForm({ _id }) {
               </label>
               <div className={cx("input-eye")}>
                 <input
+                  spellCheck={false}
                   id="pass"
                   type={showPass ? "text" : "password"}
                   className={cx({
@@ -247,6 +252,7 @@ function RegisterForm({ _id }) {
               </label>
               <input
                 id="cpass"
+                spellCheck={false}
                 type={showPass ? "text" : "password"}
                 className={cx({
                   errInput:
@@ -267,6 +273,7 @@ function RegisterForm({ _id }) {
                 Your address:
               </label>
               <textarea
+                spellCheck={false}
                 id="address"
                 type="text"
                 className={cx({

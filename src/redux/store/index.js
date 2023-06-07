@@ -1,24 +1,30 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { userSlice, imgSlice } from "../reducers";
+import { userSlice } from "../reducers";
+import thunk from "redux-thunk";
+import { combineReducers } from "@reduxjs/toolkit";
 
 const persistConfig = {
-  key: "user",
+  key: "root",
   storage,
+  blacklist: ["user"],
 };
 
-const persistedReducer = persistReducer(persistConfig, userSlice.reducer);
+const rootReducer = combineReducers({
+  user: userSlice.reducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: {
-    user: persistedReducer,
-    img: imgSlice.reducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => [
+    ...getDefaultMiddleware({
       serializableCheck: false,
     }),
+    thunk,
+  ],
 });
 
 const persistor = persistStore(store);

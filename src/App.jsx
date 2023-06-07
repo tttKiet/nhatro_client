@@ -1,7 +1,15 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
+
 import GlobalStyles from "./components/GlobalStyles";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProviderGetUserLogin from "./components/ProviderGetUserLogin";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "moment-timezone";
+import moment from "moment";
+moment().format("MMM Do YY");
+// react alert2 animation
+import "animate.css";
 
 const route = createBrowserRouter(
   router.map((route) => {
@@ -13,9 +21,11 @@ const route = createBrowserRouter(
         return {
           path: route.path,
           element: isProtected ? (
-            <ProtectedRoute>
-              <Element />
-            </ProtectedRoute>
+            <ProviderGetUserLogin>
+              <ProtectedRoute>
+                <Element />
+              </ProtectedRoute>
+            </ProviderGetUserLogin>
           ) : (
             <>
               <Element />
@@ -26,11 +36,13 @@ const route = createBrowserRouter(
       return {
         path: route.path,
         element: isProtected ? (
-          <ProtectedRoute>
-            <MappingLayout>
-              <Element />
-            </MappingLayout>
-          </ProtectedRoute>
+          <ProviderGetUserLogin>
+            <ProtectedRoute>
+              <MappingLayout>
+                <Element />
+              </MappingLayout>
+            </ProtectedRoute>
+          </ProviderGetUserLogin>
         ) : (
           <MappingLayout>
             <Element />
@@ -41,9 +53,11 @@ const route = createBrowserRouter(
       return {
         path: route.path,
         element: isProtected ? (
-          <ProtectedRoute>
-            <Element />
-          </ProtectedRoute>
+          <ProviderGetUserLogin>
+            <ProtectedRoute>
+              <Element />
+            </ProtectedRoute>
+          </ProviderGetUserLogin>
         ) : (
           <Element />
         ),

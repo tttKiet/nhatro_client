@@ -1,19 +1,4 @@
 .wrap {
-  table {
-    thead {
-      th {
-        color: 16px !important;
-      }
-    }
-
-    tbody {
-      td,
-      th {
-        font-size: 16px !important;
-      }
-    }
-  }
-
   .btn {
     display: flex;
     justify-content: center;
@@ -42,9 +27,7 @@
 }
 
 .label_type {
-  padding: 4px 16px;
-  border: 1px solid rgba(255, 0, 0, 0.681);
-  color: red;
+  color: rgb(0 0 0 / 54%);
   font-size: 16px;
   line-height: 16px;
   border-radius: 0.3rem;
@@ -58,9 +41,99 @@
   }
 
   &.admin {
-    border: 1px solid #007bff;
     color: #007bff;
     background-color: transparent;
     backdrop-filter: blur(12px);
+  }
+}
+
+.permission_for {
+  border-radius: 0.45em;
+  overflow: hidden;
+  .btn {
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    padding: 6px 12px;
+    color: #000000;
+    text-transform: uppercase;
+    position: relative;
+    transition: 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+
+    svg {
+      width: 20px;
+    }
+
+    span {
+      z-index: 2;
+    }
+
+    &:disabled {
+      cursor: auto;
+      opacity: 0.3;
+
+      &::before {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        width: 0;
+        background-color: transparent !important;
+        transition: 0.5s ease;
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        height: 0;
+        width: 100%;
+        background-color: transparent;
+        z-index: -1;
+        transition: 0.4s ease;
+      }
+    }
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background-color: rgba(255, 197, 6, 0.786);
+    transition: 0.5s ease;
+  }
+
+  .btn:hover {
+    color: #1e1e2b;
+    transition-delay: 0.5s;
+  }
+
+  .btn:hover::before {
+    width: 100%;
+  }
+
+  .btn::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    background-color: #ffc506;
+    transition: 0.4s ease;
+  }
+
+  .btn:hover::after {
+    height: 100%;
+    transition-delay: 0.4s;
+    color: aliceblue;
   }
 }

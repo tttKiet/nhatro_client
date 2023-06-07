@@ -1,0 +1,52 @@
+.wrap {
+  margin: 60px 0 20px 0;
+
+  .gr_box {
+    .heading {
+      h6 {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        line-height: 14px;
+        text-transform: uppercase;
+        display: inline-block;
+        margin-bottom: 24px;
+        color: #4f3cc9;
+      }
+
+      h5 {
+        font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial,
+          sans-serif;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 38px;
+      }
+    }
+
+    .gr {
+      list-style: none;
+      padding-left: 0;
+      li {
+        padding-top: 24px;
+
+        h5 {
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 24px;
+        }
+
+        p {
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 28px;
+          color: #3d3d4e;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .wrap {
+  }
+}

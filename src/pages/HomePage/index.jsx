@@ -11,7 +11,9 @@ import { RootLayout, DefaultLayout } from "../../components/Layouts";
 
 function HomePage() {
   const [, type] = useAuth();
-
+  if (!type) {
+    <p> Lag</p>;
+  }
   return (
     <>
       {type === "root" ? (

@@ -56,7 +56,7 @@
     }
 
     .form-login {
-      padding: 30px;
+      padding: 30px 30px 10px 30px;
 
       .form {
         height: 100%;
@@ -85,6 +85,19 @@
           display: flex;
           flex-direction: column;
           padding-top: 12px;
+          gap: 12px;
+
+          .login {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+
+          .social {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
         }
 
         .form-gr {

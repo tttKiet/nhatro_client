@@ -1,0 +1,90 @@
+.wrap {
+  .nav-control {
+    .hi {
+      h4 {
+        font-size: 16px;
+        color: #7c7c7c;
+        padding: 4px 20px 8px 20px;
+        margin-bottom: 0;
+        font-weight: 400;
+      }
+      button,
+      a {
+        text-decoration: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        font-size: 20px;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: #a2a2a2;
+        background-color: transparent !important;
+        transition: all 0.3s ease-in-out;
+        font-weight: 500;
+
+        &:hover {
+          color: #0b0b0b;
+          svg {
+            color: #0b0b0b;
+          }
+        }
+
+        svg {
+          width: 20px;
+          font-size: 18px;
+          transition: all 0.3s ease-in-out;
+          color: #a2a2a2;
+        }
+      }
+    }
+    .button-user-profile {
+      border: none;
+      background-color: transparent !important;
+      outline: none;
+      text-align: left;
+      padding-left: 58px;
+      color: rgb(255, 65, 65);
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      &:hover {
+        color: rgb(255, 135, 135);
+      }
+    }
+
+    .list-menu-control {
+      list-style: none;
+      padding: 20px;
+      padding-top: 0;
+
+      li {
+        border-radius: 0.8rem;
+        padding: 6px 10px;
+        margin-bottom: 6px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #737d8d;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        &:hover {
+          color: #1f62e8;
+          background-color: rgba(128, 165, 239, 0.3);
+        }
+        svg {
+          width: 20px;
+          font-size: 18px;
+        }
+        &.active {
+          background-color: #e9f0ff;
+          color: #0958f7;
+          border: 1px solid #3a7bff;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+.wrap-all{
+
+  .carousel{
+
+    .main-banner{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left-banner{
+        padding-left: 40px;
+        animation: contentIn 1s forwards;
+
+          h5{
+            letter-spacing: 12px;
+            color: #666;
+            font-weight: 800;
+            font-size: 16px;
+            padding: 8px 0;
+            margin-bottom: 20px;
+          }
+          h2{
+            font-size: 40px;
+            line-height: 55px;
+            font-weight: 800;
+            color: #333;
+            padding: 8px 0;
+            margin-bottom: 30px;
+          }
+          button{
+            padding: 12px 40px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            background-color: #f76b6a;
+            border: none;
+            color: #fff!important;
+            line-height: 1;
+          }
+        
+      }
+      .right-banner{
+        animation: slideIn 1s forwards;
+        img{
+          height: 500px;
+        }
+
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes contentIn {
+  0%{
+      margin-bottom: -5%;
+      opacity: 0;
+  }100%{
+      margin-bottom: 0;
+      opacity: 1;
+      transform: translateX(30px);
+  }
+}
+@keyframes slideIn {
+  0%{
+      opacity: 0;
+     filter: blur(20px);
+  }
+  100%{
+      opacity: 1;
+      filter: blur(1);
+      transform: translateX(30px);
+  }
+}

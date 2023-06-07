@@ -1,0 +1,32 @@
+.wrap {
+  margin: 16px 0 20px;
+  position: relative;
+  display: inline-block;
+
+  input {
+    outline: none;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    padding: 6px 16px;
+    min-width: 400px;
+    transition: all 0.2s linear;
+
+    &:focus {
+      border-color: #007bff;
+    }
+  }
+
+  .search {
+    padding-left: 20px;
+    border-left: 1px solid #ccc;
+    position: absolute;
+    top: 50%;
+    cursor: pointer;
+    right: 20px;
+    transform: translateY(-50%);
+
+    svg {
+      width: 20px;
+    }
+  }
+}

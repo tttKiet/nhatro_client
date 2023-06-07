@@ -1,11 +1,17 @@
 import { RingLoader } from "react-spinners";
+import PropTypes from "prop-types";
 
-function Snipper() {
+function Snipper({ color = "#fff", size = 20 }) {
   return (
     <div>
-      <RingLoader size={20} color="#fff" speedMultiplier={1} />
+      <RingLoader size={size} color={color} speedMultiplier={1} />
     </div>
   );
 }
+
+Snipper.propTypes = {
+  color: PropTypes.string,
+  size: PropTypes.number,
+};
 
 export default Snipper;
