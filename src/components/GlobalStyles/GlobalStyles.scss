@@ -88,6 +88,21 @@ body {
 
 button {
   transition: all 0.3s linear;
+
+  &.icon-x {
+    outline: none;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    svg {
+      width: 18px;
+      color: #68686865;
+    }
+  }
 }
 
 button.btn-default {
@@ -102,10 +117,32 @@ button.btn-default {
   align-items: center;
   gap: 8px;
   border-radius: 0.3rem;
-  padding: 4px;
+  padding: 4px 8px;
   background-color: #fff;
   position: relative;
-  min-height: 40px;
+  min-height: 38px;
+
+  &.transparent {
+    background-color: transparent !important;
+    color: #fff;
+    border: 1px solid rgba(213, 213, 213, 0.842);
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &.center {
+    padding: 4px 14px;
+    svg {
+      display: block;
+      width: 20px;
+      font-size: 20px;
+      position: unset;
+      transform: unset;
+    }
+  }
+
   svg {
     position: absolute;
     top: 50%;
@@ -113,6 +150,25 @@ button.btn-default {
     left: 12px;
     width: 20px;
     font-size: 20px;
+  }
+
+  &.disabled {
+    cursor: auto;
+    &:hover {
+      background-color: #fff;
+    }
+
+    &:active {
+      background-color: #fff;
+    }
+  }
+
+  &:hover {
+    background-color: #ffffff95;
+  }
+
+  &:active {
+    background-color: #ffffff38;
   }
 }
 
@@ -183,6 +239,10 @@ button.google {
 
 .hight-pink {
   color: #ea4c89;
+}
+
+.hight-l {
+  color: #1051ea;
 }
 
 h4 {

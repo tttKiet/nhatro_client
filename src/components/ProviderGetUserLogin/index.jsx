@@ -26,6 +26,7 @@ function ProviderGetUserLogin({ children }) {
               type: resInfo.dataUser.type,
               fullName: resInfo.dataUser.fullName,
               avatar: resInfo.dataUser.avatar,
+              emailVerified: resInfo.dataUser.emailVerified,
             })
           );
         } else {
@@ -36,6 +37,7 @@ function ProviderGetUserLogin({ children }) {
               type: token.type,
               fullName: token.fullName,
               avatar: token.avatar,
+              emailVerified: resInfo.dataUser.emailVerified,
             })
           );
         }

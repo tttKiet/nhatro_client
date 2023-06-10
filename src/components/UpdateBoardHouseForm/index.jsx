@@ -6,11 +6,11 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import styles from "./UpdateBoardHouseForm.module.scss";
-import classNames from "classNames/bind";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks";
 
+import styles from "./UpdateBoardHouseForm.module.scss";
+import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 function UpdateBoardHouseForm({ data, id, isCreate }) {
   const navigate = useNavigate();

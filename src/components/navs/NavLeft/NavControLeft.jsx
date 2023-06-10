@@ -12,11 +12,13 @@ import { useCallback } from "react";
 import { userServices } from "../../../services";
 import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../../../hooks";
 
 const cx = classNames.bind(styles);
 function NavControlLeft({ setActive, active }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [, , userCur] = useAuth();
 
   const handleLogout = useCallback(() => {
     Swal.fire({
@@ -52,19 +54,23 @@ function NavControlLeft({ setActive, active }) {
       <ul className={cx("list-menu-control")}>
         <hr />
 
-        <li
-          className={cx({ active: active === "my-profile" })}
-          onClick={() => setActive("my-profile")}
-        >
-          <GiCaptainHatProfile />
-          My profile
+        <li>
+          <Link
+            className={cx({ active: active === "my-profile" })}
+            to={`/profile/${userCur?._id}?tag=my-profile`}
+          >
+            <GiCaptainHatProfile />
+            My profile
+          </Link>
         </li>
-        <li
-          onClick={() => setActive("verify-email")}
-          className={cx({ active: active === "verify-email" })}
-        >
-          <HiOutlineMail />
-          Verify email
+        <li>
+          <Link
+            className={cx({ active: active === "verify-email" })}
+            to={`/profile/${userCur?._id}?tag=verify-email`}
+          >
+            <HiOutlineMail />
+            Verify email
+          </Link>
         </li>
         <li>
           <BsHouse />

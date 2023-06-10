@@ -1,0 +1,84 @@
+.wrap {
+  padding: 0 20px 20px 20px;
+
+  .title {
+    max-width: 500px;
+
+    h4 {
+      font-size: 28px;
+      color: #fff;
+    }
+
+    .content {
+      font-size: 16px;
+      line-height: 24px;
+      color: #ffffffb0;
+
+      .entered {
+        color: #fff4b3;
+        font-size: 16px;
+        gap: 9px;
+        align-items: center;
+        svg {
+          width: 20px;
+          margin: 0 6px;
+        }
+      }
+    }
+  }
+
+  form {
+    .gr {
+      .error {
+        color: rgb(255, 65, 65);
+        font-size: 16px;
+        margin-top: 12px;
+        display: block;
+      }
+      label {
+        font-size: 16px;
+        color: #fff;
+        margin-bottom: 4px;
+
+        span {
+          color: rgb(15, 255, 63);
+        }
+      }
+
+      .input {
+        margin-top: 4px;
+        position: relative;
+        span {
+          position: absolute;
+          top: 50%;
+          left: 12px;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          transform: translateY(-50%);
+          svg {
+            width: 22px;
+            font-size: 20px;
+            color: #fff;
+          }
+        }
+
+        input {
+          display: block;
+          min-width: 322px;
+          padding: 8px 22px 8px 44px;
+          border: none;
+          background: transparent;
+          color: #fff;
+          border-radius: 0.4rem;
+          border: 1px solid #ffffff44;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+.verified {
+  color: #fff;
+}
