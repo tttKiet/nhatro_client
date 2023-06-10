@@ -21,6 +21,7 @@ function VerifyEmail() {
   const [isEnterCode, setIsEnterCode] = useState(false);
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
+  const [changeInterface, setChangeInterface] = useState(false);
   const toast = useContext(ToastContext);
   const dispatch = useDispatch();
 
@@ -82,6 +83,7 @@ function VerifyEmail() {
         if (res.status === 200) {
           if (res.data.err === 0) {
             dispatch(reloadInfo());
+            setChangeInterface(false);
             toast.success(res.data.message || "Verified!");
           }
         }
@@ -114,24 +116,44 @@ function VerifyEmail() {
     }
   }, [user.emailVerified, user.email]);
 
-  if (user.emailVerified) {
-    return <VerifiedEmail />;
+  if (user.emailVerified && !changeInterface) {
+    return <VerifiedEmail setChangeInterface={setChangeInterface} />;
   }
 
   return (
     <div className={cx("wrap")}>
+      {changeInterface && (
+        <div className={cx("back")} onClick={() => setChangeInterface(false)}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z"
+            />
+          </svg>
+        </div>
+      )}
       {isEnterCode ? (
         <div>
           <div className={cx("title")}>
             <h4>Enter code</h4>
-            <span className={cx("content")}>
-              We have sent the code to
-              <span className={cx("entered")}>
-                <MdEmail />
-                {email}
+            <div className="mt-4">
+              <span className={cx("content")}>
+                We have sent the code to
+                <span className={cx("entered")}>
+                  <MdEmail />
+                  {email}
+                </span>
+                , please check your email and enter the code in the box below.
               </span>
-              , please check your email and enter the code in the box below.
-            </span>
+            </div>
           </div>
           <form name="code" onSubmit={handleSubmitCode}>
             <div className={cx("gr", "mt-3")}>
@@ -183,17 +205,21 @@ function VerifyEmail() {
       ) : (
         <>
           <div className={cx("title")}>
-            <h4>Your email is not verified</h4>
+            <h4>
+              {changeInterface ? "Change email" : "Your email is not verified "}
+            </h4>
             <span className={cx("content")}>
-              You need to verify your email to be able to use the owner function
-              and retrieve your password in case of password theft.
+              {changeInterface
+                ? "You need to re-authenticate new email when changing email."
+                : "You need to verify your email to be able to use the owner function and retrieve your password in case of password theft."}
             </span>
           </div>
           <div>
             <form name="email" onSubmit={formik.handleSubmit}>
               <div className={cx("gr", "mt-4")}>
                 <label htmlFor="email">
-                  Email Address <span>*</span>
+                  {changeInterface ? "New Email Address" : " Email Address "}
+                  <span>*</span>
                 </label>
                 <div className={cx("input")}>
                   <span>
@@ -203,7 +229,11 @@ function VerifyEmail() {
                     id="email"
                     name="email"
                     type="text"
-                    placeholder="Enter your email..."
+                    placeholder={
+                      changeInterface
+                        ? "Enter your new email..."
+                        : "Enter your email..."
+                    }
                     spellCheck={false}
                     value={formik.values.email}
                     onChange={formik.handleChange}

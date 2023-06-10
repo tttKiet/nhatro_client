@@ -73,16 +73,22 @@ function NavControlLeft({ setActive, active }) {
           </Link>
         </li>
         <li>
-          <BsHouse />
-          My rooms
+          <Link>
+            <BsHouse />
+            My rooms
+          </Link>
         </li>
         <li>
-          <FaMoneyBillWave />
-          Bill on month
+          <Link>
+            <FaMoneyBillWave />
+            Bill on month
+          </Link>
         </li>
         <li>
-          <TbBrandBooking />
-          Motel rent
+          <Link>
+            <TbBrandBooking />
+            Motel rent
+          </Link>
         </li>
       </ul>
 

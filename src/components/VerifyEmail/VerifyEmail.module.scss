@@ -1,11 +1,26 @@
 .wrap {
   padding: 0 20px 20px 20px;
+  .back {
+    cursor: pointer;
+    position: absolute;
+    top: 12px;
+    left: 40px;
+    transition: all 0.3s linear;
+    svg {
+      width: 22px;
+      color: #fff;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
 
   .title {
     max-width: 500px;
 
     h4 {
-      font-size: 28px;
+      font-size: 20px;
       color: #fff;
     }
 
@@ -81,4 +96,47 @@
 
 .verified {
   color: #fff;
+  padding: 0 20px 20px 20px;
+
+  .title {
+    font-size: 20px;
+  }
+
+  .title_4 {
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  .content {
+    font-size: 16px;
+    max-width: 500px;
+    color: rgba(255, 255, 255, 0.6901960784);
+
+    li {
+      margin-top: 10px;
+    }
+  }
+
+  .email {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0px;
+
+    .email_doc {
+      display: inline-block;
+      border-left: 4px solid hsl(214, 89%, 52%);
+      border-radius: 3px;
+      padding: 2px 12px 2px 22px;
+    }
+
+    span {
+      font-size: 16px;
+      color: hsl(214, 73%, 80%);
+    }
+    svg {
+      width: 22px;
+      color: hsl(214, 89%, 52%);
+    }
+  }
 }
