@@ -1,7 +1,6 @@
 import { useFormik } from "formik";
-import { boardHouseServices } from "../../services";
+import { boardHouseServices, cloudinaryServices } from "../../services";
 import PropTypes from "prop-types";
-import WidgetCloudinary from "../WidgetCloudinary";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Swal from "sweetalert2";
@@ -10,9 +9,12 @@ import styles from "./UpdateBoardHouseForm.module.scss";
 import classNames from "classNames/bind";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks";
+import UploadImage from "../UploadImage";
+import toast, { Toaster } from "react-hot-toast";
 
 const cx = classNames.bind(styles);
-function UpdateBoardHouseForm({ data, id, isCreate }) {
+function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
+  // const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const validate = (values) => {
     const errors = {};
@@ -61,13 +63,32 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
         confirmButtonColor: "rgb(89, 89, 255)",
       }).then((result) => {
         if (result.isConfirmed && isCreate) {
-          navigate(`/admin/profile/${adminData?._id}`);
+          // navigate(`/admin/profile/${adminData?._id}`);
+          window.location.reload();
         } else {
           navigate("/");
         }
       });
     }
   }
+
+  async function handleDeleteImage(img) {
+    toast.loading("Deleting...");
+
+    const res = await cloudinaryServices.deleteImage(img);
+    if (res.err === 0) {
+      formik.setFieldValue(
+        "images",
+        formik.values.images.filter((image) => image !== img)
+      );
+      if (onDisableClose) {
+        onDisableClose(false);
+      }
+      toast.dismiss();
+      toast.success("Delete a image successfully");
+    }
+  }
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -81,6 +102,7 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
       console.log(values);
       handleSubmit(adminData?._id, id, values);
     },
+    validateOnChange: false,
     validate,
   });
 
@@ -180,15 +202,15 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
           <div className="mb-3"></div>
         )}
 
-        <div className="my-3">
+        {/* <div className="my-3">
           <WidgetCloudinary formik={formik}></WidgetCloudinary>
-        </div>
+        </div> */}
 
         <button className="btn btn-primary m-auto" type="submit">
           Submit
         </button>
       </form>
-      <div className="col-md-7 d-flex justify-content-center align-items-center">
+      <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
         {formik.values.images?.length > 0 ? (
           <Carousel
             className={cx("carousel-control")}
@@ -197,11 +219,29 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
             emulateTouch={true}
             showIndicators={true}
             infiniteLoop={true}
-            interval={3000}
-            autoPlay={true}
+            // interval={3000}
+            // autoPlay={true}
           >
             {formik.values.images.map((img, index) => (
-              <div key={index}>
+              <div className={cx("item-img")} key={index}>
+                <span className={cx("btn-delete-img")}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                    style={{ width: "25px" }}
+                    onClick={() => handleDeleteImage(img)}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </span>
                 <img className={cx("img-uploaded")} key={index} src={img}></img>
               </div>
             ))}
@@ -211,7 +251,12 @@ function UpdateBoardHouseForm({ data, id, isCreate }) {
             Imgs were uploaded will show here!
           </div>
         )}
+        <UploadImage
+          formik={formik}
+          onDisableClose={onDisableClose}
+        ></UploadImage>
       </div>
+      <Toaster></Toaster>
     </div>
   );
 }
@@ -221,6 +266,7 @@ UpdateBoardHouseForm.propTypes = {
   id: PropTypes.string,
   room: PropTypes.object,
   isCreate: PropTypes.bool,
+  onDisableClose: PropTypes.func,
 };
 
 export default UpdateBoardHouseForm;

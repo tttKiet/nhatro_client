@@ -1,16 +1,24 @@
 import styles from "./RoomForm.module.scss";
 import classNames from "classNames/bind";
 import { useFormik } from "formik";
-import WidgetCloudinary from "../WidgetCloudinary";
+
 import { Carousel } from "react-responsive-carousel";
 import PropTypes from "prop-types";
-import { roomServices } from "../../services";
+import { cloudinaryServices, roomServices } from "../../services";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
+import UploadImage from "../UploadImage";
 
 const cx = classNames.bind(styles);
-function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
-  console.log("data existed", dataExisted);
+function RoomForm({
+  data,
+  updateData,
+  onHide,
+  isUpdate,
+  dataExisted,
+  onDisableClose,
+}) {
+  // console.log("data existed", dataExisted);
   const validate = (values) => {
     const errors = {};
     if (!values.size) {
@@ -62,11 +70,28 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
     validateOnChange: false,
   });
 
+  async function handleDeleteImage(img) {
+    toast.loading("Deleting...");
+    const res = await cloudinaryServices.deleteImage(img);
+    if (res.err === 0) {
+      formik.setFieldValue(
+        "images",
+        formik.values.images.filter((image) => image !== img)
+      );
+      if (onDisableClose) {
+        onDisableClose(false);
+      }
+      toast.dismiss();
+      toast.success("Delete a image successfully");
+    }
+  }
+
   async function handleSubmit(id, dataRoom) {
     if (isUpdate) {
       const res = await roomServices.updateRoom(id, dataRoom);
       if (res.err === 0) {
         toast.success(`Update room successfully`);
+        onDisableClose(true);
         updateData();
         onHide();
       }
@@ -74,6 +99,7 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
       const res = await roomServices.createRoom(id, dataRoom);
       if (res.err === 0) {
         toast.success(`Create room successfully`);
+        onDisableClose(true);
         updateData();
         onHide();
       }
@@ -89,7 +115,7 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
         isLayout: dataExisted["Has Layout"],
         price: dataExisted.Price,
         description: dataExisted.Description,
-        images: dataExisted.images,
+        images: dataExisted.Images,
         boardHouseId: dataExisted.boardHouseId,
       });
     }
@@ -220,15 +246,11 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
             ))}
           </select>
 
-          <div className="my-3">
-            <WidgetCloudinary formik={formik}></WidgetCloudinary>
-          </div>
-
-          <button className="btn btn-primary m-auto" type="submit">
+          <button className="btn btn-primary m-auto mt-3" type="submit">
             {isUpdate ? "Update" : "Submit"}
           </button>
         </form>
-        <div className="col-md-7 d-flex justify-content-center align-items-center">
+        <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
           {formik.values.images?.length > 0 ? (
             <Carousel
               className={cx("carousel-control")}
@@ -237,11 +259,29 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
               emulateTouch={true}
               showIndicators={true}
               infiniteLoop={true}
-              interval={3000}
-              autoPlay={true}
+              // interval={3000}
+              // autoPlay={true}
             >
               {formik.values.images.map((img, index) => (
-                <div key={index}>
+                <div className={cx("item-img")} key={index}>
+                  <span className={cx("btn-delete-img")}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                      style={{ width: "25px" }}
+                      onClick={() => handleDeleteImage(img)}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </span>
                   <img
                     className={cx("img-uploaded")}
                     key={index}
@@ -255,6 +295,10 @@ function RoomForm({ data, updateData, onHide, isUpdate, dataExisted }) {
               Imgs were uploaded will show here!
             </div>
           )}
+          <UploadImage
+            formik={formik}
+            onDisableClose={onDisableClose}
+          ></UploadImage>
         </div>
       </div>
       <Toaster></Toaster>
@@ -276,6 +320,7 @@ RoomForm.propTypes = {
   updateData: PropTypes.func,
   onHide: PropTypes.func,
   isUpdate: PropTypes.bool,
+  onDisableClose: PropTypes.func,
 };
 
 export default RoomForm;

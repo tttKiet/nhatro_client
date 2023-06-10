@@ -1,16 +1,45 @@
-.wrap {
+.wrap{ 
     border-radius: 10px;
     .carousel-control{
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
+        
         border-radius: 10px;
         overflow: hidden;
-    }
-    .img-uploaded{
-        width: 140px;
-        height: 320px;
         object-fit: cover;
+        .item-img{
+            position: relative;
+            width: 100%;
+            height: 400px;
+            .img-uploaded{
+                
+                height: 100%;
+                object-fit: contain;
+             }
+            .btn-delete-img{
+                width: 20px;
+                color: #ffffff;
+                height: 20px;
+                border: 1px solid #5158e1;
+                background-color: #0d6efd;
+                position: absolute;
+                z-index: 1000;  
+                right: 50px;
+                margin-top: 10px;
+                border-radius: 50%;
+                box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+                display: flex;
+                justify-content: center;
+                transition: all 0.2s ease-in;
+                cursor: pointer;
+            }
+            .btn-delete-img:hover{
+                opacity: 0.8;
+                scale: 1.2;
+            }
+         }
     }
+    
 }

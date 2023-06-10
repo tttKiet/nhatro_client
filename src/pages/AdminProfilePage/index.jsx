@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import RegisterForm from "../../components/RegisterForm";
 import styles from "./AdminProfilePage.module.scss";
 import classNames from "classNames/bind";
-import { boardHouseServices } from "../../services";
+import { boardHouseServices, userServices } from "../../services";
 import { useAuth } from "../../hooks";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AdminCardRoom from "../../components/AdminCardRoom";
 import ModalCustom from "../../components/ModalCustom";
 
@@ -12,22 +12,36 @@ const cx = classNames.bind(styles);
 
 function AdminProfilePage() {
   const [showUpdateInformation, setShowUpdateInformation] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [, , dataAdmin] = useAuth();
   const [rooms, setRooms] = useState([]);
+  const [admin, setAdmin] = useState([]);
   const { id } = useParams();
+
+  async function getAdminData(id) {
+    const res = await userServices.getUserById(id);
+    if (res.err === 0) {
+      setAdmin(res.dataUser);
+      console.log(res.dataUser);
+    }
+  }
+
+  useEffect(() => {
+    getAdminData(id);
+    getBoardHouse(id);
+  }, []);
 
   function handleShowUpdateInformation() {
     setShowUpdateInformation(!showUpdateInformation);
   }
 
-  useEffect(() => {
-    if (dataAdmin._id !== id || dataAdmin.type !== "admin") {
-      navigate("/error/404");
-      return null;
-    }
-    getBoardHouse(id);
-  }, [dataAdmin._id, dataAdmin.type, id, navigate]);
+  // useEffect(() => {
+  //   if (admin._id !== id || admin.type !== "admin") {
+  //     navigate("/error/404");
+  //     return null;
+  //   }
+  //   getBoardHouse(id);
+  // }, [admin._id, admin.type, id, navigate]);
 
   async function getBoardHouse(adminId) {
     const res = await boardHouseServices.getBoardHouseById(adminId);
@@ -49,18 +63,16 @@ function AdminProfilePage() {
                 alt="admin-avatar"
               />
               <div className="card-body">
-                <h5 className="card-title">{dataAdmin.fullName}</h5>
+                <h5 className="card-title">{admin.fullName}</h5>
                 <span
                   className={`badge d-flex p-1 my-2 align-items-center  rounded-pill ${
-                    dataAdmin.emailVerified
-                      ? "text-bg-success"
-                      : "text-bg-danger"
+                    admin.emailVerified ? "text-bg-success" : "text-bg-danger"
                   } `}
                   style={{ width: 120 + "px" }}
                 >
                   <span className="px-1">
                     Email verified{" "}
-                    {dataAdmin.emailVerified ? (
+                    {admin.emailVerified ? (
                       <svg
                         width={20 + "px"}
                         xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +128,7 @@ function AdminProfilePage() {
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
-                    width={30 + "px"}
+                    width={20 + "px"}
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -136,7 +148,7 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text">{dataAdmin.address}</p>
+                  <p className="card-text">{admin.address}</p>
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
@@ -155,7 +167,7 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text">{dataAdmin.phone}</p>
+                  <p className="card-text">{admin.phone}</p>
                 </div>
                 <button
                   className="btn btn-primary p-1 px-2 mt-2"
@@ -180,7 +192,7 @@ function AdminProfilePage() {
               action="Update information"
               _id={dataAdmin._id}
             ></ModalCustom>
-            {showUpdateInformation && (
+            {/* {showUpdateInformation && (
               <div
                 className={
                   (cx("form-update-infomation"),
@@ -189,7 +201,7 @@ function AdminProfilePage() {
               >
                 <RegisterForm _id={dataAdmin._id}></RegisterForm>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
