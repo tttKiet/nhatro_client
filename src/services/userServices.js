@@ -26,6 +26,15 @@ const userServices = {
     return res.data;
   },
 
+  async sendCodeEmail(userId, email) {
+    const res = await axios.post("/api/v1/user/verify/email/send-code", {
+      userId,
+      email,
+    });
+
+    return res;
+  },
+
   async getProfile() {
     const res = await axios.get("/api/v1/profile");
     return res.data;

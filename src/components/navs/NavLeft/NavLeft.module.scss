@@ -3,7 +3,7 @@
     .hi {
       h4 {
         font-size: 16px;
-        color: #7c7c7c;
+        color: #d3d3d3;
         padding: 4px 20px 8px 20px;
         margin-bottom: 0;
         font-weight: 400;
@@ -20,15 +20,15 @@
         font-size: 16px;
         border: none;
         outline: none;
-        color: #a2a2a2;
+        color: #ffffff;
         background-color: transparent !important;
         transition: all 0.3s ease-in-out;
         font-weight: 500;
 
         &:hover {
-          color: #0b0b0b;
+          color: #f0f0f0c9;
           svg {
-            color: #0b0b0b;
+            color: #f0f0f0c9;
           }
         }
 
@@ -60,29 +60,34 @@
       padding-top: 0;
 
       li {
-        border-radius: 0.8rem;
-        padding: 6px 10px;
-        margin-bottom: 6px;
-        font-size: 16px;
-        font-weight: 500;
-        color: #737d8d;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        &:hover {
-          color: #1f62e8;
-          background-color: rgba(128, 165, 239, 0.3);
-        }
-        svg {
-          width: 20px;
-          font-size: 18px;
-        }
-        &.active {
-          background-color: #e9f0ff;
-          color: #0958f7;
-          border: 1px solid #3a7bff;
+        a {
+          text-decoration: none;
+          border-radius: 0.8rem;
+          padding: 6px 10px;
+          margin-bottom: 6px;
+          font-size: 16px;
+          font-weight: 500;
+          color: #ffffff76;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+          border: 1px solid transparent;
+          &:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.103);
+            border: 1px solid rgba(46 69 255 / 59%);
+          }
+          svg {
+            width: 20px;
+            font-size: 18px;
+          }
+          &.active {
+            background-color: rgba(46 69 255 / 59%);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.251);
+          }
         }
       }
     }

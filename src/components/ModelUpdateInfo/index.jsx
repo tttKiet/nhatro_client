@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { toast, Toaster, ToastBar } from "react-hot-toast";
-
 import { Button, Accordion, Modal } from "react-bootstrap";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { ToastContext } from "../../untils/context";
+import { useContext, useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 import { useAuth } from "../../hooks";
 import { userServices } from "../../services";
@@ -20,6 +19,7 @@ function ModelUpdateInfo({ show, handleClose, getUser }) {
   const [loading, setLoading] = useState(false);
   const [, , user] = useAuth();
   const [personality, setPersonality] = useState("");
+  const toast = useContext(ToastContext);
   let ref;
 
   const handleClickBtnEnter = () => {
@@ -116,6 +116,7 @@ function ModelUpdateInfo({ show, handleClose, getUser }) {
   const handleSubmit = async (values) => {
     setLoading(true);
     const res = await userServices.updateProfile(user._id, values);
+
     if (res.status === 200) {
       if (res.data.err === 0) {
         toast.success("Updated sucess!");
@@ -128,44 +129,12 @@ function ModelUpdateInfo({ show, handleClose, getUser }) {
     } else {
       toast.error("Failed to update profile!");
     }
+
     setLoading(false);
   };
 
   return (
     <>
-      <Toaster>
-        {(t) => (
-          <ToastBar toast={t}>
-            {({ icon, message }) => (
-              <>
-                {icon}
-                {message}
-                {t.type !== "loading" && (
-                  <button
-                    className={cx("icon-x")}
-                    onClick={() => toast.dismiss(t.id)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                )}
-              </>
-            )}
-          </ToastBar>
-        )}
-      </Toaster>
       <Modal show={show} centered onHide={handleCloseModel}>
         <Modal.Header closeButton>
           <Modal.Title>Update information</Modal.Title>

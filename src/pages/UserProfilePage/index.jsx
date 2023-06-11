@@ -5,12 +5,26 @@ import { Tab, Tabs } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import StarsCanvas from "../../components/StarsCanvas";
 import MyProfile from "../../components/MyProfile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import VerifyEmail from "../../components/VerifyEmail";
+import { useSearchParams } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function UserProfilePage() {
-  const [active, setActive] = useState("my-profile");
+  const [searchParams] = useSearchParams();
+  const [active, setActive] = useState(
+    ["my-profile", "verify-email"].includes(searchParams.get("tag"))
+      ? searchParams.get("tag")
+      : "my-profile"
+  );
+
+  useEffect(() => {
+    if (["my-profile", "verify-email"].includes(searchParams.get("tag"))) {
+      setActive(searchParams.get("tag"));
+    }
+  }, [searchParams]);
+
   return (
     <div className={cx("min-vh-100", "wrap", "position-relative")}>
       <StarsCanvas />
@@ -30,7 +44,7 @@ function UserProfilePage() {
                 <MyProfile />
               </Tab>
               <Tab eventKey="verify-email" title="verify-email">
-                Tab content for verify-email
+                <VerifyEmail />
               </Tab>
               <Tab eventKey="contact" title="Contact" disabled>
                 Tab content for Contact

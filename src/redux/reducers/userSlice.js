@@ -11,20 +11,6 @@ export const reloadInfo = createAsyncThunk(
   async (_, thunkApi) => {
     const userData = thunkApi.getState().user.userData;
     const res = await userServices.getUserById(userData._id);
-    // if (res.err === 0) {
-    //   console.log("-------: res ", res);
-    //   thunkApi.dispatch(
-    //     userSlice.actions.reload({
-    //       _id: res.userData._id,
-    //       email: res.userData.email,
-    //       type: res.userData.type,
-    //       fullName: res.userData.fullName,
-    //       avatar: res.userData.avatar,
-    //     })
-    //   );
-    // }
-
-    console.log("-------: res ", res.dataUser);
 
     return res.dataUser;
   }
@@ -53,12 +39,8 @@ const userSlice = createSlice({
     builder
       .addCase(reloadInfo.pending, (state) => {
         state.isLoading = true;
-        console.log("pending: ", state);
       })
       .addCase(reloadInfo.fulfilled, (state, action) => {
-        console.log("action: ", action);
-        console.log("state: ", state);
-        console.log("payload: ", action.payload);
         state.isLoading = false;
         state.userData = {
           _id: action.payload._id,
@@ -66,11 +48,11 @@ const userSlice = createSlice({
           type: action.payload.type,
           fullName: action.payload.fullName,
           avatar: action.payload.avatar,
+          emailVerified: action.payload.emailVerified,
         };
       })
       .addCase(reloadInfo.rejected, (state) => {
         state.isLoading = false;
-        console.log("rejected: ", state);
         state.error = "Failed to fetch user data.";
       });
   },
