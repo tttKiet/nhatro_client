@@ -1,0 +1,131 @@
+.wrap {
+  font-size: 20px;
+  padding: 0 20px 20px 20px;
+
+  form {
+    border-radius: 1rem;
+    padding: 20px 30px;
+
+    .title_1 {
+      font-size: 16px;
+      padding-bottom: 8px;
+      color: #ffffffc1;
+      margin-bottom: 0;
+    }
+
+    .gr {
+      margin-bottom: 18px;
+
+      label {
+        font-size: 16px;
+        padding-bottom: 8px;
+        color: #ffffffc1;
+        cursor: pointer;
+
+        span {
+          color: rgb(15, 255, 63);
+        }
+      }
+
+      .gr_input {
+        .err {
+          font-size: 16px;
+          color: rgb(255, 65, 65);
+          margin-top: 2px;
+        }
+        .upload_img {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 12px;
+
+          .upload_img-img {
+            width: 100px;
+            height: 140px;
+            outline: none;
+            border: 1px solid #fff;
+            overflow: hidden;
+            background-color: transparent;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 0.6rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          .plus_img {
+            width: 100px;
+            height: 140px;
+            outline: none;
+            border: 1px solid #ffffff6a;
+            background-color: transparent;
+            font-size: 16px;
+            color: #fff;
+            border-radius: 0.6rem;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+              opacity: 0.7;
+            }
+
+            &:active {
+              border: 1px solid #fff;
+              opacity: 0.7;
+            }
+
+            svg {
+              font-size: 24px;
+            }
+          }
+        }
+
+        input,
+        textarea {
+          width: 100%;
+          font-size: 16px;
+          padding: 6px 12px;
+          color: #fff;
+          border-radius: 0.4rem;
+          outline: none;
+          border: 1px solid #ffffff6a;
+          background-color: transparent !important;
+          transition: all 0.2s ease;
+
+          &:focus {
+            border: 1px solid #ffffffd1;
+          }
+        }
+      }
+    }
+  }
+}
+
+.notifications {
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  h4 {
+    font-size: 20px;
+    color: aliceblue;
+  }
+  a {
+    display: block;
+    text-decoration: none;
+    margin-top: 14px;
+    font-size: 16px;
+  }
+}
