@@ -2,7 +2,7 @@ import { UserNav } from "../../navs";
 import PropTypes from "prop-types";
 import styles from "./DefaultLayout.module.scss";
 import classNames from "classNames/bind";
-import Footer from "../../Footer";
+
 const cx = classNames.bind(styles);
 
 function DefaultLayout({ children }) {

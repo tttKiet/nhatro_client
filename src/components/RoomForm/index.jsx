@@ -5,7 +5,8 @@ import { useFormik } from "formik";
 import { Carousel } from "react-responsive-carousel";
 import PropTypes from "prop-types";
 import { cloudinaryServices, roomServices } from "../../services";
-import toast, { Toaster } from "react-hot-toast";
+import { useContext } from "react";
+import { ToastContext } from "../../untils/context";
 import { useEffect } from "react";
 import UploadImage from "../UploadImage";
 
@@ -69,6 +70,8 @@ function RoomForm({
     validate,
     validateOnChange: false,
   });
+
+  const toast = useContext(ToastContext);
 
   async function handleDeleteImage(img) {
     toast.loading("Deleting...");
@@ -301,7 +304,6 @@ function RoomForm({
           ></UploadImage>
         </div>
       </div>
-      <Toaster></Toaster>
     </div>
   );
 }

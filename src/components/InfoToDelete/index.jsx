@@ -2,7 +2,8 @@ import styles from "./InfoToDelete.module.scss";
 import classNames from "classNames/bind";
 import PropTypes from "prop-types";
 import Table from "react-bootstrap/Table";
-import toast, { Toaster } from "react-hot-toast";
+import { useContext } from "react";
+import { ToastContext } from "../../untils/context";
 import { roomServices } from "../../services";
 
 const cx = classNames.bind(styles);
@@ -32,6 +33,8 @@ const ObjectTable = ({ data }) => {
 };
 
 function InfoToDelete({ data, updateData, onHide }) {
+  const toast = useContext(ToastContext);
+
   async function handleDeleteRoom(id) {
     const res = await roomServices.deleteRoom(id);
     if (res.err === 0) {
@@ -57,7 +60,6 @@ function InfoToDelete({ data, updateData, onHide }) {
           </button>
         </div>
       </div>
-      <Toaster></Toaster>
     </div>
   );
 }
