@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { toast } from "react-hot-toast";
+import { useState } from "react";
 
 function ModalCustom({
   show,
@@ -20,10 +22,21 @@ function ModalCustom({
     onHide();
   }
 
+  const [isSubmitted, setIsSubmitted] = useState(true);
+
+  function checkSubmit(isSubmitted) {
+    if (isSubmitted === false) {
+      toast.error("You need submit to exit");
+    } else {
+      onHide();
+    }
+  }
+
   return (
     <Modal
       show={show}
-      onHide={onHide}
+      // onHide={onHide}
+      onHide={() => checkSubmit(isSubmitted)}
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -41,9 +54,14 @@ function ModalCustom({
         onHide={onHide}
         dataExisted={dataExisted}
         isUpdate={isUpdate}
+        onDisableClose={(action) => setIsSubmitted(action)}
       ></Component>
       <Modal.Footer>
-        <Button variant="warning" onClick={handleCloseModal}>
+        <Button
+          variant="warning"
+          disabled={isSubmitted === false ? true : false}
+          onClick={handleCloseModal}
+        >
           Close
         </Button>
       </Modal.Footer>
