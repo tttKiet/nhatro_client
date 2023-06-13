@@ -1,8 +1,8 @@
 import axios from "../axios";
 const roomServices = {
   async createRoom(id, data) {
-    console.log("id", id);
-    console.log("data", data);
+    // console.log("id", id);
+    // console.log("data", data);
 
     const res = await axios.post(`/api/v1/board-house/room/create/${id}`, data);
     return res.data;

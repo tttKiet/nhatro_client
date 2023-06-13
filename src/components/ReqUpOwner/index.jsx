@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks";
 import { useContext, useState } from "react";
 import { ToastContext } from "../../untils/context";
 import { useFormik } from "formik";
-import { cloudinaryServices } from "../../services";
+import { cloudinaryServices, reqRoomOwnerServices } from "../../services";
 // scss
 import styles from "./ReqUpOwner.module.scss";
 import classNames from "classNames/bind";
@@ -109,7 +109,22 @@ function ReqUpOwner() {
                 };
 
                 // call axios
-                console.log(data);
+                console.log("data", data);
+                try {
+                  const response =
+                    await reqRoomOwnerServices.createReqBoardHouse(
+                      data,
+                      user._id
+                    );
+                  if (response.err === 0) {
+                    toast.success(
+                      "Create request successfully! Check console.log"
+                    );
+                    console.log("Response", response);
+                  }
+                } catch (error) {
+                  console.log(error);
+                }
 
                 resolve(data);
               }

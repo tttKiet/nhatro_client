@@ -31,7 +31,7 @@ function RootViewAccountPermissions() {
           <InfoAccountPermission />
         </Tab>
         <Tab eventKey="request" title="Request from account">
-          <RequestFromAccount />
+          <RequestFromAccount getData={true} />
         </Tab>
       </Tabs>
     </div>
