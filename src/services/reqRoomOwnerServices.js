@@ -1,9 +1,18 @@
 import axios from "../axios";
 
 const reqRoomOwnerServices = {
-  async createReqBoardHouse(data) {
+  async createReqBoardHouse(data, userId) {
+    const { name, address, phone, electric, water, images, description } = data;
+
     const res = await axios.post(`/api/v1/user/create-req-board-house`, {
-      data,
+      name,
+      address,
+      phone,
+      electric,
+      water,
+      images,
+      description,
+      userId,
     });
     return res.data;
   },
