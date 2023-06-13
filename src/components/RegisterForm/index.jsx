@@ -145,7 +145,6 @@ function RegisterForm({ _id }) {
                 onChange={formik.handleChange}
                 value={formik.values.fullName}
               />
-              {console.log(formik)}
               {formik.errors.fullName && formik.touched.fullName && (
                 <span className={cx("err")}>{formik.errors.fullName}</span>
               )}

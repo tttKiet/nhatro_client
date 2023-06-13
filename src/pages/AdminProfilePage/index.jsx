@@ -35,14 +35,6 @@ function AdminProfilePage() {
     setShowUpdateInformation(!showUpdateInformation);
   }
 
-  // useEffect(() => {
-  //   if (admin._id !== id || admin.type !== "admin") {
-  //     navigate("/error/404");
-  //     return null;
-  //   }
-  //   getBoardHouse(id);
-  // }, [admin._id, admin.type, id, navigate]);
-
   async function getBoardHouse(adminId) {
     const res = await boardHouseServices.getBoardHouseById(adminId);
     setRooms(res.data);
@@ -192,16 +184,6 @@ function AdminProfilePage() {
               action="Update information"
               _id={dataAdmin._id}
             ></ModalCustom>
-            {/* {showUpdateInformation && (
-              <div
-                className={
-                  (cx("form-update-infomation"),
-                  "row card shadow p-2 mb-5 bg-body-tertiary rounded mx-1")
-                }
-              >
-                <RegisterForm _id={dataAdmin._id}></RegisterForm>
-              </div>
-            )} */}
           </div>
         </div>
       </div>

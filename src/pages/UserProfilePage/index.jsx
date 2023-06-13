@@ -1,6 +1,4 @@
 import NavLeft from "../../components/navs/NavLeft";
-import styles from "./UserProfilePage.module.scss";
-import classNames from "classNames/bind";
 import { Tab, Tabs } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import StarsCanvas from "../../components/StarsCanvas";
@@ -8,19 +6,25 @@ import MyProfile from "../../components/MyProfile";
 import { useEffect, useState } from "react";
 import VerifyEmail from "../../components/VerifyEmail";
 import { useSearchParams } from "react-router-dom";
+import ReqUpOwner from "../../components/ReqUpOwner";
 
+// scss
+import styles from "./UserProfilePage.module.scss";
+import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
+
+const tagName = ["my-profile", "verify-email", "req-owner-broad-house"];
 
 function UserProfilePage() {
   const [searchParams] = useSearchParams();
   const [active, setActive] = useState(
-    ["my-profile", "verify-email"].includes(searchParams.get("tag"))
+    tagName.includes(searchParams.get("tag"))
       ? searchParams.get("tag")
       : "my-profile"
   );
 
   useEffect(() => {
-    if (["my-profile", "verify-email"].includes(searchParams.get("tag"))) {
+    if (tagName.includes(searchParams.get("tag"))) {
       setActive(searchParams.get("tag"));
     }
   }, [searchParams]);
@@ -30,7 +34,7 @@ function UserProfilePage() {
       <StarsCanvas />
       <Container fluid="sm">
         <div className={cx("contai")}>
-          <div className={cx("nav")}>
+          <div className={cx("nav", "d-lg-block", "d-none")}>
             <NavLeft setActive={setActive} active={active} />
           </div>
           <div className={cx("child")}>
@@ -46,8 +50,11 @@ function UserProfilePage() {
               <Tab eventKey="verify-email" title="verify-email">
                 <VerifyEmail />
               </Tab>
-              <Tab eventKey="contact" title="Contact" disabled>
-                Tab content for Contact
+              <Tab
+                eventKey="req-owner-broad-house"
+                title="req-owner-broad-house"
+              >
+                <ReqUpOwner />
               </Tab>
             </Tabs>
           </div>

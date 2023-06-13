@@ -99,7 +99,6 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
       images: [],
     },
     onSubmit: (values) => {
-      console.log(values);
       handleSubmit(adminData?._id, id, values);
     },
     validateOnChange: false,
@@ -118,7 +117,7 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
     <div className={cx("wrap", "row p-3")}>
       <form className="col-md-5" onSubmit={formik.handleSubmit}>
         <label htmlFor="name" className="fw-bold">
-          Name of board house:{" "}
+          Name of board house:
         </label>
         <input
           className="form-control "

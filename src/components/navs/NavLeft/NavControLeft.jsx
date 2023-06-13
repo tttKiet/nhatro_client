@@ -6,6 +6,8 @@ import { BsHouse } from "react-icons/bs";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { TbBrandBooking } from "react-icons/tb";
 import { TiArrowBack } from "react-icons/ti";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useCallback } from "react";
@@ -53,7 +55,6 @@ function NavControlLeft({ setActive, active }) {
       </div>
       <ul className={cx("list-menu-control")}>
         <hr />
-
         <li>
           <Link
             className={cx({ active: active === "my-profile" })}
@@ -70,6 +71,15 @@ function NavControlLeft({ setActive, active }) {
           >
             <HiOutlineMail />
             Verify email
+          </Link>
+        </li>
+        <li>
+          <Link
+            className={cx({ active: active === "req-owner-broad-house" })}
+            to={`/profile/${userCur?._id}?tag=req-owner-broad-house`}
+          >
+            <MdOutlineAdminPanelSettings />
+            Request to be the board house owner
           </Link>
         </li>
         <li>

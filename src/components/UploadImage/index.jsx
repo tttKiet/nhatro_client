@@ -31,7 +31,6 @@ function UploadImage({ formik, onDisableClose }) {
     const res = await cloudinaryServices.uploadImage(base64);
 
     if (res.err === 0) {
-      console.log("formik", formik.values);
       if (!formik.values.images) {
         formik.setValues({
           ...formik.values,
@@ -58,7 +57,6 @@ function UploadImage({ formik, onDisableClose }) {
     const res = await cloudinaryServices.uploadImages(images);
 
     if (res.err === 0) {
-      console.log(res.data);
       const newImages = res.data.map((img) => img.data);
       formik.setValues((prevValues) => ({
         ...prevValues,
@@ -75,7 +73,6 @@ function UploadImage({ formik, onDisableClose }) {
 
   const uploadImage = async (event) => {
     const files = event.target.files;
-    console.log(files);
     if (files.length === 1) {
       const base64 = await convertBase64(files[0]);
 
