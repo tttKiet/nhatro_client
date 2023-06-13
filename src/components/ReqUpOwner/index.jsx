@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks";
-import { Image } from "react-bootstrap";
-import { FcAddImage } from "react-icons/fc";
 import { useContext, useState } from "react";
 import { ToastContext } from "../../untils/context";
+import { useFormik } from "formik";
+import { cloudinaryServices } from "../../services";
 // scss
 import styles from "./ReqUpOwner.module.scss";
 import classNames from "classNames/bind";
-import { useFormik } from "formik";
-import { cloudinaryServices } from "../../services";
+import SettingImage from "./SettingImage";
 const cx = classNames.bind(styles);
 
 function ReqUpOwner() {
   const [, , user] = useAuth();
   const [imgs, setImgs] = useState([]);
+  const [show, setShow] = useState(false);
   const toast = useContext(ToastContext);
 
   const validate = (values) => {
@@ -44,78 +44,14 @@ function ReqUpOwner() {
       errors.water = "Required";
     }
 
+    if (values.images.length === 0) {
+      errors.images = "Required";
+    } else if (values.images.length > 8) {
+      errors.images = "Please Choose less than 8 photos!";
+    }
+
     return errors;
   };
-
-  const handleSubmit = async (values) => {
-    const handlePromise = new Promise((resolve, reject) => {
-      try {
-        const { images } = values;
-        const convertedImages = [];
-        for (const image of images) {
-          try {
-            const convertedImage = convertBase64(image);
-            convertedImages.push(convertedImage);
-          } catch (error) {
-            reject(error);
-          }
-        }
-        Promise.all(convertedImages)
-          .then(async (convertFromPromise) => {
-            let res;
-            if (convertFromPromise.length === 1) {
-              res = await uploadSingleImage(convertFromPromise[0]);
-            } else if (convertFromPromise.length > 1) {
-              res = await uploadMultipleImages(convertFromPromise);
-            }
-            if (res.err === 0) {
-              const data = {
-                ...values,
-                images: res.data
-                  .filter((i) => i.err === 0)
-                  .map((img) => img.data),
-              };
-
-              // call axios
-              resolve(data);
-            } else {
-              toast.error(res?.response?.data?.message);
-            }
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      } catch (error) {
-        reject(error);
-      }
-    });
-
-    toast
-      .promise(handlePromise, {
-        loading: "Loading...",
-        success: <b>Payloaded!</b>,
-        error: <b>Could not request!.</b>,
-      })
-      .then((data) => {
-        console.log(data);
-      });
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      address: "",
-      phone: "",
-      electric: "",
-      water: "",
-      description: "",
-      images: [],
-    },
-    onSubmit: handleSubmit,
-    validate,
-  });
-
-  // handle images
 
   const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -142,29 +78,84 @@ function ReqUpOwner() {
     return res;
   }
 
-  const uploadImage = async (event) => {
-    const files = event.target.files;
-    const imgData = [];
-    const imgs = [];
-    for (let img of files) {
-      const convert = URL.createObjectURL(img);
-      imgData.push(convert);
-      imgs.push(img);
-    }
+  const handleSubmit = async (values) => {
+    const handlePromise = new Promise((resolve, reject) => {
+      try {
+        const { images } = values;
+        const convertedImages = [];
+        for (const image of images) {
+          try {
+            const convertedImage = convertBase64(image);
+            convertedImages.push(convertedImage);
+          } catch (error) {
+            reject(error);
+          }
+        }
+        Promise.all(convertedImages)
+          .then(async (convertFromPromise) => {
+            let res;
+            try {
+              if (convertFromPromise.length === 1) {
+                res = await uploadSingleImage(convertFromPromise[0]);
+              } else if (convertFromPromise.length > 1) {
+                res = await uploadMultipleImages(convertFromPromise);
+              }
+              if (res.err === 0) {
+                const data = {
+                  ...values,
+                  images: Array.isArray(res.data)
+                    ? res.data.filter((i) => i.err === 0).map((img) => img.data)
+                    : [res.data],
+                };
 
-    setImgs((prev) => [...prev, ...imgData]);
-    formik.setValues({
-      ...formik.values,
-      images: [...formik.values.images, ...imgs],
+                // call axios
+                console.log(data);
+
+                resolve(data);
+              }
+            } catch (res) {
+              toast.error(res?.response?.data?.message);
+              console.log(res);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      } catch (error) {
+        console.log(error);
+
+        reject(error);
+      }
+    });
+
+    toast.promise(handlePromise, {
+      loading: <>This process will take a few minutes...</>,
+      success: <i>Payloaded!</i>,
+      error: <b>Could not request!.</b>,
     });
   };
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      address: "",
+      phone: "",
+      electric: "",
+      water: "",
+      description: "",
+      images: [],
+    },
+    onSubmit: handleSubmit,
+    validate,
+  });
 
   if (!user.emailVerified) {
     return (
       <div className={cx("notifications")}>
         <h4> You need to verify your email as to as continues!!</h4>
         <div className={cx("to_ver")}>
-          <Link to={`/profile/${user?._id}?tag=req-owner-broad-house`}>
+          <Link to={`/profile/${user?._id}?tag=verify-email`}>
             Verify email here
           </Link>
         </div>
@@ -275,37 +266,7 @@ function ReqUpOwner() {
             </div>
           </div>
 
-          <div className={cx("gr", "col-md-6 col-12")}>
-            <label htmlFor="">
-              Image <span>*</span>
-            </label>
-            <div className={cx("gr_input")}>
-              <div className={cx("upload_img")}>
-                {imgs.length > 0 &&
-                  imgs.map((image, index) => (
-                    <div key={index} className={cx("upload_img-img")}>
-                      <Image src={image} width={0} height={0} />
-                    </div>
-                  ))}
-                <label htmlFor="file_input" className={cx("plus_img")}>
-                  <FcAddImage />
-                </label>
-                <input
-                  name="file_input"
-                  id="file_input"
-                  type="file"
-                  hidden
-                  multiple
-                  onChange={uploadImage}
-                />
-              </div>
-              {formik.errors.images && formik.touched.images && (
-                <span className={cx("err")}>{formik.errors.images}</span>
-              )}
-            </div>
-          </div>
-
-          <div className={cx("gr", "col-md-6 col-12")}>
+          <div className={cx("gr", "col-12")}>
             <label htmlFor="description">Description</label>
             <div className={cx("gr_input")}>
               <textarea
@@ -317,6 +278,15 @@ function ReqUpOwner() {
                 onChange={formik.handleChange}
               />
             </div>
+          </div>
+          <div className={cx("gr", "col-12")}>
+            <SettingImage
+              show={show}
+              formik={formik}
+              setShow={setShow}
+              imgs={imgs}
+              setImgs={setImgs}
+            />
           </div>
         </div>
         <div className={cx("button", "d-flex gap-3")}>

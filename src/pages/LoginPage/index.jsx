@@ -64,13 +64,12 @@ function LoginPage() {
     facebook: new FacebookAuthProvider(),
   };
   const firebaseLogin = async (loginType) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const provider = providers[loginType];
       const userData = await signInWithPopup(firebaseAuth, provider);
       const token = userData.user.accessToken;
       const res = await userServices.loginWithSocial(token);
-      setLoading(false);
 
       if (res?.response?.status === 401) {
         // handle error
@@ -80,6 +79,8 @@ function LoginPage() {
     } catch (err) {
       console.log(err);
     }
+
+    setLoading(false);
   };
 
   function handleClickLoginGoogle() {
@@ -234,10 +235,10 @@ function LoginPage() {
                 <div className={cx("form-btn")}>
                   <div className={cx("login")}>
                     <button
-                      type="submit"
-                      className="btn-default btn btn-primary d-flex justify-content-center"
+                      type={loading ? "button" : "submit"}
+                      className="btn btn-primary d-flex justify-content-center"
                     >
-                      {loading ? <Snipper /> : "Continues"}
+                      {loading ? <Snipper size={24} /> : "Continues"}
                     </button>
                   </div>
                   <span className="border-span my-3" data-text="Or"></span>
