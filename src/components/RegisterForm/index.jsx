@@ -147,10 +147,11 @@ function RegisterForm({ _id }) {
                 id="email"
                 type="text"
                 name="email"
+                placeholder="exam: abcxyz@gmail.com"
+
                 className={cx({
                   errInput: !!formik.errors.email && formik.touched.email,
                 })}
-                placeholder="exam: abcxyz@gmail.com"
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />

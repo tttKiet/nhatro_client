@@ -9,11 +9,9 @@ const cx = classNames.bind(styles);
 function ContactPage() {
 
   const [,,inforUser] = useAuth();
-  // console.log(inforUser)
+
   const validate = (values) => {
     const errors = {};
-
-
     if (!values.title) {
       errors.title = "Please enter your title";
     }
@@ -21,18 +19,19 @@ function ContactPage() {
       errors.content = "Please enter your content";
     }
 
+    return errors;
   }
-  
+
   const formik = useFormik({
-    initialValues: {
+    initialValues: {  
       fullName: inforUser.fullName,
       email: inforUser.email,
       title: "",
       content: "",
     },
+    validate,
+    validateOnChange: false,
     onSubmit: (values) => {
-      console.log(
-        'ccc',values)
       handleSubmit(inforUser._id ,values);
     },
     
@@ -45,7 +44,7 @@ function ContactPage() {
     }
     else{
       alert("cut")
-    }
+    } 
   }
 
 
@@ -93,29 +92,16 @@ function ContactPage() {
         <p>Website: futurehome.com</p>
       </li>
     </ul>
-    <div className={cx("wrap-contact-form")}>
+    <form onSubmit={formik.handleSubmit}>
+      <div className={cx("wrap-contact-form")}>
       <div className={cx("left-contact")}>
-      <div className={cx("left-item")}>
+        <div className={cx("left-item")}>
           <h4>Full Name:</h4>
-          <input
-           type="text" 
-           placeholder="Full name"
-           id="fullname"
-           name="fullname"
-          onChange={formik.handleChange}
-          value={formik.values.fullName}
-           />
+          <span  className={cx("infor")}>{inforUser?.fullName}</span>
         </div>
         <div className={cx("left-item")}>
-          <h4>Email:</h4>
-          <input 
-            type="text" 
-            placeholder="Email"
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            />
+          <h4 >Email:</h4>
+          <span className={cx("infor")}>{inforUser?.email}</span>
         </div>
         <div className={cx("left-item")}>
           <h4>Title:</h4>
@@ -127,6 +113,10 @@ function ContactPage() {
             onChange={formik.handleChange}
             value={formik.values.title}
             />
+           {formik.errors.title && formik.touched.title && (
+                <span className={cx("err")}>{formik.errors.title}</span>
+              )}
+            
         </div>
         <div className={cx("left-item")}>
           <h4>Content:</h4>
@@ -138,13 +128,16 @@ function ContactPage() {
             onChange={formik.handleChange}
             value={formik.values.content}
             />
+           {formik.errors.content && formik.touched.content && (
+                <span className={cx("err")}>{formik.errors.content}</span>
+              )}
         </div>
         <div className={cx("left-item")}>
           <button
            
            className={cx("btn")}
            type="submit"
-           onClick={formik.handleSubmit}
+           
            >Sent Message</button>
         </div>
 
@@ -153,7 +146,9 @@ function ContactPage() {
       <img src="https://originhr.in/wp-content/uploads/2022/06/support-img.png"alt="" />
 
       </div>
-      </div>  
+      </div>
+    </form>
+
   </div>;
 }
 

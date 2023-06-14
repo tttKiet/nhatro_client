@@ -31,22 +31,30 @@
                 color: #fff;
                 }
             }
+        
             
         }
 
     }
-    .wrap-contact-form{
+    form{
+        .err{
+            display: block;
+            font-size: 14px;
+            color: red;
+        }
+
+         .wrap-contact-form{
         display: flex;
         justify-content: center;
         padding: 10px 20px;
        .left-contact{
-        width: 40%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+            width: 40%;
+        
             .left-item{
                 padding: 10px 0;
+                .infor{
+                    text-decoration: underline;
+                }
                 h4{
                     font-size: 20px;
                 }
@@ -93,4 +101,6 @@
        } 
        
     }
+    }
+   
 }   
