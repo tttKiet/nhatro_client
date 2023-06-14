@@ -48,12 +48,7 @@ function NavControl() {
           </Link>
         </div>
         <div className={cx("nav_middle-link")}>
-          <Link
-            to="/contact"
-            className={cx("control_item", { active: url.includes("/contact") })}
-          >
-            Contact
-          </Link>
+
           <div
             className={cx(
               "search",

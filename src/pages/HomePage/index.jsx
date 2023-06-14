@@ -4,10 +4,9 @@ import RootHomePage from "../RootHomePage";
 import AdminLayout from "../../components/Layouts/AdminLayout";
 import { useAuth } from "../../hooks";
 import { RootLayout, DefaultLayout } from "../../components/Layouts";
-
-// import styles from "./HomePage.module.scss";
-// import classNames from "classNames/bind";
-// const cx = classNames.bind(styles);
+import styles from "./HomePage.module.scss";
+import classNames from "classNames/bind";
+const cx = classNames.bind(styles);
 
 function HomePage() {
   const [, type] = useAuth();
@@ -32,6 +31,8 @@ function HomePage() {
             </DefaultLayout>
           )}
         </>
+
+
       )}
     </>
   );
