@@ -1,0 +1,45 @@
+.wrap {
+  align-items: center;
+  padding: 60px 0;
+
+  .contai {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgb(255 255 255 / 9%);
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1), 0 -2px 15px -3px rgba(0, 0, 0, 0.1);
+
+    .nav {
+      font-size: 16px;
+      min-width: 230px;
+      position: relative;
+
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        width: 1px;
+        background: linear-gradient(
+          rgba(230, 100, 100, 0.864),
+          rgba(145, 152, 229, 0.853),
+          rgba(0, 0, 0, 0.089),
+          transparent
+        );
+
+        right: 0;
+        top: 40px;
+        bottom: 40px;
+      }
+    }
+
+    .child {
+      position: relative;
+      flex: 1;
+      padding: 48px 20px 20px 20px;
+      margin-left: 0;
+      border-radius: 8px;
+    }
+  }
+}

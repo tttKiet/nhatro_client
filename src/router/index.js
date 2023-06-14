@@ -13,6 +13,7 @@ import {
   PostPage,
   ErrorPage,
   ContactPage,
+  UserProfilePage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -73,6 +74,14 @@ const router = [
     isProtected: true,
   },
 
+  // user
+  {
+    path: "/profile/:user_id",
+    isProtected: true,
+    layout: "None",
+    element: UserProfilePage,
+  },
+
   // Admin router [The Van]
   {
     path: "/admin/profile/:id",
@@ -105,7 +114,7 @@ const router = [
     isProtected: false,
     layout: "none",
     element: ErrorPage,
-  },  
+  },
 ];
 
 export default router;

@@ -12,7 +12,6 @@ import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function UserHomePage() {
-
   const bodyTitleContent1 = useMemo(
     () => [
       {
@@ -126,7 +125,6 @@ function UserHomePage() {
       </div>
     </div>
   );
-
 }
 
 export default UserHomePage;

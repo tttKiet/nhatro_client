@@ -1,0 +1,24 @@
+.wrap {
+  .link {
+    padding: 12px 80px 12px 20px;
+    font-size: 18px;
+    border-radius: 8px 0 0 8px;
+    color: #000;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+
+    svg {
+      width: 24px;
+    }
+  }
+
+  .des {
+    font-size: 14px;
+    color: #aeadad;
+    padding-left: 20px;
+    padding-bottom: 18px;
+  }
+}

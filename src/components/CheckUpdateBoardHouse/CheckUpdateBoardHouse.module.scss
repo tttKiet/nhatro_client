@@ -1,0 +1,21 @@
+.wrap {
+  .wrap-form{
+    border-radius: 10px;
+  }
+
+  .carousel-control{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .img-uploaded{
+    width: 180px;
+    height: 360px;
+    object-fit: cover;
+  }
+
+
+}

@@ -1,7 +1,7 @@
 import styles from "./AdminNav.module.scss";
 import classNames from "classNames/bind";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../MenuDropDowns";
+import Logo from "../../Logo";
 import { useDispatch } from "react-redux";
 import { userSlice } from "../../../redux/reducers";
 import { useLocation } from "react-router-dom";

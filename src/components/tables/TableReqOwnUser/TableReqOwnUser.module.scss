@@ -1,0 +1,64 @@
+.wrap {
+  padding: 26px 0 0 0;
+  table {
+    padding: 20px;
+    color: #fff;
+    width: 100%;
+
+    thead {
+      position: relative;
+      &::before {
+        display: block;
+        content: "";
+        position: absolute;
+        border: 1px solid #ccc;
+        border-radius: 0.4rem;
+        inset: 0;
+        bottom: calc(100% - 40px);
+        background-color: rgba(93, 112, 126, 0.299);
+        z-index: -1;
+      }
+
+      th {
+        padding-bottom: 40px;
+      }
+
+      tr {
+        th {
+          &:first-child {
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        position: relative;
+
+        td {
+          padding: 12px 0;
+
+          &:first-child {
+            text-align: center;
+
+            div {
+              border-radius: 8px 0 0 8px;
+            }
+          }
+
+          &:last-child {
+            div {
+              border-radius: 0 8px 8px 0;
+            }
+          }
+
+          div {
+            padding: 12px 0;
+            background-color: rgba(93, 112, 126, 0.299);
+          }
+        }
+      }
+    }
+  }
+}

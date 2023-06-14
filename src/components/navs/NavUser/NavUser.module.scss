@@ -201,6 +201,15 @@
         overflow: hidden;
         cursor: pointer;
 
+        &.border {
+          background: linear-gradient(white, white) padding-box,
+            linear-gradient(to right, #0863ff, #4c8bea) border-box;
+        }
+
+        svg {
+          width: 24px;
+        }
+
         img {
           width: 32px;
           height: 32px;
@@ -223,7 +232,10 @@
     min-width: 216px;
     padding-left: 0;
     margin-bottom: 0;
-    li {
+
+    li,
+    a {
+      text-decoration: none;
       font-size: 14px;
       padding: 8px 16px;
       display: flex;
@@ -232,6 +244,9 @@
       gap: 12px;
       color: #000;
       transition: all 0.2s linear;
+      &.notcursor {
+        cursor: text;
+      }
 
       &:hover:not(:first-child) {
         cursor: pointer;

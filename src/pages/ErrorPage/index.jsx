@@ -19,7 +19,7 @@ function ErrorPage() {
       </div>
       <h1>404 Error</h1>
       <h1>Oops! Something went wrong!</h1>
-      <Link to={"/"}>
+      <Link to={"/login"}>
         {" "}
         <div className={cx("btn")}>Return to Home</div>
       </Link>

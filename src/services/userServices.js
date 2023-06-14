@@ -14,6 +14,37 @@ const userServices = {
     return res.data;
   },
 
+  async loginWithSocial(token) {
+    const res = await axios.post("/api/v1/user/login/social", {
+      token,
+    });
+    return res;
+  },
+
+  async loggout() {
+    const res = await axios.get("/api/v1/loggout");
+    return res.data;
+  },
+
+  async sendCodeEmail(userId, email) {
+    const res = await axios.post("/api/v1/user/verify/email/send-code", {
+      userId,
+      email,
+    });
+
+    return res;
+  },
+
+  async getProfile() {
+    const res = await axios.get("/api/v1/profile");
+    return res.data;
+  },
+
+  async updateProfile(_id, data) {
+    const res = await axios.patch(`/api/v1/users/${_id}`, data);
+    return res;
+  },
+
   async getAllUsers() {
     const res = await axios.get("/api/v1/users/all-users");
     return res.data;
@@ -37,6 +68,11 @@ const userServices = {
   async psermissionsAccount(_id) {
     const res = await axios.get(`/api/v1/permissions/user/${_id}`);
     return res.data;
+  },
+
+  async getAllReqOwner(_id) {
+    const res = await axios.get(`/api/v1/user/${_id}/all-request-board-house`);
+    return res;
   },
 };
 

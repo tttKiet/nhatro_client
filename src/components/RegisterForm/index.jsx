@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import styles from "./RegisterForm.module.scss";
 import classNames from "classNames/bind";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import { useAuth } from "../../hooks";
-import imgSuccess from "../../assets/images/trees.png";
-import gifSuccess from "../../assets/gifs/nyan-cat.gif";
+import { ToastContext } from "../../untils/context";
+import { useContext } from "react";
 
 const cx = classNames.bind(styles);
 
 function RegisterForm({ _id }) {
   const navigation = useNavigate();
+  const toast = useContext(ToastContext);
   const [showPass, setShowPass] = useState(false);
   const [, type] = useAuth();
   const validate = (values) => {
@@ -74,31 +74,41 @@ function RegisterForm({ _id }) {
   async function handleSubmit(values) {
     let res;
     if (_id) {
-      res = await userServices.updateUser(_id, values);
-    } else {
-      res = await userServices.createUser(values);
-    }
-    if (res.err === 0) {
-      if (type == "root") {
-        navigation("/root/user/accounts");
-      } else {
-        Swal.fire({
-          title:
-            "Đăng ký thành công! Giờ đây bạn có thể đăng nhập vào hệ thống.",
-          width: 600,
-          padding: "3em",
-          color: "#716add",
-          background: `#fff url(${imgSuccess})`,
-          backdrop: `
-              rgba(0,0,123,0.4)
-              url(${gifSuccess})
-              left top
-              no-repeat
-            `,
-        }).then(() => {
-          navigation("/login");
+      toast
+        .promise(userServices.updateUser(_id, values), {
+          loading: "Update...",
+          success: <b>Update successfully!</b>,
+          error: <b>Could not update.</b>,
+        })
+        .then(() => {
+          if (res.err === 0) {
+            if (type == "root") {
+              return navigation("/root/user/accounts");
+            } else {
+              setTimeout(() => {
+                navigation("/login");
+              }, 2000);
+            }
+          }
         });
-      }
+    } else {
+      toast
+        .promise(userServices.createUser(values), {
+          loading: "Register...",
+          success: <b>Register successfully!</b>,
+          error: <b>Could not register.</b>,
+        })
+        .then((res) => {
+          if (res.err === 0) {
+            if (type == "root") {
+              return navigation("/root/user/accounts");
+            } else {
+              setTimeout(() => {
+                navigation("/login");
+              }, 2000);
+            }
+          }
+        });
     }
   }
 
@@ -127,6 +137,7 @@ function RegisterForm({ _id }) {
                 id="fullName"
                 type="text"
                 name="fullName"
+                spellCheck={false}
                 placeholder="exam: Nguyen Van A"
                 className={cx({
                   errInput: !!formik.errors.fullName && formik.touched.fullName,
@@ -144,6 +155,7 @@ function RegisterForm({ _id }) {
                 Email:
               </label>
               <input
+                spellCheck={false}
                 id="email"
                 type="text"
                 name="email"
@@ -165,6 +177,7 @@ function RegisterForm({ _id }) {
               </label>
               <input
                 id="phone"
+                spellCheck={false}
                 type="text"
                 name="phone"
                 className={cx({
@@ -186,6 +199,7 @@ function RegisterForm({ _id }) {
               </label>
               <div className={cx("input-eye")}>
                 <input
+                  spellCheck={false}
                   id="pass"
                   type={showPass ? "text" : "password"}
                   className={cx({
@@ -248,6 +262,7 @@ function RegisterForm({ _id }) {
               </label>
               <input
                 id="cpass"
+                spellCheck={false}
                 type={showPass ? "text" : "password"}
                 className={cx({
                   errInput:
@@ -268,6 +283,7 @@ function RegisterForm({ _id }) {
                 Your address:
               </label>
               <textarea
+                spellCheck={false}
                 id="address"
                 type="text"
                 className={cx({

@@ -1,0 +1,97 @@
+.wrap {
+  .nav-control {
+    .hi {
+      h4 {
+        font-size: 16px;
+        color: #d3d3d3;
+        padding: 4px 20px 8px 20px;
+        margin-bottom: 0;
+        font-weight: 400;
+      }
+      button,
+      a {
+        text-decoration: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        font-size: 20px;
+        padding: 12px;
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: #ffffff;
+        background-color: transparent !important;
+        transition: all 0.3s ease-in-out;
+        font-weight: 500;
+
+        &:hover {
+          color: #f0f0f0c9;
+          svg {
+            color: #f0f0f0c9;
+          }
+        }
+
+        svg {
+          width: 20px;
+          font-size: 18px;
+          transition: all 0.3s ease-in-out;
+          color: #a2a2a2;
+        }
+      }
+    }
+    .button-user-profile {
+      border: none;
+      background-color: transparent !important;
+      outline: none;
+      text-align: left;
+      padding-left: 58px;
+      color: rgb(255, 65, 65);
+      transition: all 0.3s ease;
+      margin-bottom: 8px;
+      &:hover {
+        color: rgb(255, 135, 135);
+      }
+    }
+
+    .list-menu-control {
+      list-style: none;
+      padding: 20px;
+      padding-top: 0;
+
+      li {
+        a {
+          text-decoration: none;
+          border-radius: 0.8rem;
+          padding: 6px 10px;
+          margin-bottom: 6px;
+          font-size: 16px;
+          max-width: 250px;
+          font-weight: 500;
+          color: #ffffff76;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          transition: all 0.3s ease;
+          border: 1px solid transparent;
+          &:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.103);
+            border: 1px solid rgba(46 69 255 / 59%);
+          }
+          svg {
+            width: 20px;
+            font-size: 18px;
+            flex-shrink: 0;
+          }
+          &.active {
+            background-color: rgba(46 69 255 / 59%);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.251);
+          }
+        }
+      }
+    }
+  }
+}

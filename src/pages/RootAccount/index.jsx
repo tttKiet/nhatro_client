@@ -74,7 +74,6 @@ function RootAccount() {
       }),
       columnHelper.accessor("Action", {
         cell: (info) => {
-          console.log("info: ", info);
           const _id = info.row.original._id;
           return (
             <div className="d-flex gap-3">
