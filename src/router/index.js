@@ -11,8 +11,8 @@ import {
   AdminAllMembersPage,
   AdminAllRoomsPage,
   PostPage,
-  ErrorPage,
   ContactPage,
+  ErrorPage,
   UserProfilePage,
 } from "../pages";
 
@@ -82,6 +82,13 @@ const router = [
     element: UserProfilePage,
   },
 
+  {
+    path: "/user/:id/feedback",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: ContactPage,
+  },
+
   // Admin router [The Van]
   {
     path: "/admin/profile/:id",
@@ -101,13 +108,6 @@ const router = [
     layout: AdminLayout,
     element: AdminAllRoomsPage,
   },
-  {
-    path: "/contact",
-    isProtected: true,
-    layout: DefaultLayout,
-    element: ContactPage,
-  },
-
   // Error page
   {
     path: "/error/404",
