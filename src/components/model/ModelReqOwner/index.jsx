@@ -43,6 +43,10 @@ function ModelReqOwner({ setActiveTab }) {
       errors.water = "Required";
     }
 
+    if (!values.description) {
+      errors.description = "Required";
+    }
+
     if (values.images.length === 0) {
       errors.images = "Required";
     } else if (values.images.length > 8) {
@@ -116,6 +120,7 @@ function ModelReqOwner({ setActiveTab }) {
                   if (response.err === 0) {
                     formik.resetForm();
                     setImgs([]);
+
                     resolve();
                   }
                 } catch (error) {
@@ -141,11 +146,13 @@ function ModelReqOwner({ setActiveTab }) {
       }
     });
 
-    toast.promise(handlePromise, {
-      loading: <>This process will take a few minutes...</>,
-      success: <i>Payloaded!</i>,
-      error: <b>Could not request!.</b>,
-    });
+    toast
+      .promise(handlePromise, {
+        loading: <>This process will take a few minutes...</>,
+        success: <i>Payloaded!</i>,
+        error: <b>Could not request!.</b>,
+      })
+      .then(() => setActiveTab("information"));
   };
 
   const formik = useFormik({
@@ -274,9 +281,12 @@ function ModelReqOwner({ setActiveTab }) {
                 id="description"
                 name="description"
                 rows={4}
-                defaultValue={formik.values.description}
+                value={formik.values.description}
                 onChange={formik.handleChange}
               />
+              {formik.errors.description && formik.touched.description && (
+                <span className={cx("err")}>{formik.errors.description}</span>
+              )}
             </div>
           </div>
           <div className={cx("gr", "col-12")}>

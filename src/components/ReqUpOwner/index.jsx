@@ -34,7 +34,7 @@ function ReqUpOwner() {
         style={{ display: "none" }}
       >
         <Tab eventKey="model" title="model">
-          <ModelReqOwner setActiveTab={setActiveTab} />
+          <ModelReqOwner activeTab={activeTab} setActiveTab={setActiveTab} />
         </Tab>
         <Tab eventKey="information" title="information">
           <button
@@ -59,7 +59,7 @@ function ReqUpOwner() {
             </div>
             Create request
           </button>
-          <TableReqOwnUser />
+          <TableReqOwnUser activeTab={activeTab} />
         </Tab>
       </Tabs>
     </div>
