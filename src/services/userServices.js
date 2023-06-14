@@ -69,6 +69,11 @@ const userServices = {
     const res = await axios.get(`/api/v1/permissions/user/${_id}`);
     return res.data;
   },
+
+  async getAllReqOwner(_id) {
+    const res = await axios.get(`/api/v1/user/${_id}/all-request-board-house`);
+    return res;
+  },
 };
 
 export default userServices;

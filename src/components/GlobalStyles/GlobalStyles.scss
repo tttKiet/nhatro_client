@@ -48,6 +48,7 @@ body {
   transition: all 0.1s linear !important;
   display: flex;
   justify-content: center;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
 
@@ -103,6 +104,13 @@ button {
       color: #68686865;
     }
   }
+}
+
+.btn.have_icon {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
 }
 
 button.btn-default {

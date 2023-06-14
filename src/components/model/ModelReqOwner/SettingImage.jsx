@@ -1,10 +1,10 @@
 import { FcAddImage } from "react-icons/fc";
 import PropTypes from "prop-types";
 import { useContext } from "react";
-import { ToastContext } from "../../untils/context";
+import { ToastContext } from "../../../untils/context";
 // scss
 import { Carousel } from "react-responsive-carousel";
-import styles from "./ReqUpOwner.module.scss";
+import styles from "./ModelReqOwner.module.scss";
 import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
 const cx = classNames.bind(styles);
