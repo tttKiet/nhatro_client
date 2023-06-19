@@ -4,6 +4,16 @@
 .wrap {
   padding: 10px 0;
   border-bottom: 1px solid $gray-300;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background-color: rgba(255, 255, 255, 0.06);
+
+  // background-color: #ffffff0b;
+  backdrop-filter: blur(20px);
+  transition: all 0.2s ease-in-out;
 
   .nav_middle {
     nav {
