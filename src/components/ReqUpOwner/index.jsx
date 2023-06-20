@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks";
-import ModelReqOwner from "../model/ModelReqOwner";
+import ModalReqOwner from "../modal/ModalReqOwner";
 import { Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 import TableReqOwnUser from "../tables/TableReqOwnUser";
@@ -34,7 +34,7 @@ function ReqUpOwner() {
         style={{ display: "none" }}
       >
         <Tab eventKey="model" title="model">
-          <ModelReqOwner activeTab={activeTab} setActiveTab={setActiveTab} />
+          <ModalReqOwner activeTab={activeTab} setActiveTab={setActiveTab} />
         </Tab>
         <Tab eventKey="information" title="information">
           <button

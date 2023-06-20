@@ -11,13 +11,19 @@ html {
 
   & *::-webkit-scrollbar {
     border-radius: 2px;
+    display: block;
     transition: all 0.3s ease;
     width: 8px;
+    left: 0;
+  }
+
+  &*::-webkit-scrollbar-button {
+    display: none;
   }
 
   & *::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(22, 24, 35, 0.06);
+    background-color: rgba(22, 24, 35, 0.26);
     transition: all 0.3s ease;
 
     &:hover {
@@ -37,6 +43,7 @@ body {
   font-family: "Inter", sans-serif;
   font-family: "Montserrat", sans-serif;
   font-family: "Poppins", sans-serif;
+  overflow: auto;
 }
 
 .btn {

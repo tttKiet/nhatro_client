@@ -6,7 +6,7 @@ import { Carousel } from "react-responsive-carousel";
 import { Image } from "react-bootstrap";
 import { ReactSortable } from "react-sortablejs";
 // scss
-import styles from "./ModelReqOwner.module.scss";
+import styles from "./ModalReqOwner.module.scss";
 import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 

@@ -4,12 +4,12 @@ import { ToastContext } from "../../../untils/context";
 import { useFormik } from "formik";
 import { cloudinaryServices, reqRoomOwnerServices } from "../../../services";
 // scss
-import styles from "./ModelReqOwner.module.scss";
+import styles from "./ModalReqOwner.module.scss";
 import classNames from "classNames/bind";
 import SettingImage from "./SettingImage";
 const cx = classNames.bind(styles);
 
-function ModelReqOwner({ setActiveTab }) {
+function ModalReqOwner({ setActiveTab }) {
   const [, , user] = useAuth();
   const [imgs, setImgs] = useState([]);
   const [show, setShow] = useState(false);
@@ -333,4 +333,4 @@ function ModelReqOwner({ setActiveTab }) {
   );
 }
 
-export default ModelReqOwner;
+export default ModalReqOwner;

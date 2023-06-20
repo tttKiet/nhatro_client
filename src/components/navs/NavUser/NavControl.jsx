@@ -24,7 +24,7 @@ function NavControl() {
   }, []);
 
   return (
-    <div className={cx("nav_middle")}>
+    <div className={cx("nav_middle", "d-none d-md-block")}>
       <nav className="d-flex align-items-center">
         <div className={cx("nav_middle-link")}>
           <Link to="/" className={cx("control_item", { active: url === "/" })}>
@@ -48,7 +48,6 @@ function NavControl() {
           </Link>
         </div>
         <div className={cx("nav_middle-link")}>
-
           <div
             className={cx(
               "search",
