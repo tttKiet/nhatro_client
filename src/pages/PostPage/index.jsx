@@ -7,7 +7,6 @@ const PostLazy = lazy(() => import("../../components/Post"));
 import styles from "./PostPage.module.scss";
 import classNames from "classNames/bind";
 import Snipper from "../../components/Snipper";
-import ModelUpdateInfo from "../../components/ModelUpdateInfo";
 
 const cx = classNames.bind(styles);
 

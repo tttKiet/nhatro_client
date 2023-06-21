@@ -43,8 +43,9 @@
   }
 
   .untils {
+    z-index: 100;
     position: fixed;
-    right: 80px;
+    left: 1200px;
     bottom: 40px;
 
     .add {

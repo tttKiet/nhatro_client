@@ -1,81 +1,43 @@
 import Modal from "react-bootstrap/Modal";
-import { useFormik } from "formik";
+import PropTypes from "prop-types";
+import { FormUpPost } from "../../forms";
 import { Button } from "react-bootstrap";
 // scss
 import styles from "./ModalUpPost.module.scss";
 import classNames from "classNames/bind";
-import { useState } from "react";
 const cx = classNames.bind(styles);
 
 function ModalUpPost({ show, setShow }) {
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
-  const validate = (values) => {
-    const errors = {};
-    if (!values.name) {
-      errors.name = "Required";
-    } else if (values.name.length < 5) {
-      errors.name = "Must be 5 characters or more";
-    }
-
-    if (!values.address) {
-      errors.address = "Required";
-    } else if (values.address.length < 5) {
-      errors.address = "Must be 5 characters or more";
-    }
-
-    if (!values.phone) {
-      errors.phone = "Please enter your phone number!";
-    } else if (!/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(values.phone)) {
-      errors.phone = "Invalid phone number format!";
-    }
-
-    if (!values.electric) {
-      errors.electric = "Required";
-    }
-
-    if (!values.water) {
-      errors.water = "Required";
-    }
-
-    if (!values.description) {
-      errors.description = "Required";
-    }
-
-    if (values.images.length === 0) {
-      errors.images = "Required";
-    } else if (values.images.length > 8) {
-      errors.images = "Please Choose less than 8 photos!";
-    }
-
-    return errors;
-  };
   return (
     <>
       <Modal
         centered
         show={show}
         onHide={handleClose}
-        // backdrop="static"
-        // keyboard={false}
+        backdrop="static"
+        keyboard={false}
+        dialogClassName={cx("wrap")}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Up Post</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Don not even try to press
-          escape key.
+        <Modal.Body className="pe-1">
+          <FormUpPost />
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            Cancel
           </Button>
-          <Button variant="primary">Understood</Button>
+          <Button variant="primary">Up here</Button>
         </Modal.Footer>
       </Modal>
     </>
   );
 }
+
+ModalUpPost.propTypes = { show: PropTypes.bool, setShow: PropTypes.func };
 
 export default ModalUpPost;

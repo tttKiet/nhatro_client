@@ -1,0 +1,107 @@
+.wrap {
+  header {
+    .avatar {
+      .wrap-avt {
+        position: relative;
+        .avt {
+          width: 32px;
+          height: 32px;
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 100px;
+          position: relative;
+          background: #fff;
+          border: 1px solid transparent;
+          box-sizing: border-box;
+          background: linear-gradient(white, white) padding-box,
+            linear-gradient(to right, #ea4c89, #ea4c89) border-box;
+          border: 2px solid transparent;
+          overflow: hidden;
+          cursor: pointer;
+
+          &.border {
+            background: linear-gradient(white, white) padding-box,
+              linear-gradient(to right, #0863ff, #4c8bea) border-box;
+          }
+
+          svg {
+            width: 24px;
+          }
+
+          img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 100px;
+          }
+        }
+      }
+      .name {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .body {
+    margin: 12px 0;
+    padding-right: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .form-gr {
+      margin-bottom: 10px;
+
+      .images {
+        border-radius: 0.4rem;
+        border: 1px solid #ccc;
+        padding: 8px;
+
+        &.layout_1 {
+          img {
+            width: 100%;
+            object-fit: contain;
+            max-height: 400px;
+            border-radius: 0.4rem;
+          }
+        }
+      }
+      .input {
+        background-color: transparent;
+        width: 100%;
+        overflow: hidden;
+        padding: 8px 0;
+        outline: none;
+        border: none;
+        resize: none;
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 22px;
+    display: flex;
+    gap: 8px;
+    select {
+      padding: 2px 4px;
+      border-radius: 0.4rem;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 16px;
+      border: 1px solid rgba(128, 128, 128, 0.479) !important;
+      min-width: 128px !important;
+      font-size: 16px !important;
+      color: rgba(0, 0, 0, 0.8666666667);
+      outline: none;
+      transition: all 0.1s linear !important;
+    }
+  }
+
+  button {
+    transition: all 0.2s ease-in-out;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.063);
+    }
+  }
+}
