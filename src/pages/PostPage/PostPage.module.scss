@@ -31,14 +31,27 @@
     align-items: center;
     position: relative;
     z-index: 10;
-    .post {
-      margin-left: 160px;
+
+    .bar_loading {
       padding: 20px;
-      min-width: 600px;
-      min-height: 400px;
-      background-color: rgb(5, 67, 237);
-      display: inline-block;
+      --border-radius-size: 0.6rem;
+      width: 590px;
+      background-color: #0073f41f;
+      border-radius: var(--border-radius-size);
+      border: 1px solid #cccccc27;
+      box-shadow: 0 1px 3px 0 rgba(148, 138, 138, 0.811),
+        0 1px 2px -1px rgb(0 0 0 / 0.1);
       margin-bottom: 20px;
+      color: rgb(40, 40, 40);
+      transition: all 0.2s ease-in-out;
+      .load {
+        margin: 0px 0 8px 0;
+        font-size: 14px;
+
+        span {
+          letter-spacing: 2px;
+        }
+      }
     }
   }
 

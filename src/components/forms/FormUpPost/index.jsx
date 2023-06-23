@@ -1,16 +1,22 @@
-import { useFormik } from "formik";
 import { useAuth } from "../../../hooks";
-import { Image } from "react-bootstrap";
+import { Button, Image, Modal } from "react-bootstrap";
+import { ToastContext } from "../../../untils/context";
+import { trackPromise } from "react-promise-tracker";
 // scss
 import styles from "./FormUpPost.module.scss";
 import classNames from "classNames/bind";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import postServices from "../../../services/postServices";
 const cx = classNames.bind(styles);
 
-function FormUpPost() {
+function FormUpPost({ handleClose }) {
   const [, , userCur] = useAuth();
+  const toast = useContext(ToastContext);
   const [rows, setRows] = useState(1);
   const [content, setContent] = useState();
+  const [hashTag, setHashTag] = useState("#notag");
+  const [files, setFiles] = useState([]);
+  const [filesUrl, setFilesUrl] = useState([]);
 
   const handleSetContent = (e) => {
     const newValues = e.target.value;
@@ -18,49 +24,47 @@ function FormUpPost() {
     setRows(countRows ? countRows.length + 1 : 1);
     setContent(newValues);
   };
-  const validate = (values) => {
-    const errors = {};
-    if (!values.name) {
-      errors.name = "Required";
-    } else if (values.name.length < 5) {
-      errors.name = "Must be 5 characters or more";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content) {
+      return toast.error("Enter the content of the article!");
+    }
+    const data = {
+      content,
+      files,
+      hashTag,
+    };
+    trackPromise(
+      postServices.createPost({ _id: userCur._id, ...data }),
+      "up_post"
+    );
+    setContent("");
+    setHashTag("#notag");
+    setFiles([]);
+    setFilesUrl([]);
+    handleClose();
+  };
+
+  const handleChangeInputFile = (e) => {
+    const filesTarget = e.target.files;
+    for (let i = 0; i < filesTarget.length; i++) {
+      if (!filesTarget[i].type.includes("image/")) {
+        return toast.error("Please select only images!");
+      }
     }
 
-    if (!values.address) {
-      errors.address = "Required";
-    } else if (values.address.length < 5) {
-      errors.address = "Must be 5 characters or more";
+    if (filesTarget.length > 4 || files.length + filesTarget.length > 4) {
+      return toast.error("Please select less than 4 image!");
     }
-
-    if (!values.phone) {
-      errors.phone = "Please enter your phone number!";
-    } else if (!/(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(values.phone)) {
-      errors.phone = "Invalid phone number format!";
-    }
-
-    if (!values.electric) {
-      errors.electric = "Required";
-    }
-
-    if (!values.water) {
-      errors.water = "Required";
-    }
-
-    if (!values.description) {
-      errors.description = "Required";
-    }
-
-    if (values.images.length === 0) {
-      errors.images = "Required";
-    } else if (values.images.length > 8) {
-      errors.images = "Please Choose less than 8 photos!";
-    }
-
-    return errors;
+    const fileUrl = Array.from(filesTarget).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setFiles((prev) => [...prev, ...filesTarget]);
+    setFilesUrl((prev) => [...prev, ...fileUrl]);
   };
 
   return (
-    <form className={cx("wrap")}>
+    <form className={cx("wrap")} onSubmit={handleSubmit}>
       <header>
         <div className={cx("d-flex align-items-center gap-2 ", "avatar")}>
           <span className={cx("wrap-avt")}>
@@ -109,27 +113,54 @@ function FormUpPost() {
             placeholder="You are think ..."
           />
         </div>
-
-        <div className={cx("form-gr")}>
-          <div className={cx("images", "layout_1")}>
-            <div>
-              <Image src={userCur.avatar} />
+        {filesUrl.length > 0 && (
+          <div className={cx("form-gr")}>
+            <div className={cx("images", `layout_${filesUrl.length}`)}>
+              {filesUrl.map((f, i) => (
+                <div key={i} className={cx("img")}>
+                  <Image src={f} />
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className={cx("actions")}>
-        <select name="hash-tag" id="hash-tag">
-          <option value="#0">Hash Tag</option>
-          <option value="#1">#findmotel</option>
-          <option value="#2">#help</option>
-          <option value="#3">#passmotel</option>
+        <select
+          name="hash-tag"
+          id="hash-tag"
+          value={hashTag}
+          onChange={(e) => setHashTag(e.target.value)}
+        >
+          <option value="#notag">Hash Tag</option>
+          <option value="#findmotel">#findmotel</option>
+          <option value="#help">#help</option>
+          <option value="#passmotel">#passmotel</option>
         </select>
 
-        <button type="button" className="btn transparent">
+        <label type="button" htmlFor="post" className="btn transparent">
           Add image
-        </button>
+        </label>
+        <input
+          type="file"
+          onChange={handleChangeInputFile}
+          multiple
+          hidden
+          id="post"
+        />
+      </div>
+      <div className={cx("submit")}>
+        <Button
+          variant="secondary"
+          className={cx("cancel")}
+          onClick={handleClose}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" className={cx("up")}>
+          Up here
+        </Button>
       </div>
     </form>
   );

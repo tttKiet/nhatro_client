@@ -1,7 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import { FormUpPost } from "../../forms";
-import { Button } from "react-bootstrap";
 // scss
 import styles from "./ModalUpPost.module.scss";
 import classNames from "classNames/bind";
@@ -24,15 +23,8 @@ function ModalUpPost({ show, setShow }) {
           <Modal.Title>Up Post</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pe-1">
-          <FormUpPost />
+          <FormUpPost handleClose={handleClose} />
         </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button variant="primary">Up here</Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
