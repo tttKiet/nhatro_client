@@ -1,12 +1,13 @@
 import { FcAddImage } from "react-icons/fc";
 import PropTypes from "prop-types";
 import { useContext } from "react";
-import { ToastContext } from "../../untils/context";
-// scss
+import { ToastContext } from "../../../untils/context";
 import { Carousel } from "react-responsive-carousel";
-import styles from "./ReqUpOwner.module.scss";
-import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
+import { ReactSortable } from "react-sortablejs";
+// scss
+import styles from "./ModalReqOwner.module.scss";
+import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function SettingImage({ imgs, formik, setImgs, show, setShow }) {
@@ -75,31 +76,37 @@ function SettingImage({ imgs, formik, setImgs, show, setShow }) {
         <div className={cx("gr_input")}>
           <div className={cx("input_img")}>
             <div className="d-flex gap-3 flex-wrap">
-              {imgs.length > 0 &&
-                imgs.map((image, index) => (
-                  <div key={index} className={cx("upload_img-img")}>
-                    <Image src={image} width={0} height={0} />
-                    <div
-                      className={cx("xSm")}
-                      onClick={() => handleDeleteImage(index)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
+              <ReactSortable
+                className="d-flex gap-3 flex-wrap"
+                list={imgs}
+                setList={(newState) => setImgs(newState)}
+              >
+                {imgs.length > 0 &&
+                  imgs.map((image, index) => (
+                    <div key={index} className={cx("upload_img-img")}>
+                      <Image src={image} width={0} height={0} />
+                      <div
+                        className={cx("xSm")}
+                        onClick={() => handleDeleteImage(index)}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </ReactSortable>
 
               {imgs.length < 8 && (
                 <>
@@ -177,32 +184,37 @@ function SettingImage({ imgs, formik, setImgs, show, setShow }) {
 
               <div className={cx("input_img")}>
                 <div className="d-flex gap-3 flex-wrap p-2">
-                  {imgs.length > 0 &&
-                    imgs.map((image, index) => (
-                      <div key={index} className={cx("upload_img-img")}>
-                        <Image src={image} width={0} height={0} />
-                        <div
-                          className={cx("xSm")}
-                          onClick={() => handleDeleteImage(index)}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
+                  <ReactSortable
+                    className="d-flex gap-3 flex-wrap"
+                    list={imgs}
+                    setList={(newState) => setImgs(newState)}
+                  >
+                    {imgs.length > 0 &&
+                      imgs.map((image, index) => (
+                        <div key={index} className={cx("upload_img-img")}>
+                          <Image src={image} width={0} height={0} />
+                          <div
+                            className={cx("xSm")}
+                            onClick={() => handleDeleteImage(index)}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="w-6 h-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-
+                      ))}
+                  </ReactSortable>
                   {imgs.length < 8 && (
                     <>
                       <label htmlFor="file_input" className={cx("plus_img")}>

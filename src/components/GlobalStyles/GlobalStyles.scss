@@ -11,13 +11,19 @@ html {
 
   & *::-webkit-scrollbar {
     border-radius: 2px;
+    display: block;
     transition: all 0.3s ease;
     width: 8px;
+    left: 0;
+  }
+
+  &*::-webkit-scrollbar-button {
+    display: none;
   }
 
   & *::-webkit-scrollbar-thumb {
     border-radius: 4px;
-    background-color: rgba(22, 24, 35, 0.06);
+    background-color: rgba(22, 24, 35, 0.26);
     transition: all 0.3s ease;
 
     &:hover {
@@ -37,6 +43,7 @@ body {
   font-family: "Inter", sans-serif;
   font-family: "Montserrat", sans-serif;
   font-family: "Poppins", sans-serif;
+  overflow: auto;
 }
 
 .btn {
@@ -48,6 +55,7 @@ body {
   transition: all 0.1s linear !important;
   display: flex;
   justify-content: center;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
 
@@ -103,6 +111,13 @@ button {
       color: #68686865;
     }
   }
+}
+
+.btn.have_icon {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
 }
 
 button.btn-default {

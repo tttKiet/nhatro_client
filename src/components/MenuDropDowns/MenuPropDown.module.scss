@@ -3,8 +3,7 @@
   position: absolute;
   top: calc(100% + 20px);
   right: -20px;
-  background-color: rgba(255, 255, 255, 0.46);
-  backdrop-filter: blur(8px);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 0.4rem;
   border: 1px solid #ccc;
   z-index: 1;
@@ -14,6 +13,7 @@
   opacity: 0;
   transform: translateY(-20px);
   animation: show 0.2s ease-in-out forwards;
+  backdrop-filter: blur(10px);
 
   @keyframes show {
     from {

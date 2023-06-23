@@ -1,0 +1,85 @@
+.wrap {
+  padding-top: 30px;
+
+  .banner {
+    position: fixed;
+    left: 122px;
+    z-index: 0;
+    top: 106px;
+    // background-color: rgba(0, 0, 0, 0.148);
+    .data {
+      position: sticky;
+      top: 110px;
+      .content {
+        height: 400px;
+        width: 300px;
+        background: linear-gradient(
+          45deg,
+          rgba(206, 11, 240, 0.2),
+          rgb(226, 42, 193)
+        );
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .posts {
+    // post
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+
+    .bar_loading {
+      padding: 20px;
+      --border-radius-size: 0.6rem;
+      width: 590px;
+      background-color: #0073f41f;
+      border-radius: var(--border-radius-size);
+      border: 1px solid #cccccc27;
+      box-shadow: 0 1px 3px 0 rgba(148, 138, 138, 0.811),
+        0 1px 2px -1px rgb(0 0 0 / 0.1);
+      margin-bottom: 20px;
+      color: rgb(40, 40, 40);
+      transition: all 0.2s ease-in-out;
+      .load {
+        margin: 0px 0 8px 0;
+        font-size: 14px;
+
+        span {
+          letter-spacing: 2px;
+        }
+      }
+    }
+  }
+
+  .untils {
+    z-index: 100;
+    position: fixed;
+    left: 1200px;
+    bottom: 40px;
+
+    .add {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      border: 1px solid rgb(220 220 220 / 55%);
+      align-items: center;
+      background-color: rgb(220 220 220 / 13%);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.2s linear;
+
+      &:hover {
+        opacity: 0.7;
+      }
+      svg {
+        width: 20px;
+        height: 20px;
+        color: rgba(47, 47, 198, 0.936);
+      }
+    }
+  }
+}
