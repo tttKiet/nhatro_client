@@ -14,6 +14,7 @@ import {
   ContactPage,
   ErrorPage,
   UserProfilePage,
+  MyPostPage,
 } from "../pages";
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -87,6 +88,12 @@ const router = [
     isProtected: true,
     layout: DefaultLayout,
     element: ContactPage,
+  },
+  {
+    path: "/:id/posts",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: MyPostPage,
   },
 
   // Admin router [The Van]

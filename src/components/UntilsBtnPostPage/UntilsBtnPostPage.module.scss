@@ -1,0 +1,121 @@
+.wrap {
+  z-index: 100;
+  position: fixed;
+  bottom: 40px;
+  width: 300px;
+  right: -284px;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px 0px 0 20px;
+  transition: all 0.3s ease-in;
+  &.showMenu {
+    right: 0px;
+
+    .menu {
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px,
+        rgba(0, 0, 0, 0.24) 0px 1px 2px;
+      background-color: #fff;
+      padding-left: 0px;
+    }
+
+    .bubble {
+      .triangle {
+        padding: 12px;
+
+        svg {
+          transform: rotateY(180deg);
+        }
+      }
+    }
+  }
+
+  //   .add {
+  //     padding: 20px;
+  //     display: flex;
+  //     justify-content: center;
+  //     border: 1px solid rgb(220 220 220 / 55%);
+  //     align-items: center;
+  //     background-color: rgb(220 220 220 / 13%);
+  //     border-radius: 100px;
+  //     cursor: pointer;
+  //     transition: all 0.2s linear;
+
+  //     &:hover {
+  //       opacity: 0.7;
+  //     }
+  //     svg {
+  //       width: 20px;
+  //       height: 20px;
+  //       color: rgba(47, 47, 198, 0.936);
+  //     }
+  //   }
+
+  .menu {
+    background-color: transparent;
+    transition: all 0.3s ease-in;
+    min-height: 200px;
+    min-width: 300px;
+    border-radius: 20px 0px 0 20px;
+    padding-left: 30px;
+    padding: 12px 0 0 12px;
+    .list {
+      padding: 0;
+      list-style: none;
+      width: calc(100% - 30px);
+      padding: 8px 12px;
+
+      li {
+        margin-bottom: 6px;
+        padding: 8px 12px;
+        padding-left: 16px;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(247, 247, 247, 0.945);
+        }
+
+        .icon {
+          display: flex;
+          align-items: center;
+          width: 22px;
+          font-size: 22px;
+          color: #000 !important;
+        }
+        .title {
+          color: #000 !important;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .bubble {
+    position: sticky;
+    right: 0;
+    top: 0;
+    margin-left: -10px;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 20px 0px 0 20px;
+    display: inline-flex;
+    align-items: center;
+    // background-color: red;
+
+    .triangle {
+      background-color: #0861dd;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      padding: 12px;
+      padding-right: 14px;
+      padding-left: 6px;
+      svg {
+        color: #fcfcfc;
+        transition: all 0.3s ease-in;
+        font-size: 20px;
+      }
+    }
+  }
+}

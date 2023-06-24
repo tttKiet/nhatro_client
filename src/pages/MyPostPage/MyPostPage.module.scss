@@ -1,0 +1,13 @@
+.wrap {
+  .nav {
+    position: fixed;
+    left: 0;
+    width: 320px;
+    background-color: red;
+    min-height: 100vh;
+  }
+
+  .my-post {
+    margin-left: 320px;
+  }
+}

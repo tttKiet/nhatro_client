@@ -1,5 +1,5 @@
 import { useAuth } from "../../../hooks";
-import { Button, Image, Modal } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { ToastContext } from "../../../untils/context";
 import { trackPromise } from "react-promise-tracker";
 // scss
@@ -9,7 +9,7 @@ import { useContext, useState } from "react";
 import postServices from "../../../services/postServices";
 const cx = classNames.bind(styles);
 
-function FormUpPost({ handleClose }) {
+function FormUpPost({ handleClose, mergePostsNew }) {
   const [, , userCur] = useAuth();
   const toast = useContext(ToastContext);
   const [rows, setRows] = useState(1);
@@ -34,10 +34,15 @@ function FormUpPost({ handleClose }) {
       files,
       hashTag,
     };
+    // console.log(data);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
     trackPromise(
       postServices.createPost({ _id: userCur._id, ...data }),
       "up_post"
-    );
+    ).then(async () => await mergePostsNew());
     setContent("");
     setHashTag("#notag");
     setFiles([]);
