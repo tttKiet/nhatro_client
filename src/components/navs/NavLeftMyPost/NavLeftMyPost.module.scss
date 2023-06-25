@@ -1,0 +1,132 @@
+.wrap {
+  position: fixed;
+  left: 0;
+  top: 30px;
+  width: var(--width-nav);
+  min-height: 100vh;
+  padding: 20px;
+  padding-left: 116px;
+  padding-right: 28px;
+  padding-top: 0;
+
+  .contain {
+    .dot {
+      display: flex;
+      justify-content: flex-start;
+      gap: 6px;
+
+      div {
+        width: 12px;
+        height: 12px;
+        border-radius: 100px;
+        background-color: rgb(212, 244, 10);
+
+        &:first-child {
+          background-color: red;
+        }
+
+        &:last-child {
+          background-color: rgb(58, 61, 207);
+        }
+      }
+    }
+
+    .breadcrumb-nav {
+      margin-top: 16px;
+
+      ol {
+        margin-bottom: 0px;
+        font-size: 14px !important;
+      }
+    }
+
+    .menu,
+    .control {
+      padding-top: 8px;
+
+      .title {
+        border-top: 1px solid #ccc;
+        font-size: 14px;
+        padding-top: 20px;
+        color: #00000070;
+      }
+
+      .list {
+        list-style-type: none;
+        padding: 0;
+        padding-top: 4px;
+
+        li {
+          .item {
+            text-decoration: none;
+            color: #000;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 8px;
+            padding-left: 0;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 0.6rem;
+            margin-bottom: 4px;
+            transition: box-shadow 0.4s linear, padding-left 0.2s linear;
+
+            svg {
+              font-size: 20px;
+            }
+
+            &:hover {
+              background-color: rgba(230, 225, 225, 0.262);
+              padding-left: 12px;
+              box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px,
+                rgba(0, 0, 0, 0.15) -1px -1px 2.6px;
+            }
+          }
+        }
+      }
+    }
+
+    .control {
+      .list {
+        li {
+          .item {
+            position: relative;
+            overflow: hidden;
+            &:hover {
+              background-color: transparent;
+              padding-left: 12px;
+              box-shadow: none;
+              &::before {
+                display: block;
+              }
+            }
+
+            &::before {
+              position: absolute;
+              top: 50%;
+              top: -40px;
+              transform: translateY(-50%);
+              left: 0;
+              display: block;
+              content: "";
+              width: 2px;
+              background-color: red;
+              border-radius: 0.4rem;
+              height: calc(100% - 20px);
+              display: none;
+              transition: all 0.4s ease;
+              animation: show 0.2s ease forwards;
+
+              @keyframes show {
+                to {
+                  top: 50%;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

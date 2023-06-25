@@ -18,6 +18,7 @@ function PostPage() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [maxDocPost, setMaxDocPost] = useState();
+
   const loadPosts = useCallback(async () => {
     try {
       setIsLoading(true);

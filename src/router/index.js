@@ -92,7 +92,7 @@ const router = [
   {
     path: "/:id/posts",
     isProtected: true,
-    layout: DefaultLayout,
+    layout: "None",
     element: MyPostPage,
   },
 

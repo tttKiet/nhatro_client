@@ -68,45 +68,48 @@ const route = createBrowserRouter(
 );
 
 function App() {
+  console.log("app");
   return (
-    <GlobalStyles>
-      <ToastContext.Provider value={toast}>
-        <Toaster>
-          {(t) => (
-            <ToastBar toast={t}>
-              {({ icon, message }) => (
-                <>
-                  {icon}
-                  {message}
-                  {t.type !== "loading" && (
-                    <button
-                      className={"icon-x"}
-                      onClick={() => toast.dismiss(t.id)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
+    <>
+      <GlobalStyles>
+        <ToastContext.Provider value={toast}>
+          <Toaster>
+            {(t) => (
+              <ToastBar toast={t}>
+                {({ icon, message }) => (
+                  <>
+                    {icon}
+                    {message}
+                    {t.type !== "loading" && (
+                      <button
+                        className={"icon-x"}
+                        onClick={() => toast.dismiss(t.id)}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  )}
-                </>
-              )}
-            </ToastBar>
-          )}
-        </Toaster>
-        <RouterProvider router={route} />
-      </ToastContext.Provider>
-    </GlobalStyles>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </>
+                )}
+              </ToastBar>
+            )}
+          </Toaster>
+          <RouterProvider router={route} />
+        </ToastContext.Provider>
+      </GlobalStyles>
+    </>
   );
 }
 

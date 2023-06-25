@@ -37,6 +37,17 @@ const postServices = {
       console.error(err);
     }
   },
+
+  async getPostUser({ _author, page = undefined }) {
+    try {
+      const res = await axios.get(
+        `/api/v1/users/${_author}/posts?page=${page}`
+      );
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 };
 
 export default postServices;
