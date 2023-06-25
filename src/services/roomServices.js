@@ -1,11 +1,36 @@
 import axios from "../axios";
 const roomServices = {
-  async createRoom(id, data) {
-    // console.log("id", id);
-    // console.log("data", data);
+  // async createRoom(id, data) {
+  //   // console.log("id", id);
+  //   // console.log("data", data);
 
-    const res = await axios.post(`/api/v1/board-house/room/create/${id}`, data);
-    return res.data;
+  //   const res = await axios.post(`/api/v1/board-house/room/create/${id}`, data);
+  //   return res.data;
+  // },
+  async createRoom({ id, files, data }) {
+    console.log("Data", data);
+    let formData = new FormData();
+    formData.append("description", data.description);
+    formData.append("isLayout", data.isLayout);
+    formData.append("number", data.number);
+    formData.append("size", data.size);
+    formData.append("price", data.price);
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("images", files[i]);
+    }
+    try {
+      const res = await axios.post(
+        `/api/v1/board-house/room/create/${id}`,
+        formData,
+        {
+          headers: { "Content-type": "multipart/form-data" },
+        }
+      );
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
   },
   async getAllRoomsByAdminId(adminId) {
     const res = await axios.get(`/api/v1/board-house/room?adminId=${adminId}`);
