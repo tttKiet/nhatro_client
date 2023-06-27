@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NavLeftMyPost from "../../components/navs/NavLeftMyPost";
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import PrevPost from "../../components/PrevPost";
@@ -11,6 +11,7 @@ const PostLazy = lazy(() => import("../../components/Post"));
 // scss
 import styles from "./MyPostPage.module.scss";
 import classNames from "classNames/bind";
+import UserInforForPost from "../../components/UserInforForPost";
 
 const cx = classNames.bind(styles);
 
@@ -89,7 +90,6 @@ function MyPostPage() {
 
   return (
     <div className={cx("wrap")}>
-      {console.log(posts)}
       {/* modal */}
 
       <div className={cx("nav")}>
@@ -98,7 +98,7 @@ function MyPostPage() {
       <div className={cx("my-post")}>
         <div className="container">
           <div className="row">
-            <div className="col-12">
+            <div className="col-xxl-7 col-12">
               {promiseInProgress && (
                 <div className={cx("bar_loading", "post")}>
                   <div className={cx("load")}>
@@ -124,6 +124,9 @@ function MyPostPage() {
                 <p>You dont any post ... </p>
               )}
               {isLoading && <PrevPost />}
+            </div>
+            <div className="col-xxl-5 d-none d-xxl-block">
+              <UserInforForPost />
             </div>
           </div>
         </div>
