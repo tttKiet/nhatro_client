@@ -58,7 +58,7 @@ function NavControlLeft({ setActive, active }) {
         <li>
           <Link
             className={cx({ active: active === "my-profile" })}
-            to={`/profile/${userCur?._id}?tag=my-profile`}
+            to={`/profile?tag=my-profile`}
           >
             <GiCaptainHatProfile />
             My profile
@@ -67,7 +67,7 @@ function NavControlLeft({ setActive, active }) {
         <li>
           <Link
             className={cx({ active: active === "verify-email" })}
-            to={`/profile/${userCur?._id}?tag=verify-email`}
+            to={`/profile?tag=verify-email`}
           >
             <HiOutlineMail />
             Verify email
@@ -76,7 +76,7 @@ function NavControlLeft({ setActive, active }) {
         <li>
           <Link
             className={cx({ active: active === "req-owner-broad-house" })}
-            to={`/profile/${userCur?._id}?tag=req-owner-broad-house`}
+            to={`/profile?tag=req-owner-broad-house`}
           >
             <MdOutlineAdminPanelSettings />
             Request to be the board house owner

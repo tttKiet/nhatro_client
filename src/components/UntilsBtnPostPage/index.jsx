@@ -36,7 +36,7 @@ function UntilsBtnPostPage({ setPosts }) {
     if (newpost) {
       setPosts((prev) => [newpost, ...prev]);
     }
-  }, [handleGetNewPost]);
+  }, [handleGetNewPost, setPosts]);
 
   return (
     <div className={cx("wrap", { showMenu })}>
@@ -58,7 +58,7 @@ function UntilsBtnPostPage({ setPosts }) {
 
           <li>
             <Link
-              to={`/${user._id}/posts`}
+              to={`/user/my-post`}
               className="d-flex gap-3 text-decoration-none"
             >
               <div className={cx("icon")}>

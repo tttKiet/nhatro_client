@@ -28,3 +28,19 @@
     }
   }
 }
+
+@media screen and (max-width: 1060px) {
+  .wrap {
+    .my-post {
+      margin-left: 218px;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .wrap {
+    .my-post {
+      margin-left: 0;
+    }
+  }
+}

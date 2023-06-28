@@ -22,6 +22,7 @@
       gap: 12px;
       align-items: center;
       justify-content: flex-start;
+      position: relative;
       .avt {
         border: 2px solid #fff;
         border-radius: 100px;
@@ -55,6 +56,24 @@
             -webkit-background-clip: text;
             color: transparent;
           }
+        }
+      }
+
+      .pen {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        svg {
+          color: #fff;
+          width: 22px;
+        }
+
+        &:hover {
+          opacity: 0.7;
         }
       }
     }

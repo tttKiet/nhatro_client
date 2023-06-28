@@ -10,6 +10,7 @@ import CommentInput from "../CommentInput";
 // scss
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
+import ImageLoader from "../ImageLoader";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -88,7 +89,8 @@ function Post({
             <div className={cx("images", `layout_${images?.length}`)}>
               {images.map((image, index) => (
                 <div key={index} className={cx("img")}>
-                  <Image src={image} />
+                  {/* <Image src={image} /> */}
+                  <ImageLoader image={{ src: image }} />
                 </div>
               ))}
             </div>

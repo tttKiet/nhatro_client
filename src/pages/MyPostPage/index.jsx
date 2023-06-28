@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import NavLeftMyPost from "../../components/navs/NavLeftMyPost";
 import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import PrevPost from "../../components/PrevPost";
@@ -12,20 +11,21 @@ const PostLazy = lazy(() => import("../../components/Post"));
 import styles from "./MyPostPage.module.scss";
 import classNames from "classNames/bind";
 import UserInforForPost from "../../components/UserInforForPost";
+import { useAuth } from "../../hooks";
 
 const cx = classNames.bind(styles);
 
 function MyPostPage() {
   const { promiseInProgress } = usePromiseTracker({ area: "up_post" });
+  const [, , user] = useAuth();
   const [maxDocPost, setMaxDocPost] = useState();
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(2);
-  const { id } = useParams();
 
   const mergePostsNew = () => {
     postServices
-      .getPostUser({ _author: id, page: 1 })
+      .getPostUser({ _author: user._id, page: 1 })
       .then((res) => {
         console.log(res);
         if (res?.status === 200) {
@@ -40,7 +40,7 @@ function MyPostPage() {
   const loadPosts = useCallback(async () => {
     setIsLoading(true);
     postServices
-      .getPostUser({ _author: id, page: page })
+      .getPostUser({ _author: user._id, page: page })
       .then((res) => {
         setPosts((prev) => [...prev, ...res.data.data.posts]);
       })
@@ -48,7 +48,7 @@ function MyPostPage() {
         console.log(err);
       })
       .finally(() => setIsLoading(false));
-  }, [id, page]);
+  }, [page, user._id]);
 
   const nextPagePost = useCallback(() => {
     setPage((prevPage) => prevPage + 1);
@@ -66,7 +66,7 @@ function MyPostPage() {
 
   useEffect(() => {
     postServices
-      .getPostUser({ _author: id, page: 1 })
+      .getPostUser({ _author: user._id, page: 1 })
       .then((res) => {
         if (res?.status === 200) {
           setPosts([...res.data.data.posts]);
@@ -76,7 +76,7 @@ function MyPostPage() {
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
+  }, [user._id]);
 
   useEffect(() => {
     if (posts.length >= maxDocPost) {
@@ -99,31 +99,33 @@ function MyPostPage() {
         <div className="container">
           <div className="row">
             <div className="col-xxl-7 col-12">
-              {promiseInProgress && (
-                <div className={cx("bar_loading", "post")}>
-                  <div className={cx("load")}>
-                    Posting <span>...</span>
+              <div className="d-flex flex-column align-items-center">
+                {promiseInProgress && (
+                  <div className={cx("bar_loading", "post")}>
+                    <div className={cx("load")}>
+                      Posting <span>...</span>
+                    </div>
+                    <BarLoading />
                   </div>
-                  <BarLoading />
-                </div>
-              )}
-              {posts.length > 0 ? (
-                posts.map((post, index) => (
-                  <Suspense key={index} fallback={<PrevPost />}>
-                    <PostLazy
-                      content={post?.content}
-                      createdAt={post?.createdAt}
-                      images={post?.images || []}
-                      authorName={post?.user.fullName}
-                      authorImage={post?.user.avatar}
-                      hashTag={post?.hashTag}
-                    />
-                  </Suspense>
-                ))
-              ) : (
-                <p>You dont any post ... </p>
-              )}
-              {isLoading && <PrevPost />}
+                )}
+                {posts.length > 0 ? (
+                  posts.map((post, index) => (
+                    <Suspense key={index} fallback={<PrevPost />}>
+                      <PostLazy
+                        content={post?.content}
+                        createdAt={post?.createdAt}
+                        images={post?.images || []}
+                        authorName={post?.user.fullName}
+                        authorImage={post?.user.avatar}
+                        hashTag={post?.hashTag}
+                      />
+                    </Suspense>
+                  ))
+                ) : (
+                  <p>You dont any post ... </p>
+                )}
+                {isLoading && <PrevPost />}
+              </div>
             </div>
             <div className="col-xxl-5 d-none d-xxl-block">
               <UserInforForPost />

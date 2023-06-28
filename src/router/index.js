@@ -77,7 +77,7 @@ const router = [
 
   // user
   {
-    path: "/profile/:user_id",
+    path: "/profile",
     isProtected: true,
     layout: "None",
     element: UserProfilePage,
@@ -90,7 +90,7 @@ const router = [
     element: ContactPage,
   },
   {
-    path: "/:id/posts",
+    path: "/user/my-post",
     isProtected: true,
     layout: "None",
     element: MyPostPage,
