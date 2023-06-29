@@ -118,11 +118,12 @@ function MyPostPage() {
                         authorName={post?.user.fullName}
                         authorImage={post?.user.avatar}
                         hashTag={post?.hashTag}
+                        postId={post?._id}
                       />
                     </Suspense>
                   ))
                 ) : (
-                  <p>You dont any post ... </p>
+                  <p className="text-text-md-center">You dont any post ... </p>
                 )}
                 {isLoading && <PrevPost />}
               </div>

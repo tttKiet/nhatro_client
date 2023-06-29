@@ -98,6 +98,7 @@ function PostPage() {
                       authorName={post.user.fullName}
                       authorImage={post.user.avatar}
                       hashTag={post.hashTag}
+                      postId={post?._id}
                     />
                   </Suspense>
                 ))}

@@ -11,6 +11,8 @@ import CommentInput from "../CommentInput";
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
+import { likeServices } from "../../services";
+import { useAuth } from "../../hooks";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -20,11 +22,27 @@ function Post({
   authorName,
   authorImage,
   hashTag,
+  postId,
 }) {
   const [showComments, setShowComments] = useState(false);
+  const [, , user] = useAuth();
+  const [like, setLike] = useState(false);
   const [showText, setShowText] = useState(false);
   const toggleShowText = () => {
     setShowText((s) => !s);
+  };
+
+  const toggleLike = () => {
+    setLike((like) => !like);
+    likeServices
+      .toggleLikePost({ postId, userId: user?._id || null })
+      .then((res) => {
+        // console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLike((like) => !like);
+      });
   };
 
   return (
@@ -108,7 +126,11 @@ function Post({
         </main>
         <footer className={cx("footer")}>
           <div className={cx("actives")}>
-            <button type="button" className={cx("active", "col-4", "liked")}>
+            <button
+              type="button"
+              className={cx("active", "col-4", { liked: like })}
+              onClick={() => toggleLike()}
+            >
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +147,7 @@ function Post({
                   />
                 </svg>
               </div>
-              <span>Like</span>
+              <span>{like ? "Liked" : "Like"}</span>
             </button>
             <button
               type="button"
@@ -198,6 +220,7 @@ Post.propTypes = {
   authorName: PropTypes.string,
   authorImage: PropTypes.string,
   hashTag: PropTypes.string,
+  postId: PropTypes.string,
 };
 
 export default Post;

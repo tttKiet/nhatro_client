@@ -3,6 +3,7 @@
 
   .form {
     margin-top: 30px;
+    width: 100%;
 
     .form-group {
       margin-bottom: 22px;
@@ -46,6 +47,7 @@
         font-size: 14px;
         transition: all 0.2s linear;
         min-width: 400px;
+        width: 100%;
 
         &:placeholder-shown {
           color: #092cf6;
@@ -74,4 +76,21 @@
 
 .custom-font-size {
   font-size: 24px;
+}
+
+@media screen and (max-width: 590px) {
+  .wrap {
+    .form {
+      .form-wrap {
+        display: block;
+        .form-group {
+          input,
+          textarea {
+            width: 100%;
+            min-width: unset;
+          }
+        }
+      }
+    }
+  }
 }

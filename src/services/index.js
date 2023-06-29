@@ -6,3 +6,4 @@ export { default as feedbackService } from "./feedbackService";
 export { default as codeServices } from "./codeServices";
 export { default as reqRoomOwnerServices } from "./reqRoomOwnerServices";
 export { default as postServices } from "./postServices";
+export { default as likeServices } from "./likeServices";

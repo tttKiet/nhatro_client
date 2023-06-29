@@ -11,6 +11,9 @@ moment().format("MMM Do YY");
 // react alert2 animation
 import "animate.css";
 import { ToastContext } from "./untils/context";
+import { Suspense } from "react";
+import Snipper from "./components/Snipper";
+import PreSnipperLoader from "./components/PreSnipperLoader";
 
 const route = createBrowserRouter(
   router.map((route) => {
@@ -24,12 +27,16 @@ const route = createBrowserRouter(
           element: isProtected ? (
             <ProviderGetUserLogin>
               <ProtectedRoute>
-                <Element />
+                <Suspense fallback={<PreSnipperLoader />}>
+                  <Element />
+                </Suspense>
               </ProtectedRoute>
             </ProviderGetUserLogin>
           ) : (
             <>
-              <Element />
+              <Suspense fallback={<PreSnipperLoader />}>
+                <Element />
+              </Suspense>
             </>
           ),
         };
@@ -40,13 +47,17 @@ const route = createBrowserRouter(
           <ProviderGetUserLogin>
             <ProtectedRoute>
               <MappingLayout>
-                <Element />
+                <Suspense fallback={<PreSnipperLoader />}>
+                  <Element />
+                </Suspense>
               </MappingLayout>
             </ProtectedRoute>
           </ProviderGetUserLogin>
         ) : (
           <MappingLayout>
-            <Element />
+            <Suspense fallback={<PreSnipperLoader />}>
+              <Element />
+            </Suspense>
           </MappingLayout>
         ),
       };
@@ -56,11 +67,15 @@ const route = createBrowserRouter(
         element: isProtected ? (
           <ProviderGetUserLogin>
             <ProtectedRoute>
-              <Element />
+              <Suspense fallback={<PreSnipperLoader />}>
+                <Element />
+              </Suspense>
             </ProtectedRoute>
           </ProviderGetUserLogin>
         ) : (
-          <Element />
+          <Suspense fallback={<PreSnipperLoader />}>
+            <Element />
+          </Suspense>
         ),
       };
     }

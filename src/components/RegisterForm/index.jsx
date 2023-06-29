@@ -2,12 +2,13 @@ import { userServices } from "../../services";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import styles from "./RegisterForm.module.scss";
-import classNames from "classNames/bind";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks";
 import { ToastContext } from "../../untils/context";
 import { useContext } from "react";
+// scss
+import styles from "./RegisterForm.module.scss";
+import classNames from "classNames/bind";
 
 const cx = classNames.bind(styles);
 
@@ -127,8 +128,13 @@ function RegisterForm({ _id }) {
   return (
     <div className={cx("wrap")}>
       <form className={cx("form")} onSubmit={formik.handleSubmit}>
-        <div className="d-flex gap-md-0 gap-lg-5 gap-xl-5 gap-sm-0 flex-wrap">
-          <div>
+        <div
+          className={cx(
+            "d-flex gap-md-0  gap-xl-5 gap-sm-0 flex-wrap w-100 flex-1",
+            "form-wrap"
+          )}
+        >
+          <div className="">
             <div className={cx("form-group")}>
               <label htmlFor="fullName" className={cx("form-group-label")}>
                 Full name:
@@ -160,7 +166,6 @@ function RegisterForm({ _id }) {
                 type="text"
                 name="email"
                 placeholder="exam: abcxyz@gmail.com"
-
                 className={cx({
                   errInput: !!formik.errors.email && formik.touched.email,
                 })}
@@ -301,9 +306,9 @@ function RegisterForm({ _id }) {
             </div>
           </div>
         </div>
-        <div className="d-flex gap-4">
+        <div className="gap-1 gap-sm-4 row">
           <button
-            className={cx("btn")}
+            className={cx("btn", "col-sm-2 col-12")}
             type="reset"
             onClick={formik.handleReset}
           >
@@ -311,14 +316,17 @@ function RegisterForm({ _id }) {
           </button>
 
           <button
-            className={cx("btn")}
+            className={cx("btn", "col-sm-2 col-12")}
             type="button"
             onClick={() => navigation(-1)}
           >
             Cancel
           </button>
 
-          <button className={cx("btn", "btn-primary")} type="submit">
+          <button
+            className={cx("btn", "col-sm-2 col-12", "btn-primary")}
+            type="submit"
+          >
             {_id ? "Save" : type === "root" ? "Add member" : "Register"}
           </button>
         </div>
