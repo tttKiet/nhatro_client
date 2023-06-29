@@ -48,6 +48,15 @@ const postServices = {
       console.error(err);
     }
   },
+
+  async getLike({ postId }) {
+    try {
+      const res = await axios.get(`/api/v1/post/${postId}/like`);
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 };
 
 export default postServices;

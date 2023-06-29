@@ -1,6 +1,6 @@
 import Image from "react-bootstrap/Image";
 import { MdPlayArrow } from "react-icons/md";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Like from "../../assets/svg/like.svg";
 import PropTypes from "prop-types";
 import Comment from "../Comment";
@@ -11,7 +11,7 @@ import CommentInput from "../CommentInput";
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
-import { likeServices } from "../../services";
+import { likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
 const cx = classNames.bind(styles);
 
@@ -26,24 +26,43 @@ function Post({
 }) {
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
-  const [like, setLike] = useState(false);
+  const [likeInfo, setLikeInfo] = useState({
+    user: [],
+    count: 0,
+  });
   const [showText, setShowText] = useState(false);
   const toggleShowText = () => {
     setShowText((s) => !s);
   };
 
   const toggleLike = () => {
-    setLike((like) => !like);
     likeServices
       .toggleLikePost({ postId, userId: user?._id || null })
       .then((res) => {
         // console.log(res);
+        if (res.status === 200 && res.data.err === 0) {
+          getLike();
+        }
       })
       .catch((err) => {
         console.log(err);
-        setLike((like) => !like);
       });
   };
+
+  const getLike = useCallback(() => {
+    postServices.getLike({ postId }).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setLikeInfo({
+          user: [...res.data.data],
+          count: res?.data?.likedCount || 0,
+        });
+      }
+    });
+  }, [postId]);
+
+  useEffect(() => {
+    getLike();
+  }, [getLike]);
 
   return (
     <div className={cx("wrap")}>
@@ -119,7 +138,7 @@ function Post({
               <div className={cx("img")}>
                 <Image src={Like} />
               </div>
-              1k2
+              {likeInfo?.count}
             </div>
             <div className={cx("info_post-item")}>860 comment</div>
           </div>
@@ -128,7 +147,9 @@ function Post({
           <div className={cx("actives")}>
             <button
               type="button"
-              className={cx("active", "col-4", { liked: like })}
+              className={cx("active", "col-4", {
+                liked: !!likeInfo.user.find((u) => u.user._id === user._id),
+              })}
               onClick={() => toggleLike()}
             >
               <div>
@@ -147,7 +168,12 @@ function Post({
                   />
                 </svg>
               </div>
-              <span>{like ? "Liked" : "Like"}</span>
+
+              <span>
+                {likeInfo.user.find((u) => u.user._id === user._id)
+                  ? "Liked"
+                  : "Like"}
+              </span>
             </button>
             <button
               type="button"
