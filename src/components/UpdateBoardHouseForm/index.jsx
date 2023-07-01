@@ -5,7 +5,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks";
 import UploadImage from "../UploadImage";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,9 +13,18 @@ import toast, { Toaster } from "react-hot-toast";
 import styles from "./UpdateBoardHouseForm.module.scss";
 import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
-function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
+function UpdateBoardHouseForm({
+  data,
+  id,
+  isCreate,
+  onDisableClose,
+  dataExisted,
+}) {
   // const [loading, setLoading] = useState(false);
+  const [, , adminData] = useAuth();
+  const [imgToDelete, setImgToDelete] = useState(null);
   const navigate = useNavigate();
+
   const validate = (values) => {
     const errors = {};
     if (!values.name) {
@@ -47,15 +56,18 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
     return errors;
   };
 
-  const [, , adminData] = useAuth();
+  async function handleSubmit(boardHouseId, data) {
+    const fileImgs = data.fileImages?.filter((file) => typeof file == "object");
+    toast.loading("Updating ... ");
 
-  async function handleSubmit(adminId, boardHouseId, data) {
     const res = await boardHouseServices.updateBoardHouse(
-      adminId,
       boardHouseId,
-      data
+      data,
+      fileImgs
     );
     if (res.err === 0) {
+      toast.dismiss();
+      toast.success("Updated successfully");
       Swal.fire({
         title: "Updated successfully. Let's access in dashboard",
         text: "Go to your profile",
@@ -73,20 +85,8 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
   }
 
   async function handleDeleteImage(img) {
-    toast.loading("Deleting...");
-
-    const res = await cloudinaryServices.deleteImage(img);
-    if (res.err === 0) {
-      formik.setFieldValue(
-        "images",
-        formik.values.images.filter((image) => image !== img)
-      );
-      if (onDisableClose) {
-        onDisableClose(false);
-      }
-      toast.dismiss();
-      toast.success("Delete a image successfully");
-    }
+    toast.success("Deleting...");
+    setImgToDelete(img);
   }
 
   const formik = useFormik({
@@ -97,9 +97,10 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
       electricPrice: "",
       waterPrice: "",
       images: [],
+      fileImages: [],
     },
     onSubmit: (values) => {
-      handleSubmit(adminData?._id, id, values);
+      handleSubmit(id, values);
     },
     validateOnChange: false,
     validate,
@@ -108,13 +109,22 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
   useEffect(() => {
     if (data && !isCreate) {
       formik.setValues({
-        ...data,
+        _id: data._id,
+        name: data.name,
+        address: data.address,
+        phone: data.phone,
+        electricPrice: data.electricPrice,
+        waterPrice: data.waterPrice,
+        images: data.images,
+        fileImages: data.fileImages,
+        originalImage: data.images,
       });
     }
   }, []);
 
   return (
     <div className={cx("wrap", "row p-3")}>
+      {console.log("formik", formik.values)}
       <form className="col-md-5" onSubmit={formik.handleSubmit}>
         <label htmlFor="name" className="fw-bold">
           Name of board house:
@@ -212,6 +222,7 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
       <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
         {formik.values.images?.length > 0 ? (
           <Carousel
+            selectedItem={formik.values.images?.length - 1}
             className={cx("carousel-control")}
             showArrows={true}
             showThumbs={false}
@@ -252,7 +263,9 @@ function UpdateBoardHouseForm({ data, id, isCreate, onDisableClose }) {
         )}
         <UploadImage
           formik={formik}
-          onDisableClose={onDisableClose}
+          dataExisted={dataExisted}
+          isUpdate={true}
+          imgToDelete={imgToDelete}
         ></UploadImage>
       </div>
       <Toaster></Toaster>
@@ -266,6 +279,11 @@ UpdateBoardHouseForm.propTypes = {
   room: PropTypes.object,
   isCreate: PropTypes.bool,
   onDisableClose: PropTypes.func,
+  dataExisted: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+  ]),
 };
 
 export default UpdateBoardHouseForm;

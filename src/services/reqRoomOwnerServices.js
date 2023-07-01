@@ -23,6 +23,18 @@ const reqRoomOwnerServices = {
     );
     return res.data;
   },
+
+  async accpectReq(reqId) {
+    const res = await axios.patch(`/api/v1/root/accept-req/${reqId}`);
+    return res.data;
+  },
+
+  async rejectReq(reqId, boardHouseId) {
+    const res = await axios.delete(`/api/v1/root/reject-req/${reqId}`, {
+      data: { boardHouseId },
+    });
+    return res.data;
+  },
 };
 
 export default reqRoomOwnerServices;

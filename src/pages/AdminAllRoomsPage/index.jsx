@@ -77,6 +77,7 @@ function AdminAllRoomsPage() {
         Status: "Loading...",
         Images: room.images,
         boardHouseId: e.target.value,
+        originalImage: room.images,
       }))
     );
     toast.success("Changed Board House");
@@ -191,6 +192,7 @@ function AdminAllRoomsPage() {
           Status: "Loading...",
           Images: room.images,
           boardHouseId: boardHouse[0]?.boardHouseId,
+          originalImage: room.images,
         }))
       );
       setIsChanged(boardHouse[0]?.boardHouseId);
@@ -209,6 +211,7 @@ function AdminAllRoomsPage() {
           Status: "Loading...",
           Images: room.images,
           boardHouseId: isChanged,
+          originalImage: room.images,
         }))
       );
     }

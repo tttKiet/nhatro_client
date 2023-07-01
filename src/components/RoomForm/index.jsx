@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 
 import { Carousel } from "react-responsive-carousel";
 import PropTypes from "prop-types";
-import { cloudinaryServices, roomServices } from "../../services";
-import { useContext } from "react";
+import { roomServices } from "../../services";
+import { useContext, useState } from "react";
 import { ToastContext } from "../../untils/context";
 import { useEffect } from "react";
 import UploadImage from "../UploadImage";
@@ -14,12 +14,14 @@ const cx = classNames.bind(styles);
 function RoomForm({
   data,
   updateData,
+  // eslint-disable-next-line no-unused-vars
   onHide,
   isUpdate,
   dataExisted,
   onDisableClose,
 }) {
-  // console.log("data existed", dataExisted);
+  const [imgToDelete, setImgToDelete] = useState(null);
+
   const validate = (values) => {
     const errors = {};
     if (!values.size) {
@@ -57,12 +59,13 @@ function RoomForm({
       description: "",
       images: [],
       boardHouseId: data[0].boardHouseId,
+      fileImages: [],
     },
 
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       if (isUpdate) {
-        handleSubmit(values._id, values);
+        handleUpdate(values._id, values);
       } else {
         handleSubmit(values.boardHouseId, values);
       }
@@ -74,38 +77,54 @@ function RoomForm({
   const toast = useContext(ToastContext);
 
   async function handleDeleteImage(img) {
-    toast.loading("Deleting...");
-    const res = await cloudinaryServices.deleteImage(img);
-    if (res.err === 0) {
-      formik.setFieldValue(
-        "images",
-        formik.values.images.filter((image) => image !== img)
-      );
-      if (onDisableClose) {
-        onDisableClose(false);
-      }
-      toast.dismiss();
-      toast.success("Delete a image successfully");
-    }
+    setImgToDelete(img);
   }
 
   async function handleSubmit(id, dataRoom) {
-    if (isUpdate) {
-      const res = await roomServices.updateRoom(id, dataRoom);
+    try {
+      toast.loading("Creating...");
+      const dataCreate = {
+        files: dataRoom.fileImages,
+        data: {
+          number: dataRoom.number,
+          size: dataRoom.size,
+          isLayout: dataRoom.isLayout,
+          price: dataRoom.price,
+          description: dataRoom.description,
+        },
+      };
+      const res = await roomServices.createRoom({ id: id, ...dataCreate });
       if (res.err === 0) {
+        toast.dismiss();
+        updateData();
+        toast.success("Successfully");
+        onHide();
+      } else {
+        toast.error("Error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleUpdate(id, dataRoom) {
+    const fileImgs = dataRoom.fileImages?.filter(
+      (file) => typeof file == "object"
+    );
+
+    toast.loading("Updating room...");
+
+    try {
+      const res = await roomServices.updateRoom(id, dataRoom, fileImgs);
+      if (res.err === 0) {
+        toast.dismiss();
         toast.success(`Update room successfully`);
         onDisableClose(true);
         updateData();
         onHide();
       }
-    } else {
-      const res = await roomServices.createRoom(id, dataRoom);
-      if (res.err === 0) {
-        toast.success(`Create room successfully`);
-        onDisableClose(true);
-        updateData();
-        onHide();
-      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -120,12 +139,15 @@ function RoomForm({
         description: dataExisted.Description,
         images: dataExisted.Images,
         boardHouseId: dataExisted.boardHouseId,
+        fileImages: dataExisted.fileImages,
+        originalImage: dataExisted.originalImage,
       });
     }
   }, []);
 
   return (
     <div className={cx("wrap")}>
+      {console.log("update-formik", formik.values)}
       <div className={cx("wrap", "row p-3")}>
         <form className="col-md-5" onSubmit={formik.handleSubmit}>
           <label htmlFor="number" className="fw-bold">
@@ -256,14 +278,13 @@ function RoomForm({
         <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
           {formik.values.images?.length > 0 ? (
             <Carousel
+              selectedItem={formik.values.images?.length - 1}
               className={cx("carousel-control")}
               showArrows={true}
               showThumbs={false}
               emulateTouch={true}
               showIndicators={true}
               infiniteLoop={true}
-              // interval={3000}
-              // autoPlay={true}
             >
               {formik.values.images.map((img, index) => (
                 <div className={cx("item-img")} key={index}>
@@ -298,9 +319,13 @@ function RoomForm({
               Imgs were uploaded will show here!
             </div>
           )}
+
           <UploadImage
+            imgToDelete={imgToDelete}
             formik={formik}
             onDisableClose={onDisableClose}
+            isUpdate={isUpdate}
+            dataExisted={dataExisted}
           ></UploadImage>
         </div>
       </div>

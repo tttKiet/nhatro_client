@@ -9,4 +9,19 @@
     align-items: center;
     display: flex;
   }
+  .carousel-control{
+    border-radius: 10px;
+    overflow: hidden;
+    width: 200px;
+    cursor: pointer;
+    .img-req{
+      height: 150px;
+      object-fit: cover;
+    }
+  }
+}
+
+.img-modal{
+  height: 450px !important;
+  object-fit: contain;
 }

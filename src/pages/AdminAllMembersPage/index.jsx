@@ -3,7 +3,6 @@ import { useAuth } from "../../hooks";
 import styles from "./AdminAllMembersPage.module.scss";
 import classNames from "classNames/bind";
 import SearchBar from "../../components/SearchBar";
-import React from "react";
 import { useTable, usePagination } from "react-table";
 
 const cx = classNames.bind(styles);

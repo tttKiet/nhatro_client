@@ -11,6 +11,17 @@ const cx = classNames.bind(styles);
 function AdminCardRoom({ room }) {
   const [showModal, setShowModal] = useState(false);
 
+  const dataExisted = {
+    _id: room._id,
+    address: room.address,
+    phone: room.phone,
+    electricPrice: room.electricPrice,
+    waterPrice: room.waterPrice,
+    Images: room.images,
+    fileImages: room.fileImages,
+    originalImage: room.images,
+  };
+
   return (
     <div className={cx("wrap")}>
       <div className="card shadow p-2 mb-5 bg-body-tertiary rounded">
@@ -138,6 +149,7 @@ function AdminCardRoom({ room }) {
         show={showModal}
         onHide={() => setShowModal(false)}
         data={room}
+        dataExisted={dataExisted}
         Component={UpdateBoardHouseForm}
         action="Edit board house"
       />
