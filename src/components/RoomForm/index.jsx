@@ -21,7 +21,6 @@ function RoomForm({
   onDisableClose,
 }) {
   const [imgToDelete, setImgToDelete] = useState(null);
-  const [index, setIndex] = useState(null);
 
   const validate = (values) => {
     const errors = {};
@@ -77,15 +76,8 @@ function RoomForm({
 
   const toast = useContext(ToastContext);
 
-  async function handleDeleteImage(img, index) {
-    // formik.setFieldValue(
-    //   "images",
-    //   formik.values.images.filter((image) => image !== img)
-    // );
-    // console.log("img to delete", formik.values.fileImages);
+  async function handleDeleteImage(img) {
     setImgToDelete(img);
-
-    // toast.success("Delete a image successfully");
   }
 
   async function handleSubmit(id, dataRoom) {
@@ -102,11 +94,11 @@ function RoomForm({
         },
       };
       const res = await roomServices.createRoom({ id: id, ...dataCreate });
-      console.log("res-data", res);
       if (res.err === 0) {
         toast.dismiss();
         updateData();
         toast.success("Successfully");
+        onHide();
       } else {
         toast.error("Error");
       }
@@ -116,12 +108,20 @@ function RoomForm({
   }
 
   async function handleUpdate(id, dataRoom) {
+    const fileImgs = dataRoom.fileImages?.filter(
+      (file) => typeof file == "object"
+    );
+
+    toast.loading("Updating room...");
+
     try {
-      const res = await roomServices.updateRoom(id, dataRoom);
+      const res = await roomServices.updateRoom(id, dataRoom, fileImgs);
       if (res.err === 0) {
+        toast.dismiss();
         toast.success(`Update room successfully`);
         onDisableClose(true);
         updateData();
+        onHide();
       }
     } catch (error) {
       console.log(error);
@@ -139,12 +139,15 @@ function RoomForm({
         description: dataExisted.Description,
         images: dataExisted.Images,
         boardHouseId: dataExisted.boardHouseId,
+        fileImages: dataExisted.fileImages,
+        originalImage: dataExisted.originalImage,
       });
     }
   }, []);
 
   return (
     <div className={cx("wrap")}>
+      {console.log("update-formik", formik.values)}
       <div className={cx("wrap", "row p-3")}>
         <form className="col-md-5" onSubmit={formik.handleSubmit}>
           <label htmlFor="number" className="fw-bold">
@@ -294,7 +297,7 @@ function RoomForm({
                       stroke="currentColor"
                       className="w-6 h-6"
                       style={{ width: "25px" }}
-                      onClick={() => handleDeleteImage(img, index)}
+                      onClick={() => handleDeleteImage(img)}
                     >
                       <path
                         strokeLinecap="round"
@@ -321,6 +324,8 @@ function RoomForm({
             imgToDelete={imgToDelete}
             formik={formik}
             onDisableClose={onDisableClose}
+            isUpdate={isUpdate}
+            dataExisted={dataExisted}
           ></UploadImage>
         </div>
       </div>
