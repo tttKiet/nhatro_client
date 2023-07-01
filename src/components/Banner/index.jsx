@@ -21,7 +21,7 @@ function Banner() {
           title={"quick room search"}
           contentButton={"Search here"}
           imgLink={
-            "https://yyusti.com/wp-content/uploads/2021/07/10-15959302107241449964770-e1626168693156.jpg"
+            "https://img.freepik.com/premium-photo/modern-house-exterior-sale-rent_293060-7831.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
           }
         />
         <BannerSlide
@@ -35,7 +35,7 @@ function Banner() {
           title={"cheap accommodation"}
           contentButton={"rent here"}
           imgLink={
-            "https://yyusti.com/wp-content/uploads/2021/07/10-15959302107241449964770-e1626168693156.jpg"
+            "https://img.freepik.com/free-photo/house-isolated-field_1303-23773.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
           }
         />
       </Carousel>
