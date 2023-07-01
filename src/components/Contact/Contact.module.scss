@@ -1,6 +1,4 @@
 .wrap{
-    
-
     .col-left{
         border-radius: 0 10px 10px 0;
         background-color: #fff;
@@ -43,6 +41,11 @@
             margin-right: 8px;
         }
     }
+
+    input:disabled{
+        background-color: inherit;
+        opacity: 0.7;
+    }
     
     @media (min-width: 577px) and (max-width: 768px) {
         .col-right {
@@ -57,13 +60,19 @@
 
     // mobile
     @media (max-width: 576px) {
-        .col-right{
-            border-radius: 10px 10px 0 0;
+        .row-wrap {
+            margin: 8px;
+
+            .col-right{
+                border-radius: 10px 10px 0 0;
+            }
+    
+            .col-left{
+                border-radius: 0 0 10px 10px;
+            }
         }
 
-        .col-left{
-            border-radius: 0 0 10px 10px;
-        }
+        
     }
    
 }   

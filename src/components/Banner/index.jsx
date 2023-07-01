@@ -11,11 +11,13 @@ function Banner() {
         className={cx("carousel")}
         showThumbs={false}
         autoPlay={true}
-        nterval={2000}
+        interval={2000}
         infiniteLoop={true}
         transitionTime={1000}
         showStatus={false}
         emulateTouch={true}
+        showArrows={false}
+        showIndicators={false}
       >
         <BannerSlide
           title={"quick room search"}

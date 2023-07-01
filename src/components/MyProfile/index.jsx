@@ -7,6 +7,7 @@ import ModelUpdateInfo from "../../components/ModelUpdateInfo";
 import styles from "./MyProfile.module.scss";
 import classNames from "classNames/bind";
 import { useSearchParams } from "react-router-dom";
+import { AiFillCamera } from "react-icons/ai";
 
 const cx = classNames.bind(styles);
 
@@ -70,6 +71,10 @@ function MyProfile() {
                 </svg>
               </div>
             )}
+            <label htmlFor="avatar" className={cx("upload-avatar", "shadow")}>
+              <AiFillCamera className="fs-xl"></AiFillCamera>
+            </label>
+            <input type="file" name="avatar" id="avatar" hidden></input>
           </div>
           <div className={cx("info")}>
             <h2>{userInfo?.fullName}</h2>

@@ -18,7 +18,7 @@ function Footer() {
     <div className={cx("wrap")}>
       <div className="container py-3">
         <div className="row p-4">
-          <div className={cx("col-left", "col-md-4")}>
+          <div className={cx("col-left", "col-md-3")}>
             <div className="row">
               <div className="d-flex align-items-center">
                 <svg
@@ -48,8 +48,13 @@ function Footer() {
               </p>
             </div>
           </div>
-          <div className={cx("col-right", "col-md-8 d-flex")}>
-            <div className="row">
+          <div
+            className={cx(
+              "col-right",
+              "col-md-9 d-flex justify-content-md-around "
+            )}
+          >
+            <div className="row flex-fill">
               {" "}
               {/* Links */}
               <div className="col-xl-2 col-6">
@@ -75,7 +80,7 @@ function Footer() {
                 </Link>
               </div>
               {/* technologies */}
-              <div className="col-xl-2 col-6">
+              <div className="col-xl-3 col-6">
                 <p className="fw-medium fs-l">Technologies</p>
                 <p className="fs-s">
                   ReactJS <FaReact className="fs-m"></FaReact>
@@ -95,7 +100,7 @@ function Footer() {
                 <p className="fs-s">Etc...</p>
               </div>
               {/* Developers */}
-              <div className="col-xl-8 col-12">
+              <div className="col-xl-7 col-12 ">
                 <p className="fw-medium fs-l text-center">Developers</p>
                 <div className="row">
                   <div className="col-xl-6 col-6">
@@ -111,7 +116,7 @@ function Footer() {
                         )}
                       >
                         <FaFacebookF className="fs-m me-2"></FaFacebookF>
-                        https://www.facebook.com/ltv.1805/
+                        facebook.com/ltv.1805
                       </a>
                     </p>
 
@@ -136,14 +141,14 @@ function Footer() {
                         )}
                       >
                         <FaGithub className="fs-m me-2 "></FaGithub>
-                        https://github.com/fcthevan123-vn
+                        github.com/fcthevan123-vn
                       </a>
                     </p>
                   </div>
 
                   <div className="col-xl-6 col-6">
                     <p className="fs-s">
-                      <FaUser className="fs-m me-2"></FaUser>Lai The Van
+                      <FaUser className="fs-m me-2"></FaUser>Bui Tuan Kiet
                     </p>
                     <p>
                       <a
@@ -154,7 +159,7 @@ function Footer() {
                         )}
                       >
                         <FaFacebookF className="fs-m me-2"></FaFacebookF>
-                        https://www.facebook.com/ltv.1805/
+                        facebook.com/kiett01
                       </a>
                     </p>
 
@@ -180,7 +185,7 @@ function Footer() {
                         )}
                       >
                         <FaGithub className="fs-m me-2 "></FaGithub>
-                        https://github.com/fcthevan123-vn
+                        github.com/tttKiet
                       </a>
                     </p>
                   </div>

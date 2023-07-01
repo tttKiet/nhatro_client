@@ -13,19 +13,27 @@ import {
   BsFillTvFill,
 } from "react-icons/bs";
 import { AiFillMessage } from "react-icons/ai";
+import { ToastContext } from "../../untils/context";
+import { useContext } from "react";
 
 const cx = classNames.bind(styles);
 
 function Contact() {
   const [, , inforUser] = useAuth();
+  const toast = useContext(ToastContext);
 
   const validate = (values) => {
     const errors = {};
     if (!values.title) {
-      errors.title = "Please enter your title";
+      errors.title = "Please enter title";
+    } else if (values.title.length <= 5) {
+      errors.title = "Title must more than be 5 characters";
     }
-    if (!values.content) {
-      errors.content = "Please enter your content";
+
+    if (!values.message) {
+      errors.message = "Please enter message";
+    } else if (values.message.length <= 10) {
+      errors.message = "Message must more than be 10 characters";
     }
 
     return errors;
@@ -36,7 +44,7 @@ function Contact() {
       fullName: inforUser.fullName,
       email: inforUser.email,
       title: "",
-      content: "",
+      message: "",
     },
     validate,
     validateOnChange: false,
@@ -46,76 +54,29 @@ function Contact() {
   });
 
   async function handleSubmit(id, values) {
-    const res = await feedbackService.createFeedback(id, values);
-    if (res.err === 0) {
-      alert("ok");
-    } else {
-      alert("cut");
+    toast.loading("Creating...");
+    try {
+      const res = await feedbackService.createFeedback(id, values);
+      if (res.err === 0) {
+        formik.resetForm();
+        toast.dismiss();
+        toast.success("Create feedback successfully");
+      }
+    } catch (error) {
+      toast.dismiss();
+      toast.error("Error");
+      console.log(error);
     }
   }
 
   return (
     <>
       <div className={cx("wrap", "rounded")}>
-        {/* <form onSubmit={formik.handleSubmit}>
-      <div className={cx({cx("wrap-contact-form")}>
-      <div className={cx({cx("left-contact")}>
-        <div className={cx({cx("left-item")}>
-          <h4>Full Name:</h4>
-          <span  className={cx({cx("infor")}>{inforUser?.fullName}</span>
-        </div>
-        <div className={cx({cx("left-item")}>
-          <h4 >Email:</h4>
-          <span className={cx({cx("infor")}>{inforUser?.email}</span>
-        </div>
-        <div className={cx({cx("left-item")}>
-          <h4>Title:</h4>
-          <input 
-            type="text" 
-            placeholder="Title"
-            id="title"
-            name="title"
-            onChange={formik.handleChange}
-            value={formik.values.title}
-            />
-           {formik.errors.title && formik.touched.title && (
-                <span className={cx({cx("err")}>{formik.errors.title}</span>
-              )}
-            
-        </div>
-        <div className={cx({cx("left-item")}>
-          <h4>Content:</h4>
-          <textarea 
-            type="text-aria" 
-            placeholder="Message"
-            id="content"
-            name="content"
-            onChange={formik.handleChange}
-            value={formik.values.content}
-            />
-           {formik.errors.content && formik.touched.content && (
-                <span className={cx({cx("err")}>{formik.errors.content}</span>
-              )}
-        </div>
-        <div className={cx({cx("left-item")}>
-          <button
-           
-           className={cx({cx("btn")}
-           type="submit"
-           
-           >Sent Message</button>
-        </div>
-
-        </div>
-      <div className={cx({cx("right-contact")}>
-      <img src="https://originhr.in/wp-content/uploads/2022/06/support-img.png"alt="" />
-
-      </div>
-      </div>
-    </form> */}
-
         <div className="container ">
-          <div className="row my-5 shadow" style={{ borderRadius: "10px" }}>
+          <div
+            className={cx("row-wrap", "row my-5 shadow")}
+            style={{ borderRadius: "10px" }}
+          >
             <div className={cx("col-right", "col-md-6 col-sm-6 px-5")}>
               <h3
                 className="fs-xxl text-center py-3 fst-italic"
@@ -211,9 +172,12 @@ function Contact() {
                 <div className="form-floating mb-3">
                   <input
                     type="email"
-                    className={cx("input-field", "form-control")}
+                    className={cx("input-field", "form-control fst-italic")}
                     id="email"
-                    placeholder="name@example.com"
+                    name="email"
+                    onChange={formik.handleChange}
+                    defaultValue={formik.values.email}
+                    disabled
                   />
                   <label htmlFor="email" className="fw-light fs-s">
                     Email address
@@ -223,9 +187,12 @@ function Contact() {
                 <div className="form-floating mb-3">
                   <input
                     type="text"
-                    className={cx("input-field", "form-control")}
+                    className={cx("input-field", "form-control fst-italic")}
                     id="fullName"
-                    placeholder="name@example.com"
+                    name="fullName"
+                    onChange={formik.handleChange}
+                    defaultValue={formik.values.fullName}
+                    disabled
                   />
                   <label htmlFor="fullName" className="fw-light fs-s">
                     Full name
@@ -237,11 +204,23 @@ function Contact() {
                     type="text"
                     className={cx("input-field", "form-control")}
                     id="title"
+                    name="title"
                     placeholder="name@example.com"
+                    onChange={formik.handleChange}
+                    value={formik.values.title}
                   />
                   <label htmlFor="title" className="fw-light fs-s">
                     Title
                   </label>
+
+                  {formik.errors.title && formik.touched.title && (
+                    <span
+                      style={{ color: "rgb(255, 105, 105)" }}
+                      className={cx("err", "ms-2 fs-s fst-italic fw-light")}
+                    >
+                      {formik.errors.title}
+                    </span>
+                  )}
                 </div>
 
                 <div className="form-floating mb-3">
@@ -249,11 +228,23 @@ function Contact() {
                     className={cx("input-field", "form-control")}
                     placeholder="Leave a comment here"
                     id="message"
+                    name="message"
                     style={{ height: "100px" }}
+                    value={formik.values.message}
+                    onChange={formik.handleChange}
                   ></textarea>
                   <label htmlFor="message" className="fw-light fs-s">
                     Message
                   </label>
+
+                  {formik.errors.message && formik.touched.message && (
+                    <span
+                      className={cx("err", "ms-2 fs-s fst-italic fw-light")}
+                      style={{ color: "rgb(255, 105, 105)" }}
+                    >
+                      {formik.errors.message}
+                    </span>
+                  )}
                 </div>
                 <div className="d-flex justify-content-center">
                   <button className={cx("btn-submit")}>
