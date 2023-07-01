@@ -232,7 +232,7 @@ function Post({
         )}
 
         <div className={cx("input_comment")}>
-          <CommentInput />
+          <CommentInput postId={postId} />
         </div>
       </div>
     </div>

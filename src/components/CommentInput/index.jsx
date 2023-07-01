@@ -2,6 +2,7 @@ import Image from "react-bootstrap/esm/Image";
 import { BiConfused } from "react-icons/bi";
 import { AiOutlineSend } from "react-icons/ai";
 import { useAuth } from "../../hooks";
+import { commentServices } from "../../services";
 
 // emoji
 import data from "@emoji-mart/data/sets/14/facebook.json";
@@ -21,9 +22,10 @@ import { useEffect, useRef, useState } from "react";
 //
 const cx = classNames.bind(styles);
 
-function CommentInput() {
+function CommentInput({ postId }) {
   const [, , user] = useAuth();
   const [rows, setRows] = useState(1);
+  const [cmt, setCmt] = useState([]);
   const [content, setContent] = useState("");
   const [focus, setFocus] = useState(false);
   const textComment = useRef(null);
@@ -38,6 +40,24 @@ function CommentInput() {
 
   const handleChooseIcon = (e) => {
     setContent((prev) => prev.concat(e.native));
+  };
+
+  const handleSendCmt = () => {
+    if (!content) return;
+    const data = { content, postId, userId: user._id };
+
+    commentServices
+      .createCmt({ ...data })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 200 && response.data.err === 0) {
+          setFocus(false);
+          setContent("");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -105,7 +125,12 @@ function CommentInput() {
               >
                 <BiConfused />
               </div>
-              <div className={cx("icon", "send")}>
+              <div
+                className={cx("icon", "send", {
+                  disable: !content,
+                })}
+                onClick={handleSendCmt}
+              >
                 <AiOutlineSend />
               </div>
             </div>

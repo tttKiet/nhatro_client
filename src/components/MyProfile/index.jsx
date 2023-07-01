@@ -18,6 +18,7 @@ function MyProfile() {
   const [modalIsOpen, setIsOpen] = useState(
     searchParams.get("modal") == "open" ? true : false
   );
+
   const name_parts = user?.fullName.split(" ");
   const handleClose = () => {
     setIsOpen(false);

@@ -82,6 +82,15 @@
           align-items: center;
           cursor: pointer;
 
+          &.disable {
+            cursor: auto;
+            color: rgba(0, 0, 0, 0.258);
+
+            &:hover {
+              background-color: unset;
+            }
+          }
+
           svg {
             width: 18px;
             font-size: 18px;
