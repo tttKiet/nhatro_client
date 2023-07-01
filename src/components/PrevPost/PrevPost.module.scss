@@ -1,0 +1,14 @@
+.prev_loading {
+  padding: 20px;
+  padding-bottom: 10px;
+  --border-radius-size: 0.6rem;
+  width: 590px;
+  background-color: transparent !important;
+  border-radius: var(--border-radius-size);
+  border: 1px solid #cccccc27;
+  box-shadow: 0 1px 3px 0 rgba(148, 138, 138, 0.811),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+  margin-bottom: 20px;
+  color: rgba(92, 92, 92, 0.368);
+  transition: all 0.2s ease-in-out;
+}

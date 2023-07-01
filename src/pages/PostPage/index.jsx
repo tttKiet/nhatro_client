@@ -1,31 +1,83 @@
-import { Suspense, lazy, useState } from "react";
-import { MdOutlineNoteAdd } from "react-icons/md";
-import ModalUpPost from "../../components/modal/ModalUpPost";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { usePromiseTracker } from "react-promise-tracker";
 const PostLazy = lazy(() => import("../../components/Post"));
 
+import BarLoading from "../../components/BarLoader";
+import postServices from "../../services/postServices";
+import PrevPost from "../../components/PrevPost";
 // scss
 import styles from "./PostPage.module.scss";
 import classNames from "classNames/bind";
-import Snipper from "../../components/Snipper";
-import BarLoading from "../../components/BarLoader";
+import UntilsBtnPostPage from "../../components/UntilsBtnPostPage";
 
 const cx = classNames.bind(styles);
 
 function PostPage() {
-  const [openModal, setOpenModal] = useState(false);
   const { promiseInProgress } = usePromiseTracker({ area: "up_post" });
+  const [page, setPage] = useState(2);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [maxDocPost, setMaxDocPost] = useState();
+
+  const loadPosts = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const res = await postServices.getPostPage({ page: page });
+      if (res?.status === 200) {
+        setPosts((prev) => [...prev, ...res.data.data.posts]);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [page, setPosts]);
+
+  const nextPagePost = useCallback(() => {
+    setPage((prevPage) => prevPage + 1);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + window.scrollY + 20 >= document.body.offsetHeight &&
+      !isLoading
+    ) {
+      nextPagePost();
+      loadPosts();
+    }
+  }, [isLoading, loadPosts, nextPagePost]);
+
+  useEffect(() => {
+    postServices.getPostPage({ page: 1 }).then((res) => {
+      if (res?.status === 200) {
+        setPosts([...res.data.data.posts]);
+        setMaxDocPost(res.data.data.limit);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (posts.length >= maxDocPost) {
+      return;
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [handleScroll]);
+
   return (
     <>
       <div className={cx("wrap")}>
-        <ModalUpPost show={openModal} setShow={setOpenModal} />
-
         <div className="container">
           <div className="row">
             <div className="col-12 position-relative">
+              <UntilsBtnPostPage setPosts={setPosts} />
+
               <div className={cx("banner", "d-none d-xxl-inline-block")}>
                 <div className={cx("data")}>
-                  <div className={cx("content")}>sadsa</div>
+                  <div className={cx("content")}>PrevPost</div>
                 </div>
               </div>
               <div className={cx("posts")}>
@@ -37,23 +89,22 @@ function PostPage() {
                     <BarLoading />
                   </div>
                 )}
-                <Suspense fallback={<Snipper color="#000" />}>
-                  <PostLazy />
-                </Suspense>
-                <Suspense fallback={<Snipper color="#000" />}>
-                  <PostLazy />
-                </Suspense>
-                <Suspense fallback={<Snipper color="#000" />}>
-                  <PostLazy />
-                </Suspense>
+                {posts.map((post, index) => (
+                  <Suspense key={index} fallback={<PrevPost />}>
+                    <PostLazy
+                      content={post.content}
+                      createdAt={post.createdAt}
+                      images={post.images}
+                      authorName={post.user.fullName}
+                      authorImage={post.user.avatar}
+                      hashTag={post.hashTag}
+                      postId={post?._id}
+                    />
+                  </Suspense>
+                ))}
+                {isLoading && <PrevPost />}
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className={cx("untils")}>
-          <div className={cx("add")} onClick={() => setOpenModal(true)}>
-            <MdOutlineNoteAdd />
           </div>
         </div>
       </div>

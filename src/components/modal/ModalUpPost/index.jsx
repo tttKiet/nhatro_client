@@ -1,14 +1,14 @@
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import { FormUpPost } from "../../forms";
+import { memo } from "react";
 // scss
 import styles from "./ModalUpPost.module.scss";
 import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
-function ModalUpPost({ show, setShow }) {
+function ModalUp({ show, setShow, mergePostsNew }) {
   const handleClose = () => setShow(false);
-
   return (
     <>
       <Modal
@@ -23,13 +23,19 @@ function ModalUpPost({ show, setShow }) {
           <Modal.Title>Up Post</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pe-1">
-          <FormUpPost handleClose={handleClose} />
+          <FormUpPost mergePostsNew={mergePostsNew} handleClose={handleClose} />
         </Modal.Body>
       </Modal>
     </>
   );
 }
 
-ModalUpPost.propTypes = { show: PropTypes.bool, setShow: PropTypes.func };
+ModalUp.propTypes = {
+  show: PropTypes.bool,
+  setShow: PropTypes.func,
+  mergePostsNew: PropTypes.func,
+};
+
+const ModalUpPost = memo(ModalUp);
 
 export default ModalUpPost;

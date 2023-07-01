@@ -37,7 +37,7 @@ function ProviderGetUserLogin({ children }) {
               type: token.type,
               fullName: token.fullName,
               avatar: token.avatar,
-              emailVerified: resInfo.dataUser.emailVerified,
+              emailVerified: resInfo?.dataUser?.emailVerified || false,
             })
           );
         }
@@ -51,8 +51,9 @@ function ProviderGetUserLogin({ children }) {
 
   if (!login) {
     return (
-      <div className="d-flex min-vh-100 w-100 justify-content-center align-items-center">
-        <Snipper color="black" size={40} />
+      <div className="d-flex min-vh-100 w-100 flex-column justify-content-center align-items-center">
+        <Snipper color="black" size={30} />
+        <div className="my-3">Logging ... </div>
       </div>
     );
   } else {

@@ -1,20 +1,41 @@
-import {
-  HomePage,
-  AboutPage,
-  LoginPage,
-  RootAccount,
-  RootAddAccount,
-  RootEditAccount,
-  AdminProfilePage,
-  RegisterPage,
-  RootViewAccountPermissions,
-  AdminAllMembersPage,
-  AdminAllRoomsPage,
-  PostPage,
-  ContactPage,
-  ErrorPage,
-  UserProfilePage,
-} from "../pages";
+// import {
+//   HomePage,
+//   AboutPage,
+//   LoginPage,
+//   RootAccount,
+//   RootAddAccount,
+//   RootEditAccount,
+//   AdminProfilePage,
+//   RegisterPage,
+//   RootViewAccountPermissions,
+//   AdminAllMembersPage,
+//   AdminAllRoomsPage,
+//   PostPage,
+//   ContactPage,
+//   ErrorPage,
+//   UserProfilePage,
+//   MyPostPage,
+// } from "../pages";
+import { lazy } from "react";
+
+const HomePage = lazy(() => import("../pages/HomePage"));
+const AboutPage = lazy(() => import("../pages/AboutPage"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const RootAccount = lazy(() => import("../pages/RootAccount"));
+const RootAddAccount = lazy(() => import("../pages/RootAddAccount"));
+const RootEditAccount = lazy(() => import("../pages/RootEditAccount"));
+const AdminProfilePage = lazy(() => import("../pages/AdminProfilePage"));
+const RegisterPage = lazy(() => import("../pages/RegisterPage"));
+const RootViewAccountPermissions = lazy(() =>
+  import("../pages/RootViewAccountPermissions")
+);
+const AdminAllMembersPage = lazy(() => import("../pages/AdminAllMembersPage"));
+const AdminAllRoomsPage = lazy(() => import("../pages/AdminAllRoomsPage"));
+const PostPage = lazy(() => import("../pages/PostPage"));
+const ContactPage = lazy(() => import("../pages/ContactPage"));
+const ErrorPage = lazy(() => import("../pages/ErrorPage"));
+const UserProfilePage = lazy(() => import("../pages/UserProfilePage"));
+const MyPostPage = lazy(() => import("../pages/MyPostPage"));
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
 
@@ -76,7 +97,7 @@ const router = [
 
   // user
   {
-    path: "/profile/:user_id",
+    path: "/profile",
     isProtected: true,
     layout: "None",
     element: UserProfilePage,
@@ -87,6 +108,12 @@ const router = [
     isProtected: true,
     layout: DefaultLayout,
     element: ContactPage,
+  },
+  {
+    path: "/user/my-post",
+    isProtected: true,
+    layout: "None",
+    element: MyPostPage,
   },
 
   // Admin router [The Van]

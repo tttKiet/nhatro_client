@@ -6,15 +6,20 @@ import moment from "moment";
 import ModelUpdateInfo from "../../components/ModelUpdateInfo";
 import styles from "./MyProfile.module.scss";
 import classNames from "classNames/bind";
+import { useSearchParams } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function MyProfile() {
   const [, , user] = useAuth();
-  const [userInfo, setUserInfor] = useState({});
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const name_parts = user?.fullName.split(" ");
+  const [searchParams] = useSearchParams();
 
+  const [userInfo, setUserInfor] = useState({});
+  const [modalIsOpen, setIsOpen] = useState(
+    searchParams.get("modal") == "open" ? true : false
+  );
+
+  const name_parts = user?.fullName.split(" ");
   const handleClose = () => {
     setIsOpen(false);
   };

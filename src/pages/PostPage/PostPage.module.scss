@@ -31,6 +31,7 @@
     align-items: center;
     position: relative;
     z-index: 10;
+    padding-bottom: 50px;
 
     .bar_loading {
       padding: 20px;
@@ -51,34 +52,6 @@
         span {
           letter-spacing: 2px;
         }
-      }
-    }
-  }
-
-  .untils {
-    z-index: 100;
-    position: fixed;
-    left: 1200px;
-    bottom: 40px;
-
-    .add {
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      border: 1px solid rgb(220 220 220 / 55%);
-      align-items: center;
-      background-color: rgb(220 220 220 / 13%);
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.2s linear;
-
-      &:hover {
-        opacity: 0.7;
-      }
-      svg {
-        width: 20px;
-        height: 20px;
-        color: rgba(47, 47, 198, 0.936);
       }
     }
   }

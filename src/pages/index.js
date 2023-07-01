@@ -17,7 +17,9 @@ export { default as RootEditAccount } from "./RootEditAccount";
 export { default as RootViewAccountPermissions } from "./RootViewAccountPermissions";
 
 // User pages
+
 export { default as UserHomePage } from "./UserHomePage";
+export { default as MyPostPage } from "./MyPostPage";
 export { default as UserProfilePage } from "./UserProfilePage";
 
 // Admin pages

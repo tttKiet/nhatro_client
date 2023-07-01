@@ -1,4 +1,5 @@
 .wrap {
+  position: relative;
   .layout {
     display: flex;
     justify-content: flex-start;
@@ -38,7 +39,7 @@
         textarea {
           width: 100%;
           outline: none;
-          font-size: 14px;
+          font-size: 16px;
           padding: 0;
           height: auto;
           border: none;
@@ -81,6 +82,15 @@
           align-items: center;
           cursor: pointer;
 
+          &.disable {
+            cursor: auto;
+            color: rgba(0, 0, 0, 0.258);
+
+            &:hover {
+              background-color: unset;
+            }
+          }
+
           svg {
             width: 18px;
             font-size: 18px;
@@ -96,5 +106,11 @@
         }
       }
     }
+  }
+
+  .input_comment {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50px;
   }
 }

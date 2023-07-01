@@ -71,7 +71,7 @@ function UserControl() {
             }
           />
           <MenuItem
-            to={`/profile/${userCur?._id}`}
+            to={`/profile?tag=my-profile`}
             title="Personal page"
             svg={
               <svg
