@@ -147,7 +147,6 @@ function RoomForm({
 
   return (
     <div className={cx("wrap")}>
-      {console.log("update-formik", formik.values)}
       <div className={cx("wrap", "row p-3")}>
         <form className="col-md-5" onSubmit={formik.handleSubmit}>
           <label htmlFor="number" className="fw-bold">

@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { toast } from "react-hot-toast";
-import { useState } from "react";
 
 function ModalCustom({
   show,
@@ -14,6 +12,7 @@ function ModalCustom({
   updateData,
   dataExisted,
   isUpdate,
+  img,
 }) {
   function handleCloseModal() {
     if (updateData) {
@@ -22,21 +21,10 @@ function ModalCustom({
     onHide();
   }
 
-  const [isSubmitted, setIsSubmitted] = useState(true);
-
-  function checkSubmit(isSubmitted) {
-    if (isSubmitted === false) {
-      toast.error("You need submit to exit");
-    } else {
-      onHide();
-    }
-  }
-
   return (
     <Modal
       show={show}
-      // onHide={onHide}
-      onHide={() => checkSubmit(isSubmitted)}
+      onHide={onHide}
       size="xl"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -47,6 +35,7 @@ function ModalCustom({
         </Modal.Title>
       </Modal.Header>
       <Component
+        src={img}
         data={data}
         id={data?._id}
         _id={_id}
@@ -54,14 +43,9 @@ function ModalCustom({
         onHide={onHide}
         dataExisted={dataExisted}
         isUpdate={isUpdate}
-        onDisableClose={(action) => setIsSubmitted(action)}
       ></Component>
       <Modal.Footer>
-        <Button
-          variant="warning"
-          disabled={isSubmitted === false ? true : false}
-          onClick={handleCloseModal}
-        >
+        <Button variant="warning" onClick={handleCloseModal}>
           Close
         </Button>
       </Modal.Footer>
@@ -70,7 +54,12 @@ function ModalCustom({
 }
 
 ModalCustom.propTypes = {
-  Component: PropTypes.func,
+  Component: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+    PropTypes.func,
+  ]),
   data: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.array,
@@ -87,6 +76,7 @@ ModalCustom.propTypes = {
   _id: PropTypes.string,
   updateData: PropTypes.func,
   isUpdate: PropTypes.bool,
+  img: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
 };
 
 export default ModalCustom;

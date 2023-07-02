@@ -69,9 +69,6 @@ function UploadImage({ formik, imgToDelete, isUpdate, dataExisted }) {
   function UploadInput() {
     return (
       <div className={cx("wrap")}>
-        {console.log("files", filesUrl)}
-        {console.log("dataExisted", dataExisted)}
-
         <div className="mb-3">
           <div>
             <label htmlFor="formFile" className="form-label fw-bold mt-2">

@@ -74,6 +74,25 @@ const userServices = {
     const res = await axios.get(`/api/v1/user/${_id}/all-request-board-house`);
     return res;
   },
+
+  // Upload avatar
+  async uploadAvatar(id, files, imgToDelete) {
+    let formData = new FormData();
+    formData.append("id", id);
+
+    formData.append("images", files);
+
+    formData.append("imgToDelete", imgToDelete);
+
+    try {
+      const res = await axios.patch("/api/v1/user/change-avatar", formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default userServices;

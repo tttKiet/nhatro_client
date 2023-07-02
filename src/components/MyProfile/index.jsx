@@ -1,6 +1,6 @@
 import { Image } from "react-bootstrap";
 import { useAuth } from "../../hooks";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { userServices } from "../../services";
 import moment from "moment";
 import ModelUpdateInfo from "../../components/ModelUpdateInfo";
@@ -8,14 +8,22 @@ import styles from "./MyProfile.module.scss";
 import classNames from "classNames/bind";
 import { useSearchParams } from "react-router-dom";
 import { AiFillCamera } from "react-icons/ai";
+import { ToastContext } from "../../untils/context";
+import ModalCustom from "../ModalCustom";
 
 const cx = classNames.bind(styles);
 
 function MyProfile() {
   const [, , user] = useAuth();
   const [searchParams] = useSearchParams();
+  const toast = useContext(ToastContext);
 
   const [userInfo, setUserInfor] = useState({});
+  const [file, setFile] = useState([]);
+  const [fileUrl, setFileUrl] = useState([]);
+  const [showModalAvatar, setShowModalAvatar] = useState(false);
+  const [isUploaded, setIsUploaded] = useState(false);
+
   const [modalIsOpen, setIsOpen] = useState(
     searchParams.get("modal") == "open" ? true : false
   );
@@ -38,9 +46,85 @@ function MyProfile() {
     }
   }
 
+  const handleChangeInputFile = (e) => {
+    const filesTarget = e.target.files;
+    for (let i = 0; i < filesTarget.length; i++) {
+      if (!filesTarget[i].type.includes("image/")) {
+        return toast.error("Please select only images!");
+      }
+    }
+
+    const fileUrl = Array.from(filesTarget).map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    setFile(filesTarget[0]);
+    setFileUrl(fileUrl);
+    setShowModalAvatar(true);
+    e.target.value = "";
+  };
+
+  // Component upload avatar
+  function upLoadAvatar({ src }) {
+    async function handleUploadAvatar() {
+      setIsUploaded(false);
+      toast.loading("Uploading avatar...");
+      let imgToDelete;
+      if (userInfo.avatar.includes("https:")) {
+        imgToDelete = userInfo.avatar;
+      }
+
+      try {
+        const res = await userServices.uploadAvatar(
+          userInfo._id,
+          file,
+          imgToDelete
+        );
+
+        if (res.err === 0) {
+          toast.dismiss();
+          toast.success("Upload avatar successfully");
+          setIsUploaded(true);
+          setShowModalAvatar(false);
+        } else {
+          toast.dismiss();
+          toast.error("Wrong");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    return (
+      <>
+        <div className="d-flex justify-content-center  ">
+          <Image
+            className="rounded m-3 shadow"
+            style={{
+              width: "50vw",
+              objectFit: "cover",
+              minHeight: "30vh",
+              maxHeight: "55vh",
+            }}
+            src={src}
+          />
+        </div>
+        <div className="d-flex justify-content-end">
+          <button
+            onClick={() => handleUploadAvatar(file)}
+            className="btn  btn-primary  "
+            style={{ width: "30px", margin: "16px" }}
+          >
+            Save
+          </button>
+        </div>
+      </>
+    );
+  }
+
   useEffect(() => {
     getUser();
-  }, []);
+  }, [isUploaded]);
 
   return (
     <div className={cx("wrap")}>
@@ -48,7 +132,18 @@ function MyProfile() {
         show={modalIsOpen}
         handleClose={handleClose}
         getUser={getUser}
+        component={Image}
       />
+
+      {/* Modal upload avatar */}
+      <ModalCustom
+        show={showModalAvatar}
+        onHide={() => setShowModalAvatar(false)}
+        data={file}
+        Component={upLoadAvatar}
+        action="Upload your avatar"
+        img={fileUrl}
+      ></ModalCustom>
       <div className={cx("avt-info")}>
         <div className={cx("contai")}>
           <div className={cx("avt")}>
@@ -71,10 +166,16 @@ function MyProfile() {
                 </svg>
               </div>
             )}
+            {/* upload avatar */}
             <label htmlFor="avatar" className={cx("upload-avatar", "shadow")}>
               <AiFillCamera className="fs-xl"></AiFillCamera>
             </label>
-            <input type="file" name="avatar" id="avatar" hidden></input>
+            <input
+              onChange={handleChangeInputFile}
+              type="file"
+              id="avatar"
+              hidden
+            ></input>
           </div>
           <div className={cx("info")}>
             <h2>{userInfo?.fullName}</h2>
