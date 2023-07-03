@@ -20,6 +20,7 @@
 
     .avatar {
       cursor: pointer;
+      z-index: 100;
       .img {
         background: linear-gradient(white, white) padding-box,
           linear-gradient(to right, #ea4c89, #ea4c89) border-box;
@@ -35,8 +36,8 @@
           width: 24px;
         }
         img {
-          width: 36px;
-          height: 36px;
+          width: 34px;
+          height: 34px;
           object-fit: cover;
         }
       }
@@ -211,12 +212,17 @@
         font-size: 15px;
         color: #65676b;
 
+        .count_cmt {
+          padding: 0 3px;
+          color: rgb(3, 3, 3);
+        }
+
         .img {
-          width: 26px;
-          height: 26px;
           margin-right: 8px;
 
-          .img {
+          img {
+            width: 22px;
+            height: 22px;
             object-fit: contain;
           }
         }
@@ -287,7 +293,57 @@
 
   .comment {
     padding: 0px 16px 12px 12px;
+
+    .not_cmt {
+      padding: 16px;
+      h4 {
+        font-size: 14px;
+        text-align: center;
+        margin-top: 8px;
+
+        svg {
+          width: 22px;
+        }
+      }
+    }
+    .show_more_cmt {
+      padding-left: 20px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      opacity: 0.8;
+      cursor: pointer;
+      font-size: 15px;
+
+      &:last-child {
+        padding-left: 8px;
+        border-left: 1px solid #ccc;
+      }
+
+      &:first-child {
+        padding-left: 8px;
+        border-radius: 2px;
+        border-left: 3px solid #3c21ee;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+      .show_more_cmt-icon {
+        padding: 0 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        svg {
+          width: 16px;
+          transition: all 0.2 linear;
+          cursor: pointer;
+        }
+      }
+    }
     .comment_layout {
+      max-height: 500px;
+      overflow-y: scroll;
       margin-top: 6px;
       position: relative;
       padding-top: 8px;
@@ -296,7 +352,8 @@
         display: block;
         content: "";
         position: absolute;
-        width: 5%;
+        width: 100%;
+        box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
         border-top: 1px solid #ccc;
         top: -6px;
         left: 0;

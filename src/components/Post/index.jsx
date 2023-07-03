@@ -1,17 +1,18 @@
 import Image from "react-bootstrap/Image";
 import { MdPlayArrow } from "react-icons/md";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Like from "../../assets/svg/like.svg";
 import PropTypes from "prop-types";
 import Comment from "../Comment";
 import moment from "moment";
+import { TbLoaderQuarter, TbLoader } from "react-icons/tb";
 
 import CommentInput from "../CommentInput";
 // scss
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
-import { likeServices, postServices } from "../../services";
+import { commentServices, likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
 const cx = classNames.bind(styles);
 
@@ -25,21 +26,37 @@ function Post({
   postId,
 }) {
   const [showComments, setShowComments] = useState(false);
+  const coutDoc = useMemo(() => 3, []);
   const [, , user] = useAuth();
+  const [isScroll, setIsScroll] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [likeInfo, setLikeInfo] = useState({
     user: [],
     count: 0,
   });
   const [showText, setShowText] = useState(false);
+  const [cmtPage, setCmtPage] = useState(2);
+  const [maxCount, setMaxCount] = useState(1);
+  const [cmts, setCmts] = useState([]);
+  const body = useRef(null);
+
   const toggleShowText = () => {
     setShowText((s) => !s);
+  };
+
+  const handleMergeCmt = () => {
+    commentServices.getComment(postId, 1).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setMaxCount((pre) => pre + 1);
+        setCmts((cmt) => [res.data.data[0], ...cmt]);
+      }
+    });
   };
 
   const toggleLike = () => {
     likeServices
       .toggleLikePost({ postId, userId: user?._id || null })
       .then((res) => {
-        // console.log(res);
         if (res.status === 200 && res.data.err === 0) {
           getLike();
         }
@@ -54,15 +71,86 @@ function Post({
       if (res.status === 200 && res.data.err === 0) {
         setLikeInfo({
           user: [...res.data.data],
-          count: res?.data?.likedCount || 0,
+          count: res.data.likedCount || 0,
         });
       }
     });
   }, [postId]);
 
+  const getCmts = useCallback(
+    (action) => {
+      console.log(cmtPage);
+      setLoading(true);
+      commentServices
+        .getComment(postId, cmtPage)
+        .then((res) => {
+          if (res.status === 200 && res.data.err === 0) {
+            if (action === "refresh") {
+              setCmts([...res.data.data]);
+            } else {
+              setCmts((cmt) => [...cmt, ...res.data.data]);
+            }
+            setMaxCount(res.data.maxCmt);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [postId, cmtPage]
+  );
+
+  const nextPageCmt = useCallback(() => {
+    if (coutDoc * cmtPage < maxCount) setCmtPage((v) => v + 1);
+  }, [cmtPage, coutDoc, maxCount]);
+
+  const handleClickMore = useCallback(() => {
+    nextPageCmt();
+    getCmts();
+  }, [getCmts, nextPageCmt]);
+
+  const handleClickMoreAll = () => {
+    handleClickMore();
+    setIsScroll(true);
+  };
+
+  const handleScroll = useCallback(() => {
+    const scrollHeight = body.current.scrollHeight;
+    const scrollTop = body.current.scrollTop;
+    const clientHeight = body.current.clientHeight;
+
+    if (scrollTop + clientHeight + 10 >= scrollHeight && !loading) {
+      handleClickMore();
+    }
+  }, [handleClickMore, loading]);
+
   useEffect(() => {
     getLike();
-  }, [getLike]);
+    // getCmts();
+    commentServices.getComment(postId, 1).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setCmts([...res.data.data]);
+        setMaxCount(res.data.maxCmt);
+      }
+    });
+  }, [getLike, postId]);
+
+  useEffect(() => {
+    if (cmts.length >= maxCount) {
+      return;
+    }
+    if (isScroll) {
+      body.current.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (body && isScroll) {
+        body.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [isScroll, handleScroll, cmts.length, maxCount]);
 
   return (
     <div className={cx("wrap")}>
@@ -140,7 +228,9 @@ function Post({
               </div>
               {likeInfo?.count}
             </div>
-            <div className={cx("info_post-item")}>860 comment</div>
+            <div className={cx("info_post-item")}>
+              <span className={cx("count_cmt")}>{maxCount}</span>comment
+            </div>
           </div>
         </main>
         <footer className={cx("footer")}>
@@ -177,7 +267,7 @@ function Post({
             </button>
             <button
               type="button"
-              onClick={() => setShowComments(true)}
+              onClick={() => setShowComments((s) => !s)}
               className={cx("active", "col-4")}
             >
               <div>
@@ -198,6 +288,7 @@ function Post({
               </div>
               <span>Comment</span>
             </button>
+            {console.log(cmts)}
             <button
               type="button"
               className={cx("active", "favorited", "col-4")}
@@ -224,15 +315,81 @@ function Post({
         </footer>
         {showComments && (
           <div className={cx("comment")}>
-            <div className={cx("comment_layout")}>
-              <Comment />
-              <Comment />
+            <div className={cx("comment_layout")} ref={body}>
+              {cmts.length > 0 ? (
+                <>
+                  {cmts.map((cmt, index) => (
+                    <Comment
+                      id={cmt._id}
+                      key={index}
+                      postId={postId}
+                      user={cmt.user}
+                      content={cmt.content}
+                      createdAt={cmt.createdAt}
+                      updatedAt={cmt.updatedAt}
+                      child={cmt.child.comment}
+                      getCmts={getCmts}
+                      countChildren={cmt.child.count}
+                    />
+                  ))}
+
+                  {maxCount > cmts.length && (
+                    <div className="d-flex my-3">
+                      <div
+                        className={cx("show_more_cmt")}
+                        onClick={handleClickMore}
+                      >
+                        view more
+                        <div className={cx("show_more_cmt-icon")}>
+                          <TbLoaderQuarter />
+                        </div>
+                      </div>
+
+                      <div
+                        className={cx("show_more_cmt")}
+                        onClick={handleClickMoreAll}
+                      >
+                        view all
+                        <div className={cx("show_more_cmt-icon")}>
+                          <TbLoader />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className={cx("not_cmt")}>
+                  <h4>This post has not comment !!!</h4>
+                  <h4>Comment here...</h4>
+
+                  <h4>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </h4>
+                </div>
+              )}
             </div>
           </div>
         )}
 
         <div className={cx("input_comment")}>
-          <CommentInput postId={postId} />
+          <CommentInput
+            postId={postId}
+            send={handleMergeCmt}
+            showComment={() => setShowComments(true)}
+          />
         </div>
       </div>
     </div>

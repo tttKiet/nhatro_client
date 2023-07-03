@@ -3,6 +3,7 @@ import { BiConfused } from "react-icons/bi";
 import { AiOutlineSend } from "react-icons/ai";
 import { useAuth } from "../../hooks";
 import { commentServices } from "../../services";
+import PropTypes from "prop-types";
 
 // emoji
 import data from "@emoji-mart/data/sets/14/facebook.json";
@@ -18,23 +19,21 @@ const configEmoji = {
 // scss
 import styles from "./CommentInput.module.scss";
 import classNames from "classNames/bind";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 //
 const cx = classNames.bind(styles);
 
-function CommentInput({ postId }) {
+function CommentInputRef(
+  { postId, parentId, send, showComment, setTagUser },
+  ref
+) {
   const [, , user] = useAuth();
-  const [rows, setRows] = useState(1);
-  const [cmt, setCmt] = useState([]);
   const [content, setContent] = useState("");
   const [focus, setFocus] = useState(false);
-  const textComment = useRef(null);
   const [showIcon, setShowIcon] = useState(false);
 
   const handleSetContent = (e) => {
     const newValues = e.target.value;
-    const countRows = newValues.match(/\n/g);
-    setRows(countRows ? countRows.length + 1 : 1);
     setContent(newValues);
   };
 
@@ -42,10 +41,37 @@ function CommentInput({ postId }) {
     setContent((prev) => prev.concat(e.native));
   };
 
-  const handleSendCmt = () => {
-    if (!content) return;
-    const data = { content, postId, userId: user._id };
+  const handleEnterSend = (e) => {
+    if (e.keyCode === 13 && !e.shiftKey) {
+      e.preventDefault();
+      handleSendCmt();
+    }
+  };
 
+  const handleInput = () => {
+    if (ref.current) {
+      ref.current.style.height = "24px";
+      ref.current.style.height = ref.current.scrollHeight + "px";
+    }
+  };
+
+  const handleSendCmt = () => {
+    if (ref.current) {
+      ref.current.style.height = "24px";
+    }
+
+    if (!content.trim()) {
+      setContent("");
+      return;
+    }
+
+    setTagUser("");
+    const data = {
+      content: content.trim(),
+      postId,
+      userId: user._id,
+      parentId: parentId,
+    };
     commentServices
       .createCmt({ ...data })
       .then((response) => {
@@ -53,6 +79,11 @@ function CommentInput({ postId }) {
         if (response.status === 200 && response.data.err === 0) {
           setFocus(false);
           setContent("");
+          setShowIcon(false);
+          if (showComment) {
+            showComment();
+          }
+          send(response.data.newComment);
         }
       })
       .catch((error) => {
@@ -82,43 +113,42 @@ function CommentInput({ postId }) {
             {user?.avatar?.includes("https:") ? (
               <Image src={user.avatar} />
             ) : (
-              <div className={cx("svg")}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                  />
-                </svg>
-              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                />
+              </svg>
             )}
           </div>
         </div>
         <div className={cx("main", "main_icon")}>
           <div className={cx("input")}>
             <textarea
-              ref={textComment}
+              onInput={handleInput}
+              ref={ref}
               spellCheck={false}
-              rows={rows}
               onClick={() => setFocus(true)}
-              className={cx({ focus: focus || !!content })}
+              className={cx({ focus: focus || !!content }, "input_com")}
               type="text"
               value={content}
               onChange={handleSetContent}
               placeholder="Enter comment ..."
+              onKeyDown={handleEnterSend}
             />
 
             <div className={cx("icons")}>
               <div
                 className={cx("icon", "icon-open")}
                 onClick={() => {
-                  textComment.current.focus();
+                  ref.current.focus();
                   setShowIcon((prev) => !prev);
                   setFocus(true);
                 }}
@@ -152,5 +182,15 @@ function CommentInput({ postId }) {
     </div>
   );
 }
+
+CommentInputRef.propTypes = {
+  postId: PropTypes.string,
+  parentId: PropTypes.string,
+  send: PropTypes.func,
+  showComment: PropTypes.func,
+  setTagUser: PropTypes.func,
+};
+
+const CommentInput = forwardRef(CommentInputRef);
 
 export default CommentInput;

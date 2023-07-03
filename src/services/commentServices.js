@@ -1,3 +1,4 @@
+import { flushSync } from "react-dom";
 import axios from "../axios";
 
 const commentServices = {
@@ -8,6 +9,18 @@ const commentServices = {
       postId,
       parentId,
     });
+    return res;
+  },
+
+  async getComment(postId, page = 1) {
+    const res = await axios.get(`/api/v1/post/${postId}/comment?page=${page}`);
+    return res;
+  },
+
+  async getCommentById(parentId, page = 1, all = "") {
+    const res = await axios.get(
+      `/api/v1/comment/${parentId}/child?page=${page}&type=${all}`
+    );
     return res;
   },
 };

@@ -27,7 +27,6 @@ function MyPostPage() {
     postServices
       .getPostUser({ _author: user._id, page: 1 })
       .then((res) => {
-        console.log(res);
         if (res?.status === 200) {
           setPosts((prev) => [res?.data?.data?.posts[0], ...prev]);
         }
@@ -108,6 +107,7 @@ function MyPostPage() {
                     <BarLoading />
                   </div>
                 )}
+                {console.log(posts)}
                 {posts.length > 0 ? (
                   posts.map((post, index) => (
                     <Suspense key={index} fallback={<PrevPost />}>

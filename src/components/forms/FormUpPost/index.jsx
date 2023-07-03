@@ -42,7 +42,7 @@ function FormUpPost({ handleClose, mergePostsNew }) {
     trackPromise(
       postServices.createPost({ _id: userCur._id, ...data }),
       "up_post"
-    ).then(async () => await mergePostsNew());
+    ).then(mergePostsNew);
     setContent("");
     setHashTag("#notag");
     setFiles([]);
