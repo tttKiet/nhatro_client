@@ -35,8 +35,10 @@ function Post({
     count: 0,
   });
   const [showText, setShowText] = useState(false);
+  const [cmtLocal, setCmtLocal] = useState([]);
   const [cmtPage, setCmtPage] = useState(2);
   const [maxCount, setMaxCount] = useState(1);
+  const inputRef = useRef(null);
   const [cmts, setCmts] = useState([]);
   const body = useRef(null);
 
@@ -44,13 +46,18 @@ function Post({
     setShowText((s) => !s);
   };
 
-  const handleMergeCmt = () => {
-    commentServices.getComment(postId, 1).then((res) => {
-      if (res.status === 200 && res.data.err === 0) {
-        setMaxCount((pre) => pre + 1);
-        setCmts((cmt) => [res.data.data[0], ...cmt]);
-      }
-    });
+  const nextMaxCount = useCallback(() => {
+    setMaxCount((pre) => pre + 1);
+  }, []);
+
+  const handleMergeCmt = (newCmt) => {
+    // if (body.current) {
+    //   body.current.scrollIntoView({
+    //     behavior: "smooth",
+    //     block: "end",
+    //   });
+    // }
+    setCmtLocal((prev) => []);
   };
 
   const toggleLike = () => {
@@ -79,7 +86,6 @@ function Post({
 
   const getCmts = useCallback(
     (action) => {
-      console.log(cmtPage);
       setLoading(true);
       commentServices
         .getComment(postId, cmtPage)
@@ -90,7 +96,9 @@ function Post({
             } else {
               setCmts((cmt) => [...cmt, ...res.data.data]);
             }
-            setMaxCount(res.data.maxCmt);
+
+            // console.log(res);
+            // setMaxCount(res.data.maxCmt);
           }
         })
         .catch((err) => {
@@ -129,14 +137,24 @@ function Post({
 
   useEffect(() => {
     getLike();
-    // getCmts();
+  }, [getLike]);
+
+  useEffect(() => {
     commentServices.getComment(postId, 1).then((res) => {
       if (res.status === 200 && res.data.err === 0) {
         setCmts([...res.data.data]);
         setMaxCount(res.data.maxCmt);
       }
     });
-  }, [getLike, postId]);
+  }, [postId]);
+
+  useEffect(() => {
+    commentServices.getLimitComments(postId).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setMaxCount(res.data.countCmt);
+      }
+    });
+  }, [postId]);
 
   useEffect(() => {
     if (cmts.length >= maxCount) {
@@ -146,7 +164,7 @@ function Post({
       body.current.addEventListener("scroll", handleScroll);
     }
     return () => {
-      if (body && isScroll) {
+      if (body.current && isScroll) {
         body.current.removeEventListener("scroll", handleScroll);
       }
     };
@@ -214,7 +232,6 @@ function Post({
             <div className={cx("images", `layout_${images?.length}`)}>
               {images.map((image, index) => (
                 <div key={index} className={cx("img")}>
-                  {/* <Image src={image} /> */}
                   <ImageLoader image={{ src: image }} />
                 </div>
               ))}
@@ -288,7 +305,6 @@ function Post({
               </div>
               <span>Comment</span>
             </button>
-            {console.log(cmts)}
             <button
               type="button"
               className={cx("active", "favorited", "col-4")}
@@ -327,9 +343,10 @@ function Post({
                       content={cmt.content}
                       createdAt={cmt.createdAt}
                       updatedAt={cmt.updatedAt}
-                      child={cmt.child.comment}
+                      child={cmt?.child?.comment}
                       getCmts={getCmts}
-                      countChildren={cmt.child.count}
+                      countChildren={cmt?.child?.count}
+                      nextMaxCount={nextMaxCount}
                     />
                   ))}
 
@@ -386,6 +403,8 @@ function Post({
 
         <div className={cx("input_comment")}>
           <CommentInput
+            ref={inputRef}
+            nextMaxCount={nextMaxCount}
             postId={postId}
             send={handleMergeCmt}
             showComment={() => setShowComments(true)}
