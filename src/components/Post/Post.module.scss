@@ -44,9 +44,11 @@
     }
 
     .info {
+      padding-left: 12px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
       width: 100%;
 
       .user {
@@ -62,12 +64,15 @@
         .name {
           font-size: 16px;
           font-weight: 500;
+          margin-bottom: 0;
+          line-height: 16px;
         }
       }
 
       .time {
-        font-size: 14px;
         color: rgba(0, 0, 0, 0.622);
+        font-size: 13px;
+        margin-top: 2px;
       }
     }
   }
@@ -313,7 +318,7 @@
       align-items: center;
       opacity: 0.8;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 14px;
 
       &:last-child {
         padding-left: 8px;
@@ -343,7 +348,7 @@
     }
     .comment_layout {
       max-height: 500px;
-      overflow-y: scroll;
+      overflow-y: auto;
       margin-top: 6px;
       position: relative;
       padding-top: 8px;

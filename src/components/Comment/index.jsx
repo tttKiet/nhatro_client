@@ -33,8 +33,9 @@ function Comment({
   const [showText, setShowText] = useState(false);
   const [showCmt, setShowCmt] = useState(false);
   const cmtRef = useRef(null);
+  const responseRef = useRef(null);
   const inputRef = useRef(null);
-  const textCommentRef = useRef(null);
+  let textCommentRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [childCmt, setChildCmt] = useState([]);
   const [countChild, setCountChild] = useState(countChildren);
@@ -52,6 +53,7 @@ function Comment({
   };
 
   const focus = () => {
+    if (!textCommentRef.current) return;
     textCommentRef.current.focus();
     textCommentRef.current.scrollIntoView({
       behavior: "smooth",
@@ -64,15 +66,25 @@ function Comment({
       onclickRes(user.fullName);
       focusInput();
     } else {
-      if (inputRef.current && textCommentRef.current) {
-        textCommentRef.current.focus();
-        inputRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      }
-      setTagUser(user.fullName);
       setShowInput(true);
+      setTagUser(user.fullName);
+      if (inputRef.current && textCommentRef.current) {
+        // console.log([textCommentRef.current, textCommentRef]);
+        // textCommentRef.current.focus();
+        // // inputRef.current.scrollIntoView({
+        // //   behavior: "smooth",
+        // //   block: "center",
+        // // });
+      }
+      setTimeout(() => {
+        if (inputRef.current && textCommentRef.current) {
+          textCommentRef.current.focus();
+          inputRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 0);
     }
   };
 
@@ -117,7 +129,6 @@ function Comment({
           "wrap",
           `${isChild === true ? "ch" : "pa"}`,
           `${countChildren === 0 && !showInput ? "offLine" : ""}`
-          // `${childCmt.length > 0 && !showInput ? "customLine" : ""}`
         )}
       >
         <div className={cx("layout")}>
@@ -138,9 +149,7 @@ function Comment({
                   />
                 </svg>
               ) : (
-                <div className={cx("img")}>
-                  <Image src={user.avatar} />
-                </div>
+                <Image src={user.avatar} />
               )}
             </div>
           </div>
@@ -183,7 +192,11 @@ function Comment({
               </div>
             </div>
             <div className={cx("actives")}>
-              <div className={cx("active")} onClick={handleClickRes}>
+              <div
+                className={cx("active")}
+                ref={responseRef}
+                onClick={handleClickRes}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -198,7 +211,7 @@ function Comment({
                     d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
                   />
                 </svg>
-                Response
+                Reply
               </div>
 
               <div className={cx("active", "date")}>
@@ -299,6 +312,8 @@ Comment.propTypes = {
   countChildren: PropTypes.number,
   getCmts: PropTypes.func,
   commentParent: PropTypes.object,
+  focusInput: PropTypes.func,
+  nextMaxCount: PropTypes.func,
 };
 
 export default Comment;

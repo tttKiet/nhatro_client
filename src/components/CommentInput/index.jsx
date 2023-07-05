@@ -29,6 +29,7 @@ const CommentInput = forwardRef(function (
 ) {
   const [, , user] = useAuth();
   const inputRef = useRef(null);
+  const iconsCommentRef = useRef(null);
   const [content, setContent] = useState("");
   const [focus, setFocus] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
@@ -113,7 +114,14 @@ const CommentInput = forwardRef(function (
       window.removeEventListener("click", handleClick);
     };
   }, []);
-
+  useEffect(() => {
+    if (showIcon && iconsCommentRef.current) {
+      iconsCommentRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [showIcon]);
   return (
     <div className={cx("wrap")}>
       <div className={cx("layout")}>
@@ -178,7 +186,10 @@ const CommentInput = forwardRef(function (
       </div>
 
       {showIcon && (
-        <div className={cx("input_comment", "icons_comment")}>
+        <div
+          className={cx("input_comment", "icons_comment")}
+          ref={iconsCommentRef}
+        >
           <div className={cx("emoji")}>
             <Picker
               {...configEmoji}

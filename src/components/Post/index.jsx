@@ -8,13 +8,15 @@ import { TbLoaderQuarter, TbLoader } from "react-icons/tb";
 
 import CommentInput from "../CommentInput";
 import Comment from "../Comment";
-// scss
-import styles from "./Post.module.scss";
-import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
 import { commentServices, likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
 import LoaderCmt from "../LoaderCmt";
+
+// scss
+import styles from "./Post.module.scss";
+import classNames from "classNames/bind";
+import More from "./more";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -197,15 +199,17 @@ function Post({
           </div>
           <div className={cx("info")}>
             <div className={cx("user")}>
-              <span className={cx("space")}>
+              {/* <span className={cx("space")}>
                 <MdPlayArrow />
-              </span>
-              <div className={cx("name")}>{authorName}</div>
+              </span> */}
+              <h5 className={cx("name")}>{authorName}</h5>
             </div>
-            <div className={cx("time")}>
-              <span>{moment(createdAt).startOf("minutes").fromNow()}</span>
-            </div>
+            <span className={cx("time")}>
+              {moment(createdAt).startOf("minutes").fromNow()}
+            </span>
           </div>
+
+          <More postId={postId} />
         </header>
         <main className={cx("main")}>
           <div className={cx("content")}>
@@ -325,7 +329,7 @@ function Post({
                   />
                 </svg>
               </div>
-              <span>Favourites</span>
+              <span>Save</span>
             </button>
           </div>
         </footer>
@@ -356,7 +360,7 @@ function Post({
                   )}
 
                   {maxCountCmtParent > cmts.length && (
-                    <div className="d-flex my-3">
+                    <div className="d-flex my-3 ps-3">
                       <div
                         className={cx("show_more_cmt")}
                         onClick={handleClickMore}
