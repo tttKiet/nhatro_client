@@ -27,6 +27,7 @@ function Comment({
   countChildren = 0,
   commentParent,
   focusInput,
+  nextMaxCount,
 }) {
   const [showInput, setShowInput] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -61,7 +62,6 @@ function Comment({
   const handleClickRes = () => {
     if (onclickRes) {
       onclickRes(user.fullName);
-      console.log("first");
       focusInput();
     } else {
       if (inputRef.current && textCommentRef.current) {
@@ -277,6 +277,7 @@ function Comment({
               parentId={id}
               send={handleMergeCmtChild}
               setTagUser={setTagUser}
+              nextMaxCount={nextMaxCount}
             />
           </div>
         </div>

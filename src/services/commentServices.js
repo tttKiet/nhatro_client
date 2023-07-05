@@ -23,6 +23,11 @@ const commentServices = {
     );
     return res;
   },
+
+  async getLimitComments(postId) {
+    const res = await axios.get(`/api/v1/comment/limit?postId=${postId}`);
+    return res;
+  },
 };
 
 export default commentServices;

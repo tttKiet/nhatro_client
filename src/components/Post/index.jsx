@@ -3,17 +3,18 @@ import { MdPlayArrow } from "react-icons/md";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Like from "../../assets/svg/like.svg";
 import PropTypes from "prop-types";
-import Comment from "../Comment";
 import moment from "moment";
 import { TbLoaderQuarter, TbLoader } from "react-icons/tb";
 
 import CommentInput from "../CommentInput";
+import Comment from "../Comment";
 // scss
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
 import { commentServices, likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
+import LoaderCmt from "../LoaderCmt";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -35,9 +36,9 @@ function Post({
     count: 0,
   });
   const [showText, setShowText] = useState(false);
-  const [cmtLocal, setCmtLocal] = useState([]);
   const [cmtPage, setCmtPage] = useState(2);
   const [maxCount, setMaxCount] = useState(1);
+  const [maxCountCmtParent, setMaxCountCmtParent] = useState(1);
   const inputRef = useRef(null);
   const [cmts, setCmts] = useState([]);
   const body = useRef(null);
@@ -57,7 +58,8 @@ function Post({
     //     block: "end",
     //   });
     // }
-    setCmtLocal((prev) => []);
+
+    setCmts((prev) => [newCmt, ...prev]);
   };
 
   const toggleLike = () => {
@@ -84,6 +86,10 @@ function Post({
     });
   }, [postId]);
 
+  const nextPageCmt = useCallback(() => {
+    if (coutDoc * cmtPage < maxCountCmtParent) setCmtPage((v) => v + 1);
+  }, [cmtPage, coutDoc, maxCountCmtParent]);
+
   const getCmts = useCallback(
     (action) => {
       setLoading(true);
@@ -96,9 +102,6 @@ function Post({
             } else {
               setCmts((cmt) => [...cmt, ...res.data.data]);
             }
-
-            // console.log(res);
-            // setMaxCount(res.data.maxCmt);
           }
         })
         .catch((err) => {
@@ -111,14 +114,11 @@ function Post({
     [postId, cmtPage]
   );
 
-  const nextPageCmt = useCallback(() => {
-    if (coutDoc * cmtPage < maxCount) setCmtPage((v) => v + 1);
-  }, [cmtPage, coutDoc, maxCount]);
-
-  const handleClickMore = useCallback(() => {
+  const handleClickMore = useCallback(async () => {
+    if (loading) return;
+    await getCmts();
     nextPageCmt();
-    getCmts();
-  }, [getCmts, nextPageCmt]);
+  }, [getCmts, loading, nextPageCmt]);
 
   const handleClickMoreAll = () => {
     handleClickMore();
@@ -143,7 +143,7 @@ function Post({
     commentServices.getComment(postId, 1).then((res) => {
       if (res.status === 200 && res.data.err === 0) {
         setCmts([...res.data.data]);
-        setMaxCount(res.data.maxCmt);
+        setMaxCountCmtParent(res.data.count);
       }
     });
   }, [postId]);
@@ -157,10 +157,10 @@ function Post({
   }, [postId]);
 
   useEffect(() => {
-    if (cmts.length >= maxCount) {
+    if (cmts.length >= maxCountCmtParent) {
       return;
     }
-    if (isScroll) {
+    if (isScroll && body.current) {
       body.current.addEventListener("scroll", handleScroll);
     }
     return () => {
@@ -168,7 +168,7 @@ function Post({
         body.current.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [isScroll, handleScroll, cmts.length, maxCount]);
+  }, [isScroll, handleScroll, cmts.length, maxCountCmtParent]);
 
   return (
     <div className={cx("wrap")}>
@@ -246,7 +246,7 @@ function Post({
               {likeInfo?.count}
             </div>
             <div className={cx("info_post-item")}>
-              <span className={cx("count_cmt")}>{maxCount}</span>comment
+              <span className={cx("count_cmt")}>{maxCount}</span>comments
             </div>
           </div>
         </main>
@@ -334,10 +334,10 @@ function Post({
             <div className={cx("comment_layout")} ref={body}>
               {cmts.length > 0 ? (
                 <>
-                  {cmts.map((cmt, index) => (
+                  {cmts.map((cmt) => (
                     <Comment
                       id={cmt._id}
-                      key={index}
+                      key={cmt._id}
                       postId={postId}
                       user={cmt.user}
                       content={cmt.content}
@@ -349,8 +349,13 @@ function Post({
                       nextMaxCount={nextMaxCount}
                     />
                   ))}
+                  {loading && (
+                    <div className="pe-4">
+                      <LoaderCmt />
+                    </div>
+                  )}
 
-                  {maxCount > cmts.length && (
+                  {maxCountCmtParent > cmts.length && (
                     <div className="d-flex my-3">
                       <div
                         className={cx("show_more_cmt")}

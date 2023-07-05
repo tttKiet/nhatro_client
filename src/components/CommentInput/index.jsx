@@ -19,15 +19,16 @@ const configEmoji = {
 // scss
 import styles from "./CommentInput.module.scss";
 import classNames from "classNames/bind";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 //
 const cx = classNames.bind(styles);
 
-function CommentInputRef(
-  { postId, parentId, send, showComment, setTagUser },
+const CommentInput = forwardRef(function (
+  { postId, parentId, send, showComment, setTagUser, nextMaxCount },
   ref
 ) {
   const [, , user] = useAuth();
+  const inputRef = useRef(null);
   const [content, setContent] = useState("");
   const [focus, setFocus] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
@@ -49,15 +50,19 @@ function CommentInputRef(
   };
 
   const handleInput = () => {
-    if (ref.current) {
+    if (ref && ref.current) {
       ref.current.style.height = "24px";
       ref.current.style.height = ref.current.scrollHeight + "px";
     }
   };
 
   const handleSendCmt = () => {
-    if (ref.current) {
+    if (ref && ref.current) {
       ref.current.style.height = "24px";
+    } else {
+      if (inputRef.current) {
+        inputRef.current.style.height = "24px";
+      }
     }
 
     if (!content.trim()) {
@@ -65,7 +70,10 @@ function CommentInputRef(
       return;
     }
 
-    setTagUser("");
+    if (setTagUser) {
+      setTagUser("");
+    }
+
     const data = {
       content: content.trim(),
       postId,
@@ -80,6 +88,7 @@ function CommentInputRef(
           setFocus(false);
           setContent("");
           setShowIcon(false);
+          nextMaxCount();
           if (showComment) {
             showComment();
           }
@@ -133,7 +142,7 @@ function CommentInputRef(
           <div className={cx("input")}>
             <textarea
               onInput={handleInput}
-              ref={ref}
+              ref={ref || inputRef}
               spellCheck={false}
               onClick={() => setFocus(true)}
               className={cx({ focus: focus || !!content }, "input_com")}
@@ -181,16 +190,17 @@ function CommentInputRef(
       )}
     </div>
   );
-}
+});
 
-CommentInputRef.propTypes = {
+CommentInput.propTypes = {
   postId: PropTypes.string,
   parentId: PropTypes.string,
   send: PropTypes.func,
   showComment: PropTypes.func,
   setTagUser: PropTypes.func,
+  nextMaxCount: PropTypes.func,
 };
 
-const CommentInput = forwardRef(CommentInputRef);
+CommentInput.displayName = "CommentInput";
 
 export default CommentInput;
