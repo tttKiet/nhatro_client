@@ -27,6 +27,15 @@ const postServices = {
     }
   },
 
+  async getPostPageById(postId) {
+    try {
+      const res = await axios.get(`/api/v1/post/${postId}`);
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
   async getUserNewPost({ _author, index = 1 }) {
     try {
       const res = await axios.get(

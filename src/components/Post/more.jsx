@@ -7,7 +7,7 @@ import classNames from "classNames/bind";
 import { useEffect, useRef, useState } from "react";
 const cx = classNames.bind(styles);
 
-function More({ postId }) {
+function More({ postId, details }) {
   const [show, setShow] = useState(false);
   const menuRef = useRef(null);
   const moreRef = useRef(null);
@@ -53,10 +53,18 @@ function More({ postId }) {
         </svg>
 
         <ul className={cx("list")}>
+          {!details && (
+            <li className={cx("item")}>
+              <Link to={`/post/${postId}`}>
+                <TbListDetails />
+                <span className={cx("title")}>Details</span>
+              </Link>
+            </li>
+          )}
           <li className={cx("item")}>
             <Link to={`/post/${postId}`}>
               <TbListDetails />
-              <span className={cx("title")}>Details</span>
+              <span className={cx("title")}>Save</span>
             </Link>
           </li>
         </ul>

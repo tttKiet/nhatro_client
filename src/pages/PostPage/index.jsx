@@ -65,7 +65,7 @@ function PostPage() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [handleScroll]);
+  }, [handleScroll, maxDocPost, posts.length]);
 
   return (
     <>
@@ -77,7 +77,7 @@ function PostPage() {
 
               <div className={cx("banner", "d-none d-xxl-inline-block")}>
                 <div className={cx("data")}>
-                  <div className={cx("content")}>PrevPost</div>
+                  <div className={cx("content")}>Quang cao</div>
                 </div>
               </div>
               <div className={cx("posts")}>
