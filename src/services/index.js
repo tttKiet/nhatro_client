@@ -8,3 +8,4 @@ export { default as reqRoomOwnerServices } from "./reqRoomOwnerServices";
 export { default as postServices } from "./postServices";
 export { default as likeServices } from "./likeServices";
 export { default as commentServices } from "./commentServices";
+export { default as favouritePostServices } from "./favouritePostServices";

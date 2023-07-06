@@ -1,0 +1,32 @@
+.wrap{
+    margin-top: 30px;
+    --width-nav: 420px;
+    .my-favourite-post{
+        margin-left: calc(var(--width-nav) + 20px);
+        margin-right: 116px;
+
+        
+    }
+}
+
+@media screen and (max-width: 1060px) {
+  .wrap {
+    .my-favourite-post {
+      margin-left: 260px;
+      margin-right: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .wrap {
+    .my-favourite-post {
+      margin-left: 0;
+      margin-right: 0;
+
+    }
+  }
+}
+
+
+  

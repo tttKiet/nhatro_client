@@ -1,0 +1,36 @@
+.wrap {
+  .favourite-post{
+    border: 2px solid #ebe9e9;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 10px;
+    .img-favourite-post{
+        width: 144px;
+        height: 144px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eae8e8;
+    }
+
+    .btn-action{
+      padding: 4px 8px;
+      margin-right: 8px;
+      border-radius: 8px;
+      outline: none;
+      background-color: #FD5959;
+      border: 1px solid #d9d2d2;
+      color: white;
+      font-size: 14px;
+
+      &:hover{
+       opacity: 0.8;
+       transform: scale(1.1);
+      }
+    }
+  }
+}
+
+

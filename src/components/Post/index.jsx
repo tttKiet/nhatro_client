@@ -1,6 +1,6 @@
 import Image from "react-bootstrap/Image";
 import { MdPlayArrow } from "react-icons/md";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Like from "../../assets/svg/like.svg";
 import PropTypes from "prop-types";
 import Comment from "../Comment";
@@ -11,8 +11,14 @@ import CommentInput from "../CommentInput";
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
-import { likeServices, postServices } from "../../services";
+import {
+  favouritePostServices,
+  likeServices,
+  postServices,
+} from "../../services";
 import { useAuth } from "../../hooks";
+import { ToastContext } from "../../untils/context";
+
 const cx = classNames.bind(styles);
 
 function Post({
@@ -24,6 +30,7 @@ function Post({
   hashTag,
   postId,
 }) {
+  const toast = useContext(ToastContext);
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
   const [likeInfo, setLikeInfo] = useState({
@@ -59,6 +66,23 @@ function Post({
       }
     });
   }, [postId]);
+
+  // Favourite post
+  async function handleFavouritePost(postId) {
+    try {
+      const res = await favouritePostServices.addFavouritePost(
+        user._id,
+        postId
+      );
+      if (res.err === 0) {
+        toast.success(res.message);
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     getLike();
@@ -201,6 +225,7 @@ function Post({
             <button
               type="button"
               className={cx("active", "favorited", "col-4")}
+              onClick={() => handleFavouritePost(postId)}
             >
               <div>
                 <svg
