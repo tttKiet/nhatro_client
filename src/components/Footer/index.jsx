@@ -116,7 +116,7 @@ function Footer() {
                         )}
                       >
                         <FaFacebookF className="fs-m me-2"></FaFacebookF>
-                        facebook.com/ltv.1805
+                        /ltv.1805
                       </a>
                     </p>
 
@@ -141,7 +141,7 @@ function Footer() {
                         )}
                       >
                         <FaGithub className="fs-m me-2 "></FaGithub>
-                        github.com/fcthevan123-vn
+                        /fcthevan123-vn
                       </a>
                     </p>
                   </div>
@@ -152,14 +152,14 @@ function Footer() {
                     </p>
                     <p>
                       <a
-                        href="https://www.facebook.com/ltv.1805/"
+                        href="https://www.facebook.com/kiett01"
                         className={cx(
                           "link-footer",
                           "fs-s d-flex align-items-center text-break"
                         )}
                       >
                         <FaFacebookF className="fs-m me-2"></FaFacebookF>
-                        facebook.com/kiett01
+                        /kiett01
                       </a>
                     </p>
 
@@ -178,14 +178,14 @@ function Footer() {
 
                     <p>
                       <a
-                        href="https://github.com/fcthevan123-vn"
+                        href="https://github.com/tttKiet"
                         className={cx(
                           "link-footer",
                           "fs-s d-flex align-items-center  text-break"
                         )}
                       >
                         <FaGithub className="fs-m me-2 "></FaGithub>
-                        github.com/tttKiet
+                        /tttKiet
                       </a>
                     </p>
                   </div>

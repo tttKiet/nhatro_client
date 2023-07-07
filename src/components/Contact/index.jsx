@@ -14,13 +14,14 @@ import {
 } from "react-icons/bs";
 import { AiFillMessage } from "react-icons/ai";
 import { ToastContext } from "../../untils/context";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function Contact() {
   const [, , inforUser] = useAuth();
   const toast = useContext(ToastContext);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const validate = (values) => {
     const errors = {};
@@ -47,7 +48,7 @@ function Contact() {
       message: "",
     },
     validate,
-    validateOnChange: false,
+
     onSubmit: (values) => {
       handleSubmit(inforUser._id, values);
     },
@@ -58,9 +59,13 @@ function Contact() {
     try {
       const res = await feedbackService.createFeedback(id, values);
       if (res.err === 0) {
+        setIsDisabled(true);
         formik.resetForm();
         toast.dismiss();
-        toast.success("Create feedback successfully");
+        toast.success(
+          "Create feedback successfully. You can see all your feedbacks in personal page",
+          { duration: 5000 }
+        );
       }
     } catch (error) {
       toast.dismiss();
@@ -77,6 +82,7 @@ function Contact() {
             className={cx("row-wrap", "row my-5 shadow")}
             style={{ borderRadius: "10px" }}
           >
+            {/* Infomation of us */}
             <div className={cx("col-right", "col-md-6 col-sm-6 px-5")}>
               <h3
                 className="fs-xxl text-center py-3 fst-italic"
@@ -202,12 +208,13 @@ function Contact() {
                 <div className="form-floating mb-3">
                   <input
                     type="text"
-                    className={cx("input-field", "form-control")}
+                    className={cx("input-field", "form-control fst-italic")}
                     id="title"
                     name="title"
                     placeholder="name@example.com"
                     onChange={formik.handleChange}
-                    value={formik.values.title}
+                    value={isDisabled ? "Sent!" : formik.values.title}
+                    disabled={isDisabled}
                   />
                   <label htmlFor="title" className="fw-light fs-s">
                     Title
@@ -225,13 +232,14 @@ function Contact() {
 
                 <div className="form-floating mb-3">
                   <textarea
-                    className={cx("input-field", "form-control")}
+                    className={cx("input-field", "form-control fst-italic")}
                     placeholder="Leave a comment here"
                     id="message"
                     name="message"
                     style={{ height: "100px" }}
-                    value={formik.values.message}
                     onChange={formik.handleChange}
+                    value={isDisabled ? "Sent!" : formik.values.message}
+                    disabled={isDisabled}
                   ></textarea>
                   <label htmlFor="message" className="fw-light fs-s">
                     Message
@@ -247,7 +255,14 @@ function Contact() {
                   )}
                 </div>
                 <div className="d-flex justify-content-center">
-                  <button className={cx("btn-submit")}>
+                  <button
+                    disabled={isDisabled}
+                    type="submit"
+                    className={cx(
+                      "btn-submit",
+                      `${isDisabled ? "opacity-50" : "opacity-100"}`
+                    )}
+                  >
                     Submit <BsFillSendFill className="ms-1"></BsFillSendFill>
                   </button>
                 </div>

@@ -11,9 +11,15 @@ import ReqUpOwner from "../../components/ReqUpOwner";
 // scss
 import styles from "./UserProfilePage.module.scss";
 import classNames from "classNames/bind";
+import AllFeedback from "../../components/AllFeedback";
 const cx = classNames.bind(styles);
 
-const tagName = ["my-profile", "verify-email", "req-owner-broad-house"];
+const tagName = [
+  "my-profile",
+  "verify-email",
+  "req-owner-broad-house",
+  "my-feedback",
+];
 
 function UserProfilePage() {
   const [searchParams] = useSearchParams();
@@ -55,6 +61,9 @@ function UserProfilePage() {
                 title="req-owner-broad-house"
               >
                 <ReqUpOwner />
+              </Tab>
+              <Tab eventKey="my-feedback" title="my-feedback">
+                <AllFeedback></AllFeedback>
               </Tab>
             </Tabs>
           </div>

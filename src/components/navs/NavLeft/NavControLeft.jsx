@@ -2,7 +2,7 @@ import classNames from "classNames/bind";
 import styles from "./NavLeft.module.scss";
 import { GiCaptainHatProfile } from "react-icons/gi";
 import { HiOutlineMail } from "react-icons/hi";
-import { BsHouse } from "react-icons/bs";
+import { BsFileEarmark, BsHouse } from "react-icons/bs";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { TbBrandBooking } from "react-icons/tb";
 import { TiArrowBack } from "react-icons/ti";
@@ -86,6 +86,15 @@ function NavControlLeft({ setActive, active }) {
           <Link>
             <BsHouse />
             My rooms
+          </Link>
+        </li>
+        <li>
+          <Link
+            className={cx({ active: active === "my-feedback" })}
+            to={`/profile?tag=my-feedback`}
+          >
+            <BsFileEarmark />
+            My feedbacks
           </Link>
         </li>
         <li>

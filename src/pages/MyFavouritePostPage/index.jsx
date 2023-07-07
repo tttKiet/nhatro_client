@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavLeftMyPost from "../../components/navs/NavLeftMyPost";
 import { useAuth } from "../../hooks";
 import { favouritePostServices, postServices } from "../../services";
@@ -9,7 +9,9 @@ import FavouritePost from "../../components/FavouritePost";
 const cx = classNames.bind(styles);
 
 function MyFavouritePostPage() {
+  const selectRef = useRef(null);
   const [, , user] = useAuth();
+  // eslint-disable-next-line no-unused-vars
   const [posts, setPosts] = useState([]);
   const [fvPost, setFvPost] = useState([]);
   const [isFilter, setIsFilter] = useState(false);
@@ -32,7 +34,12 @@ function MyFavouritePostPage() {
     try {
       const res = await favouritePostServices.getFavouritePost(user._id);
       if (res.err === 0) {
-        setFvPost(res.data);
+        if (selectRef.current.value === "newest") {
+          const fvReverse = [...res.data].reverse();
+          setFvPost(fvReverse);
+        } else {
+          setFvPost(res.data);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -62,7 +69,6 @@ function MyFavouritePostPage() {
 
   return (
     <div className={cx("wrap")}>
-      {console.log("casd", fvPost)}
       <div className={cx("nav")}>
         <NavLeftMyPost mergePostsNew={mergePostsNew} />
       </div>
@@ -73,6 +79,7 @@ function MyFavouritePostPage() {
             <div className="mb-3 d-flex flex-row-reverse">
               <div style={{ width: "120px" }}>
                 <select
+                  ref={selectRef}
                   onChange={(e) => handleChangeSelect(e)}
                   className="form-select p-2 rounded-3 border border-primary-subtle shadow-sm border-1"
                   aria-label="Default select example"
@@ -88,7 +95,11 @@ function MyFavouritePostPage() {
 
           {/* Favourite post */}
           {fvPost.map((post, index) => (
-            <FavouritePost key={index} post={post}></FavouritePost>
+            <FavouritePost
+              key={index}
+              post={post}
+              getFvPost={() => getFavouritePost()}
+            ></FavouritePost>
           ))}
         </div>
       </div>
