@@ -60,7 +60,14 @@ function FavouritePost({ post, getFvPost }) {
       ),
       {
         icon: (
-          <AiOutlineDelete style={{ color: "#FD5959", fontSize: "20px" }} />
+          <div className="bg-danger p-1 border border-1 rounded shadow">
+            <AiOutlineDelete
+              style={{
+                color: "white",
+                fontSize: "22px",
+              }}
+            />
+          </div>
         ),
       }
     );

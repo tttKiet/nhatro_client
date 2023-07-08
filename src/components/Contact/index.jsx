@@ -63,7 +63,7 @@ function Contact() {
         formik.resetForm();
         toast.dismiss();
         toast.success(
-          "Create feedback successfully. You can see all your feedbacks in personal page",
+          "Create feedback successfully. You can see all your feedbacks in personal page.",
           { duration: 5000 }
         );
       }

@@ -9,7 +9,16 @@
             transform: scale(1.15);
         }
     }
+
+    .text-description{
+        width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 }
+
+
 
 
 

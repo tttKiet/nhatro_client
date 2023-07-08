@@ -11,6 +11,7 @@ import Footer from "../../components/Footer";
 // scss
 import styles from "./UserHomePage.module.scss";
 import classNames from "classNames/bind";
+import FeedbackOfCustomer from "../../components/FeedbackOfCustomer";
 const cx = classNames.bind(styles);
 
 function UserHomePage() {
@@ -124,6 +125,9 @@ function UserHomePage() {
             </div>
           </div>
           <Contact></Contact>
+
+          {/* Feedbacks of customer */}
+          <FeedbackOfCustomer></FeedbackOfCustomer>
         </div>
       </div>
       <Footer></Footer>

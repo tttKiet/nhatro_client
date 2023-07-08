@@ -10,5 +10,12 @@ const feedbackService = {
     const res = await axios.get(`/api/v1/user/${_id}/all-feedbacks`);
     return res.data;
   },
+
+  async deleteFeedback(userId, fbId) {
+    const res = await axios.delete(
+      `/api/v1/user/${userId}/delete-feedback?fbId=${fbId}`
+    );
+    return res.data;
+  },
 };
 export default feedbackService;
