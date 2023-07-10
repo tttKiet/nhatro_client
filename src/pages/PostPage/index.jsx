@@ -65,7 +65,7 @@ function PostPage() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [handleScroll]);
+  }, [handleScroll, maxDocPost, posts.length]);
 
   return (
     <>
@@ -77,7 +77,7 @@ function PostPage() {
 
               <div className={cx("banner", "d-none d-xxl-inline-block")}>
                 <div className={cx("data")}>
-                  <div className={cx("content")}>PrevPost</div>
+                  <div className={cx("content")}>Quang cao</div>
                 </div>
               </div>
               <div className={cx("posts")}>
@@ -92,11 +92,13 @@ function PostPage() {
                 {posts.map((post, index) => (
                   <Suspense key={index} fallback={<PrevPost />}>
                     <PostLazy
+                      setPosts={setPosts}
                       content={post.content}
                       createdAt={post.createdAt}
                       images={post.images}
                       authorName={post.user.fullName}
                       authorImage={post.user.avatar}
+                      author_id={post.user._id}
                       hashTag={post.hashTag}
                       postId={post?._id}
                     />

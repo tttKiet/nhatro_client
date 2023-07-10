@@ -1,4 +1,4 @@
-import Snipper from "../Snipper";
+import ClockLoader from "../Snipper/ClockLoader";
 
 // scss
 import styles from "./PreSnipperLoader.module.scss";
@@ -9,7 +9,8 @@ const cx = classNames.bind(styles);
 function PreSnipperLoader() {
   return (
     <div className={cx("wrap")}>
-      <Snipper color="#000" size={30} />
+      <ClockLoader color="#000" size={50} />
+      <p>Loading page ... Please watting</p>
     </div>
   );
 }

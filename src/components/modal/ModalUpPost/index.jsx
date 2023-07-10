@@ -7,7 +7,7 @@ import styles from "./ModalUpPost.module.scss";
 import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
-function ModalUp({ show, setShow, mergePostsNew }) {
+function ModalUp({ show, setShow, mergePostsNew, postInfo }) {
   const handleClose = () => setShow(false);
   return (
     <>
@@ -20,10 +20,14 @@ function ModalUp({ show, setShow, mergePostsNew }) {
         dialogClassName={cx("wrap")}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Up Post</Modal.Title>
+          <Modal.Title>{postInfo ? "Edit Post" : "Up Post"}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pe-1">
-          <FormUpPost mergePostsNew={mergePostsNew} handleClose={handleClose} />
+          <FormUpPost
+            mergePostsNew={mergePostsNew}
+            handleClose={handleClose}
+            postInfo={postInfo}
+          />
         </Modal.Body>
       </Modal>
     </>
@@ -33,6 +37,7 @@ function ModalUp({ show, setShow, mergePostsNew }) {
 ModalUp.propTypes = {
   show: PropTypes.bool,
   setShow: PropTypes.func,
+  setPosts: PropTypes.func,
   mergePostsNew: PropTypes.func,
 };
 

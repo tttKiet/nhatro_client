@@ -1,27 +1,23 @@
-import Image from "react-bootstrap/Image";
-import { MdPlayArrow } from "react-icons/md";
 import { useCallback, useContext, useEffect, useState } from "react";
-import Like from "../../assets/svg/like.svg";
 import PropTypes from "prop-types";
-import Comment from "../Comment";
+import Image from "react-bootstrap/Image";
+import Like from "../../assets/svg/like.svg";
 import moment from "moment";
+import ImageLoader from "../ImageLoader";
+import { commentServices, likeServices, postServices } from "../../services";
+import { useAuth } from "../../hooks";
+import More from "./more";
 
-import CommentInput from "../CommentInput";
 // scss
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import ImageLoader from "../ImageLoader";
-import {
-  favouritePostServices,
-  likeServices,
-  postServices,
-} from "../../services";
+import { likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
-import { ToastContext } from "../../untils/context";
-
 const cx = classNames.bind(styles);
 
 function Post({
+  setPosts,
   content,
   images,
   createdAt,
@@ -29,6 +25,7 @@ function Post({
   authorImage,
   hashTag,
   postId,
+  author_id,
 }) {
   const toast = useContext(ToastContext);
   const [showComments, setShowComments] = useState(false);
@@ -37,16 +34,21 @@ function Post({
     user: [],
     count: 0,
   });
+  const [maxCount, setMaxCount] = useState(1);
   const [showText, setShowText] = useState(false);
+
   const toggleShowText = () => {
     setShowText((s) => !s);
   };
+
+  const nextMaxCount = useCallback(() => {
+    setMaxCount((pre) => pre + 1);
+  }, []);
 
   const toggleLike = () => {
     likeServices
       .toggleLikePost({ postId, userId: user?._id || null })
       .then((res) => {
-        // console.log(res);
         if (res.status === 200 && res.data.err === 0) {
           getLike();
         }
@@ -61,7 +63,7 @@ function Post({
       if (res.status === 200 && res.data.err === 0) {
         setLikeInfo({
           user: [...res.data.data],
-          count: res?.data?.likedCount || 0,
+          count: res.data.likedCount || 0,
         });
       }
     });
@@ -87,6 +89,22 @@ function Post({
   useEffect(() => {
     getLike();
   }, [getLike]);
+
+  //   commentServices.getComment(postId, 1).then((res) => {
+  //     if (res.status === 200 && res.data.err === 0) {
+  //       setCmts([...res.data.data]);
+  //       setMaxCountCmtParent(res.data.count);
+  //     }
+  //   });
+  // }, [postId]);
+
+  useEffect(() => {
+    commentServices.getLimitComments(postId).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setMaxCount(res.data.countCmt);
+      }
+    });
+  }, [postId]);
 
   return (
     <div className={cx("wrap")}>
@@ -115,15 +133,27 @@ function Post({
           </div>
           <div className={cx("info")}>
             <div className={cx("user")}>
-              <span className={cx("space")}>
-                <MdPlayArrow />
-              </span>
-              <div className={cx("name")}>{authorName}</div>
+              <h5 className={cx("name")}>{authorName}</h5>
             </div>
-            <div className={cx("time")}>
-              <span>{moment(createdAt).startOf("minutes").fromNow()}</span>
-            </div>
+            <span className={cx("time")}>
+              {moment(createdAt).startOf("minutes").fromNow()}
+            </span>
           </div>
+
+          <More
+            setPosts={setPosts}
+            postId={postId}
+            postInfo={{
+              content,
+              images,
+              author_id: author_id,
+              createdAt,
+              authorName,
+              authorImage,
+              hashTag,
+              postId,
+            }}
+          />
         </header>
         <main className={cx("main")}>
           <div className={cx("content")}>
@@ -150,7 +180,6 @@ function Post({
             <div className={cx("images", `layout_${images?.length}`)}>
               {images.map((image, index) => (
                 <div key={index} className={cx("img")}>
-                  {/* <Image src={image} /> */}
                   <ImageLoader image={{ src: image }} />
                 </div>
               ))}
@@ -164,7 +193,9 @@ function Post({
               </div>
               {likeInfo?.count}
             </div>
-            <div className={cx("info_post-item")}>860 comment</div>
+            <div className={cx("info_post-item")}>
+              <span className={cx("count_cmt")}>{maxCount}</span>comments
+            </div>
           </div>
         </main>
         <footer className={cx("footer")}>
@@ -201,7 +232,7 @@ function Post({
             </button>
             <button
               type="button"
-              onClick={() => setShowComments(true)}
+              onClick={() => setShowComments((s) => !s)}
               className={cx("active", "col-4")}
             >
               <div>
@@ -243,22 +274,16 @@ function Post({
                   />
                 </svg>
               </div>
-              <span>Favourites</span>
+              <span>Save</span>
             </button>
           </div>
         </footer>
-        {showComments && (
-          <div className={cx("comment")}>
-            <div className={cx("comment_layout")}>
-              <Comment />
-              <Comment />
-            </div>
-          </div>
-        )}
 
-        <div className={cx("input_comment")}>
-          <CommentInput postId={postId} />
-        </div>
+        <CommentsBox
+          showComments={showComments}
+          postId={postId}
+          nextMaxCount={nextMaxCount}
+        />
       </div>
     </div>
   );
@@ -271,6 +296,7 @@ Post.propTypes = {
   authorName: PropTypes.string,
   authorImage: PropTypes.string,
   hashTag: PropTypes.string,
+  setPosts: PropTypes.func,
   postId: PropTypes.string,
 };
 

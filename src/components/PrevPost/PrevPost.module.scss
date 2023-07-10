@@ -12,3 +12,21 @@
   color: rgba(92, 92, 92, 0.368);
   transition: all 0.2s ease-in-out;
 }
+
+@media screen and (max-width: 630px) {
+  .prev_loading {
+    width: 460px;
+  }
+}
+
+@media only screen and (max-width: 358px) {
+  .prev_loading {
+    width: 324px;
+  }
+}
+
+@media only screen and (min-width: 358px) and (max-width: 497px) {
+  .prev_loading {
+    width: 340px;
+  }
+}

@@ -2,6 +2,7 @@
   position: relative;
   .layout {
     display: flex;
+    // width: 100%;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 12px;
@@ -15,10 +16,18 @@
         border: 2px solid transparent;
         overflow: hidden;
         border-radius: 100px;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         img {
-          width: 34px;
-          height: 34px;
+          width: 32px;
+          height: 32px;
           object-fit: cover;
+        }
+        svg {
+          width: 24px;
         }
       }
     }
@@ -36,19 +45,19 @@
 
       .input {
         padding: 4px 10px;
-        textarea {
+        .input_com {
+          height: 24px;
           width: 100%;
           outline: none;
           font-size: 16px;
           padding: 0;
-          height: auto;
           border: none;
           background-color: transparent;
           display: flex;
           align-items: center;
           resize: none;
           overflow: hidden;
-          transition: all 0.2s ease-in-out;
+          // transition: all 0.2s ease-in-out;
 
           &.focus {
             & ~ .icons {
@@ -111,6 +120,15 @@
   .input_comment {
     position: absolute;
     top: calc(100% + 8px);
-    left: 50px;
+    left: 0px;
+    z-index: 1000;
+    // padding: 20px;
+    padding-bottom: 20px;
+
+    &.topLeft {
+      left: 50px;
+      bottom: 100%;
+      top: unset;
+    }
   }
 }

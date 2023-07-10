@@ -7,10 +7,7 @@ const cx = classNames.bind(styles);
 function PrevPost() {
   return (
     <div className={cx("prev_loading")}>
-      <Facebook
-        foregroundColor={"rgba(92, 92, 92, 0.368)"}
-        backgroundColor={"rgba(92, 92, 92, 0.968)"}
-      />
+      <Facebook foregroundColor={"#ECEAEC"} backgroundColor={"#c2c2c2"} />
     </div>
   );
 }
