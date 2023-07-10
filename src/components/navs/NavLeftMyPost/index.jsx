@@ -1,6 +1,6 @@
 // icons
 import { BsPlusSquareDotted, BsPostcard } from "react-icons/bs";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineGroup } from "react-icons/ai";
 import { LuHotel } from "react-icons/lu";
 
 // scss
@@ -114,6 +114,13 @@ function NavLeftMyPost({ mergePostsNew }) {
                   <BsPlusSquareDotted />
                   Up Post
                 </div>
+              </li>
+
+              <li>
+                <Link to="/user/my-favourite-post" className={cx("item")}>
+                  <AiOutlineGroup />
+                  My favourite post
+                </Link>
               </li>
             </ul>
           </div>

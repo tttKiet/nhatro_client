@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { BsPlusSquareDotted } from "react-icons/bs";
 import { SiPostcss } from "react-icons/si";
+import { FiBookmark } from "react-icons/fi";
 
 // scss
 import styles from "./UntilsBtnPostPage.module.scss";
@@ -83,6 +84,18 @@ function UntilsBtnPostPage({ setPosts }) {
                 <SiPostcss />
               </div>
               <span className={cx("title")}>My post</span>
+            </Link>
+          </li>
+
+          <li>
+            <Link
+              to={`/user/my-favourite-post`}
+              className="d-flex gap-3 text-decoration-none"
+            >
+              <div className={cx("icon")}>
+                <FiBookmark />
+              </div>
+              <span className={cx("title")}>Favourite post</span>
             </Link>
           </li>
         </ul>

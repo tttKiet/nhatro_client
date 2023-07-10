@@ -1,106 +1,79 @@
 .wrap{
-    background-color: #fff;
-    h3{
-        padding-top: 20px;
-        text-align: center;
-    }
-    .list-contact-item{
-        display: flex;
-        justify-content: center;
-        margin: 0;
-        padding: 0;
-        li{
-            display: flex;
-            flex-direction: column;
-            justify-self:center;
-            align-items: center;
-            gap: 10px;
-            list-style: none;
-            padding: 10px 20px;
-            p{
-                margin: 0;
-            }
-            .wrap-item{
-                padding: 10px;
-                border: 1px solid #ccc;
-                background-color: #00BFA6;
-                border-radius: 100%;
-                svg{
-                border-radius: 100%;
-                width: 30px;
-                color: #fff;
-                }
-            }
+    .col-left{
+        border-radius: 0 10px 10px 0;
+        background-color: #fff;
         
-            
+        .input-field{
+            border-radius: 2px;
+            border: none;
+            border-bottom: 1px solid #dad9d9;
+            font-style: 14px;
+        }
+        .btn-submit{
+            padding: 10px 30px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            border: 0;
+            background-color: rgb(255, 56, 86);
+            letter-spacing: 1.5px;
+            font-size: 15px;
+            transition: all .3s ease;
+            box-shadow: rgb(201, 46, 70) 0px 10px 0px 0px;
+            color: hsl(0, 0%, 100%);
+
+            &:hover{
+                opacity: 0.9;
+                box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
+            }
+        }
+    }
+    
+    .col-right {
+        
+        background: linear-gradient(135deg, hsla(0, 100%, 71%, 1) 0%, hsla(49, 70%, 74%, 1) 100%, hsla(347, 75%, 61%, 1) 100%);
+
+        border-radius: 10px 0 0 10px;
+        
+        .circle{
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            margin-right: 8px;
+        }
+    }
+
+    input:disabled, textarea:disabled{
+        background-color: inherit;
+        opacity: 0.7;
+    }
+    
+    @media (min-width: 577px) and (max-width: 768px) {
+        .col-right {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+    
+        .col-left {
+            border-radius: 0 0 10px 10px;
+        }
+    }
+
+    // mobile
+    @media (max-width: 576px) {
+        .row-wrap {
+            margin: 8px;
+
+            .col-right{
+                border-radius: 10px 10px 0 0;
+            }
+    
+            .col-left{
+                border-radius: 0 0 10px 10px;
+            }
         }
 
-    }
-    form{
-        .err{
-            display: block;
-            font-size: 14px;
-            color: red;
-        }
-
-         .wrap-contact-form{
-        display: flex;
-        justify-content: center;
-        padding: 10px 20px;
-       .left-contact{
-            width: 40%;
         
-            .left-item{
-                padding: 10px 0;
-                .infor{
-                    text-decoration: underline;
-                }
-                h4{
-                    font-size: 20px;
-                }
-                input{
-                    border: none;
-                    height: 40px;
-                    width: 300px;
-                    border-bottom: 2px solid #ccc;
-                    outline: none;
-                    padding-left: 20px;
-                    border-radius: 0.3rem;
-
-                }
-                textarea{
-                    border: none;
-                    height: 40px;
-                    width: 300px;
-                    border-bottom: 1px solid #ccc;
-                    outline: none;
-                    padding-left: 20px;
-                    border-radius: 0.3rem;
-
-                }
-                .btn{
-                    padding: 10px 20px;
-                    border: 2px solid transparent;
-                    border-radius: 5px;
-                    background-color: #00BFA6;
-                    color: #fff;
-                    transition: .5s;
-                   &:hover{
-                    background-color: #fff;
-                    color: #00BFA6;
-                    border: 2px dashed;
-                   } 
-                }
-
-            }
-       }    
-       .right-contact{
-            img{
-                height: 500px;
-            }
-       } 
-       
-    }
     }
    
 }   
+

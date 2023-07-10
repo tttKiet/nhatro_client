@@ -23,6 +23,24 @@
       gap: 24px;
       .avt {
         overflow: hidden;
+        position: relative;
+
+        .upload-avatar {
+          position: absolute;
+          color: rgb(85, 82, 81);
+          z-index: 2;
+          bottom: 5px;
+          right: 6px;
+          padding: 3px 5px;
+          background-color: #ffffff;
+          border-radius: 50%;
+          border: 2px solid #a7a1a1;
+          transition: all 0.2s ease-in;
+          &:hover{
+            cursor: pointer;
+            transform: scale(1.1);
+          }
+        }
 
         .svg {
           width: 140px;
@@ -160,4 +178,6 @@
       }
     }
   }
+
+ 
 }

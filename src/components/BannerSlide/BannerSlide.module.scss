@@ -79,10 +79,31 @@
   .right-banner {
     img {
       height: 500px;
+      object-fit: cover;
       opacity: 0;
       transform: translateY(40px);
       transition: all 0.3s ease;
       transition-delay: 0.1s;
     }
   }
+
+  
+}
+
+@media screen and (max-width: 576px) {
+  .main-banner {
+    padding: 20px;
+    border-radius: 10px;
+    
+    .left-banner {
+      display: none;
+    }
+    .right-banner{  
+      img{
+        height: 300px;
+        object-fit: cover;
+      }
+    }
+  }
+ 
 }

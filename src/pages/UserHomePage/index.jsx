@@ -5,11 +5,13 @@ import GroupTextVertical from "../../components/GroupTextVertical";
 import TittleContentLv3 from "../../components/TittleContentLv3";
 import imglv3_1 from "../../assets/images/titlelv3_1.png";
 import imglv3_2 from "../../assets/images/titlelv3_2.png";
-import Contact from "../../components/Contact"
+import Contact from "../../components/Contact";
+import Footer from "../../components/Footer";
 
 // scss
 import styles from "./UserHomePage.module.scss";
 import classNames from "classNames/bind";
+import FeedbackOfCustomer from "../../components/FeedbackOfCustomer";
 const cx = classNames.bind(styles);
 
 function UserHomePage() {
@@ -122,10 +124,13 @@ function UserHomePage() {
               />
             </div>
           </div>
-        <Contact ></Contact>
+          <Contact></Contact>
+
+          {/* Feedbacks of customer */}
+          <FeedbackOfCustomer></FeedbackOfCustomer>
         </div>
       </div>
-
+      <Footer></Footer>
     </div>
   );
 }
