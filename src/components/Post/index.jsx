@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Image from "react-bootstrap/Image";
 import Like from "../../assets/svg/like.svg";
@@ -11,9 +11,7 @@ import More from "./more";
 // scss
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
-import ImageLoader from "../ImageLoader";
-import { likeServices, postServices } from "../../services";
-import { useAuth } from "../../hooks";
+import CommentsBox from "../CommentsBox";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -27,7 +25,6 @@ function Post({
   postId,
   author_id,
 }) {
-  const toast = useContext(ToastContext);
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
   const [likeInfo, setLikeInfo] = useState({
@@ -68,23 +65,6 @@ function Post({
       }
     });
   }, [postId]);
-
-  // Favourite post
-  async function handleFavouritePost(postId) {
-    try {
-      const res = await favouritePostServices.addFavouritePost(
-        user._id,
-        postId
-      );
-      if (res.err === 0) {
-        toast.success(res.message);
-      } else {
-        console.log(res);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   useEffect(() => {
     getLike();
@@ -256,7 +236,6 @@ function Post({
             <button
               type="button"
               className={cx("active", "favorited", "col-4")}
-              onClick={() => handleFavouritePost(postId)}
             >
               <div>
                 <svg
