@@ -49,18 +49,19 @@ function FeedbackOfCustomer() {
   function Feedback({ fb }) {
     return (
       <div className={cx("wrap-feedback")}>
-        <div
-          className={cx(
-            "feedback",
-            "d-flex align-items-center m-auto shadow rounded-4 p-2 "
-          )}
-        >
+        <div className={cx("feedback", "shadow rounded-4 ")}>
           <div className="">
-            <Image className={cx("avatar")} src={fb.avatar}></Image>
+            <Image
+              className={cx("avatar", "shadow-sm")}
+              src={fb.avatar}
+            ></Image>
           </div>
           <div className={cx("wrap-text", "flex-grow-1 p-2")}>
-            <p className="fs-m fw-normal ">"{fb.content}"</p>
-            <p className="fs-s fw-bold fst-italic" style={{ color: "#F3AA60" }}>
+            <p className="fs-m fw-normal fst-italic">"{fb.content}"</p>
+            <p
+              className="fs-s fw-bold fst-italic mb-0"
+              style={{ color: "#F3AA60" }}
+            >
               - {fb.user}
             </p>
           </div>
@@ -83,7 +84,7 @@ function FeedbackOfCustomer() {
         className={cx("carousel", "shadow-sm")}
         showThumbs={false}
         autoPlay={true}
-        interval={4000}
+        interval={8000}
         infiniteLoop={true}
         transitionTime={1000}
         showStatus={false}
