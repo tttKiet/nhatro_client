@@ -63,7 +63,7 @@ function UserProfilePage() {
                 <ReqUpOwner />
               </Tab>
               <Tab eventKey="my-feedback" title="my-feedback">
-                <AllFeedback></AllFeedback>
+                <AllFeedback />
               </Tab>
             </Tabs>
           </div>

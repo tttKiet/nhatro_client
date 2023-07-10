@@ -1,16 +1,23 @@
 import { IoIosMore } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { TbListDetails } from "react-icons/tb";
+import { CiTrash } from "react-icons/ci";
+import { HiOutlinePencil } from "react-icons/hi";
+import { BsHeart } from "react-icons/bs";
+import PropTypes from "prop-types";
 
 // scss
 import styles from "./More.module.scss";
 import classNames from "classNames/bind";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ModalUpPost from "../modal/ModalUpPost";
 import { useAuth } from "../../hooks";
+import { AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
+import { ToastContext } from "../../untils/context";
+import postServices from "../../services/postServices";
 const cx = classNames.bind(styles);
 
 function More({ postId, details, postInfo, setPosts }) {
+  const toast = useContext(ToastContext);
   const [, , user] = useAuth();
   const [show, setShow] = useState(false);
   const [openModalEdit, setOpenModalEdit] = useState(false);
@@ -20,6 +27,66 @@ function More({ postId, details, postInfo, setPosts }) {
   const handleClickEdit = () => {
     setShow(false);
     setOpenModalEdit(true);
+  };
+
+  const handleDeletePost = (offToastId) => {
+    toast.dismiss(offToastId);
+    toast
+      .promise(postServices.deletePost(postId), {
+        loading: "Deleting...",
+        success: <span>Deleted!</span>,
+        error: <span>Could not delete.</span>,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setPosts((prev) => {
+            let index;
+            for (let i = 0; i < prev.length; i++) {
+              if (prev[i]._id === postId) {
+                index = i;
+                break;
+              }
+            }
+            const newPosts = [...prev];
+            newPosts.splice(index, 1);
+            return newPosts;
+          });
+        }
+      });
+  };
+
+  const handleClickDelete = () => {
+    toast.success(
+      (t) => (
+        <div className="d-flex justify-content-center align-items-center">
+          <p className="m-0">
+            Are you sure to <b>delete</b>?
+          </p>
+          <AiOutlineCheckCircle
+            onClick={() => handleDeletePost(t.id)}
+            style={{
+              color: "#0075f5",
+              fontSize: "20px",
+              marginLeft: "12px",
+              cursor: "pointer",
+            }}
+          />
+        </div>
+      ),
+      {
+        icon: (
+          <div className="bg-danger p-1 border border-1 rounded shadow">
+            <AiOutlineDelete
+              style={{
+                color: "white",
+                fontSize: "22px",
+              }}
+            />
+          </div>
+        ),
+        duration: 6000,
+      }
+    );
   };
 
   const handleMergePostsEdit = (postEdit) => {
@@ -86,22 +153,24 @@ function More({ postId, details, postInfo, setPosts }) {
             {user?._id === postInfo?.author_id && (
               <li className={cx("item")}>
                 <button onClick={handleClickEdit}>
-                  <TbListDetails />
+                  <HiOutlinePencil />
                   <span className={cx("title")}>Edit</span>
                 </button>
               </li>
             )}
-            {!details && (
+
+            {user?._id === postInfo?.author_id && (
               <li className={cx("item")}>
-                <Link to={`/post/${postId}`} state={{ source: "other-page" }}>
-                  <TbListDetails />
-                  <span className={cx("title")}>Details</span>
-                </Link>
+                <button onClick={handleClickDelete}>
+                  <CiTrash />
+                  <span className={cx("title")}>Delete</span>
+                </button>
               </li>
             )}
+
             <li className={cx("item")}>
               <Link to={`/post/${postId}`}>
-                <TbListDetails />
+                <BsHeart />
                 <span className={cx("title")}>Save</span>
               </Link>
             </li>
@@ -111,5 +180,12 @@ function More({ postId, details, postInfo, setPosts }) {
     </>
   );
 }
+
+More.propTypes = {
+  postId: PropTypes.string,
+  details: PropTypes.bool,
+  postInfo: PropTypes.object,
+  setPosts: PropTypes.func,
+};
 
 export default More;

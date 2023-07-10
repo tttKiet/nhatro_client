@@ -12,6 +12,7 @@ import More from "./more";
 import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import CommentsBox from "../CommentsBox";
+import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -233,28 +234,13 @@ function Post({
               </div>
               <span>Comment</span>
             </button>
-            <button
-              type="button"
-              className={cx("active", "favorited", "col-4")}
+            <Link
+              className={cx("details", "active")}
+              to={`/post/${postId}`}
+              state={{ source: "other-page" }}
             >
-              <div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-                  />
-                </svg>
-              </div>
-              <span>Save</span>
-            </button>
+              <span className={cx("title")}>Details</span>
+            </Link>
           </div>
         </footer>
 
@@ -277,6 +263,7 @@ Post.propTypes = {
   hashTag: PropTypes.string,
   setPosts: PropTypes.func,
   postId: PropTypes.string,
+  author_id: PropTypes.string,
 };
 
 export default Post;
