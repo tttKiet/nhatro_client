@@ -1,6 +1,23 @@
 .wrap {
   min-height: 100vh;
 
+  .back {
+    padding-top: 22px;
+    font-size: 16px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   .header {
     padding: 12px 16px 0 12px;
     margin-bottom: 12px;

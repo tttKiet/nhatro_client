@@ -58,6 +58,37 @@
         border: 1px solid #ccc;
         padding: 8px;
         display: grid;
+        .img {
+          position: relative;
+          user-select: none;
+          img {
+            border: 1px solid #0d0d0d24;
+          }
+
+          .x {
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            padding: 2px;
+            border-radius: 0 0.4rem 0 0;
+            font-size: 14px;
+            color: #fff;
+            background-color: #000;
+            border-left: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover {
+              background-color: #ff00002d;
+              svg {
+                color: red;
+              }
+            }
+          }
+        }
 
         &.layout_1 {
           grid-template-columns: repeat(1, 1fr);
@@ -141,6 +172,7 @@
         background-color: transparent;
         width: 100%;
         overflow: hidden;
+        height: auto;
         padding: 8px 0;
         outline: none;
         border: none;
@@ -178,12 +210,13 @@
   .submit {
     border-top: 1px solid #ccc;
     margin-top: 16px;
+    position: relative;
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     padding: 16px;
     padding-bottom: 0;
     padding-right: 0;
-    gap: 12px;
     margin-right: 16px;
 
     button {

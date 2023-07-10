@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks";
 import postServices from "../../services/postServices";
 
 import ModalUpPost from "../modal/ModalUpPost";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 // icons
 import { VscTriangleLeft } from "react-icons/vsc";
@@ -19,6 +19,7 @@ const cx = classNames.bind(styles);
 function UntilsBtnPostPage({ setPosts }) {
   const [showMenu, setShowMenu] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const untils = useRef(null);
   const [, , user] = useAuth();
 
   const handleGetNewPost = useCallback(async () => {
@@ -37,9 +38,21 @@ function UntilsBtnPostPage({ setPosts }) {
       setPosts((prev) => [newpost, ...prev]);
     }
   }, [handleGetNewPost, setPosts]);
+  useEffect(() => {
+    const handleClickWindow = (e) => {
+      if (untils.current && !untils.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+    if (!showMenu) return;
+    window.addEventListener("click", handleClickWindow);
+    return () => {
+      window.removeEventListener("click", handleClickWindow);
+    };
+  }, [showMenu]);
 
   return (
-    <div className={cx("wrap", { showMenu })}>
+    <div className={cx("wrap", { showMenu })} ref={untils}>
       <ModalUpPost
         show={openModal}
         mergePostsNew={mergePostsNew}
@@ -47,7 +60,12 @@ function UntilsBtnPostPage({ setPosts }) {
       />
       <div className={cx("menu")}>
         <ul className={cx("list")}>
-          <li onClick={() => setOpenModal(true)}>
+          <li
+            onClick={() => {
+              setOpenModal(true);
+              setShowMenu(false);
+            }}
+          >
             <div className="d-flex gap-3">
               <div className={cx("icon")}>
                 <BsPlusSquareDotted />

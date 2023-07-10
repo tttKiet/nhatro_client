@@ -1,27 +1,32 @@
 import { useAuth } from "../../../hooks";
 import { Button, Image } from "react-bootstrap";
 import { ToastContext } from "../../../untils/context";
+import { ReactSortable } from "react-sortablejs";
 import { trackPromise } from "react-promise-tracker";
+import { HiX } from "react-icons/hi";
+import { MoonLoader } from "react-spinners";
 // scss
 import styles from "./FormUpPost.module.scss";
+import PropTypes from "prop-types";
 import classNames from "classNames/bind";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import postServices from "../../../services/postServices";
 const cx = classNames.bind(styles);
 
-function FormUpPost({ handleClose, mergePostsNew }) {
-  const [, , userCur] = useAuth();
+function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
   const toast = useContext(ToastContext);
-  const [rows, setRows] = useState(1);
-  const [content, setContent] = useState();
-  const [hashTag, setHashTag] = useState("#notag");
+  const [, , userCur] = useAuth();
+  const [load, setLoad] = useState(false);
+  const [changed, setChanged] = useState(false);
+  const [content, setContent] = useState(postInfo?.content || "");
+  const [hashTag, setHashTag] = useState(postInfo?.hashTag || "#notag");
   const [files, setFiles] = useState([]);
-  const [filesUrl, setFilesUrl] = useState([]);
+  const [filesUrl, setFilesUrl] = useState(postInfo?.images || []);
+  const refInput = useRef(null);
 
   const handleSetContent = (e) => {
+    setChanged(true);
     const newValues = e.target.value;
-    const countRows = newValues.match(/\n/g);
-    setRows(countRows ? countRows.length + 1 : 1);
     setContent(newValues);
   };
   const handleSubmit = async (e) => {
@@ -30,24 +35,73 @@ function FormUpPost({ handleClose, mergePostsNew }) {
       return toast.error("Enter the content of the article!");
     }
     const data = {
-      content,
+      content: content.trim(),
       files,
       hashTag,
     };
-    // console.log(data);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-    trackPromise(
-      postServices.createPost({ _id: userCur._id, ...data }),
-      "up_post"
-    ).then(mergePostsNew);
+
+    if (postInfo) {
+      if (!changed)
+        return toast("You don't chnge this post!", {
+          icon: "💔",
+        });
+      data.postId = postInfo?.postId;
+      toast
+        .promise(postServices.editPost({ _id: userCur._id, ...data }), {
+          loading: "Updating...",
+          success: <span>Updated is successfully!</span>,
+          error: <span>Erorr update this post!</span>,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            mergePostsNew(res?.data?.postDoc);
+          }
+        });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      trackPromise(
+        postServices.createPost({ _id: userCur._id, ...data }),
+        "up_post"
+      ).then(mergePostsNew);
+    }
     setContent("");
     setHashTag("#notag");
     setFiles([]);
     setFilesUrl([]);
     handleClose();
+  };
+  const handleInput = () => {
+    if (refInput && refInput.current) {
+      refInput.current.style.height = "24px";
+      refInput.current.style.height = refInput.current.scrollHeight + "px";
+    }
+  };
+
+  const urlToFile = (urlAr) => {
+    setLoad(true);
+    const promises = urlAr.map((img) => fetch(img));
+    return Promise.all(promises)
+      .then((resAr) => {
+        const ress = resAr.map((res) => res.blob());
+
+        return Promise.all(ress);
+      })
+      .then((res) => {
+        const array = res.map(
+          (r) => new File([r], "filename.png", { type: "image/png" })
+        );
+        return Promise.resolve(array);
+      })
+      .catch((err) => {
+        console.log(err);
+        Promise.reject(err);
+      })
+      .finally(() => {
+        setLoad(false);
+      });
   };
 
   const handleChangeInputFile = (e) => {
@@ -67,6 +121,48 @@ function FormUpPost({ handleClose, mergePostsNew }) {
     setFiles((prev) => [...prev, ...filesTarget]);
     setFilesUrl((prev) => [...prev, ...fileUrl]);
   };
+
+  const handleSetList = (newState) => {
+    setFiles(newState);
+    const fileUrl = newState.map((file) => URL.createObjectURL(file));
+    setFilesUrl(() => [...fileUrl]);
+  };
+
+  const handleCLickXImg = (index) => {
+    setChanged(true);
+
+    setFilesUrl((prev) => {
+      const newImgs = [...prev];
+      newImgs.splice(index, 1);
+      return newImgs;
+    });
+    setFiles((prev) => {
+      const newImgs = [...prev];
+      newImgs.splice(index, 1);
+      return newImgs;
+    });
+  };
+
+  useEffect(() => {
+    if (postInfo?.images) {
+      urlToFile(postInfo?.images)
+        .then((res) => {
+          setFiles(res);
+          const fileUrl = res.map((file) => URL.createObjectURL(file));
+          setFilesUrl(fileUrl);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [postInfo?.images]);
+
+  useEffect(() => {
+    if (postInfo?.content) {
+      refInput.current.style.height = refInput.current.scrollHeight + "px";
+    }
+  }, [postInfo?.content]);
+  useEffect(() => {
+    setChanged(false);
+  }, []);
 
   return (
     <form className={cx("wrap")} onSubmit={handleSubmit}>
@@ -109,24 +205,34 @@ function FormUpPost({ handleClose, mergePostsNew }) {
       <div className={cx("body")}>
         <div className={cx("form-gr")}>
           <textarea
+            ref={refInput}
             spellCheck={false}
-            rows={rows}
             value={content}
             onChange={handleSetContent}
             type="text"
             className={cx("input")}
             placeholder="You are think ..."
+            onInput={handleInput}
           />
         </div>
         {filesUrl.length > 0 && (
           <div className={cx("form-gr")}>
-            <div className={cx("images", `layout_${filesUrl.length}`)}>
+            <ReactSortable
+              className={cx("images", `layout_${filesUrl.length}`)}
+              list={files}
+              setList={(newState) => {
+                handleSetList(newState);
+              }}
+            >
               {filesUrl.map((f, i) => (
                 <div key={i} className={cx("img")}>
                   <Image src={f} />
+                  <div className={cx("x")} onClick={() => handleCLickXImg(i)}>
+                    <HiX />
+                  </div>
                 </div>
               ))}
-            </div>
+            </ReactSortable>
           </div>
         )}
       </div>
@@ -136,7 +242,10 @@ function FormUpPost({ handleClose, mergePostsNew }) {
           name="hash-tag"
           id="hash-tag"
           value={hashTag}
-          onChange={(e) => setHashTag(e.target.value)}
+          onChange={(e) => {
+            setHashTag(e.target.value);
+            setChanged(true);
+          }}
         >
           <option value="#notag">Hash Tag</option>
           <option value="#findmotel">#findmotel</option>
@@ -156,19 +265,32 @@ function FormUpPost({ handleClose, mergePostsNew }) {
         />
       </div>
       <div className={cx("submit")}>
-        <Button
-          variant="secondary"
-          className={cx("cancel")}
-          onClick={handleClose}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" className={cx("up")}>
-          Up here
-        </Button>
+        <div className={cx("load ")}>{load && <MoonLoader size={18} />}</div>
+        <div className="d-flex gap-2">
+          <Button
+            variant="secondary"
+            className={cx("cancel")}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className={cx("up")}
+            disabled={load || !changed}
+          >
+            {postInfo ? "Save change" : " Up here"}
+          </Button>
+        </div>
       </div>
     </form>
   );
 }
+
+FormUpPost.propTypes = {
+  handleClose: PropTypes.func,
+  mergePostsNew: PropTypes.func,
+  postInfo: PropTypes.object,
+};
 
 export default FormUpPost;

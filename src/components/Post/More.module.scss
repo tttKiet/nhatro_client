@@ -70,7 +70,8 @@
           margin-top: 4px;
         }
 
-        a {
+        a,
+        button {
           user-select: none;
           display: flex;
           justify-content: flex-start;
@@ -90,6 +91,16 @@
           &:hover {
             background-color: rgb(204 204 204 / 36%);
           }
+          &:active {
+            background-color: rgba(204, 204, 204, 0.732);
+          }
+        }
+
+        button {
+          background-color: transparent;
+          border: none !important;
+          outline: none;
+          width: 100%;
         }
       }
     }

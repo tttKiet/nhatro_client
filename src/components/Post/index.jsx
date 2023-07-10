@@ -15,6 +15,7 @@ import CommentsBox from "../CommentsBox";
 const cx = classNames.bind(styles);
 
 function Post({
+  setPosts,
   content,
   images,
   createdAt,
@@ -22,6 +23,7 @@ function Post({
   authorImage,
   hashTag,
   postId,
+  author_id,
 }) {
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
@@ -118,7 +120,20 @@ function Post({
             </span>
           </div>
 
-          <More postId={postId} />
+          <More
+            setPosts={setPosts}
+            postId={postId}
+            postInfo={{
+              content,
+              images,
+              author_id: author_id,
+              createdAt,
+              authorName,
+              authorImage,
+              hashTag,
+              postId,
+            }}
+          />
         </header>
         <main className={cx("main")}>
           <div className={cx("content")}>
@@ -260,6 +275,7 @@ Post.propTypes = {
   authorName: PropTypes.string,
   authorImage: PropTypes.string,
   hashTag: PropTypes.string,
+  setPosts: PropTypes.func,
   postId: PropTypes.string,
 };
 

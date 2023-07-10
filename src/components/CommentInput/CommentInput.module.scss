@@ -120,9 +120,15 @@
   .input_comment {
     position: absolute;
     top: calc(100% + 8px);
-    left: 50px;
-    z-index: 100000;
+    left: 0px;
+    z-index: 1000;
     // padding: 20px;
     padding-bottom: 20px;
+
+    &.topLeft {
+      left: 50px;
+      bottom: 100%;
+      top: unset;
+    }
   }
 }

@@ -171,6 +171,7 @@ function CommentsBox({ postId, nextMaxCount, showComments }) {
 
       <div className={cx("input_comment")}>
         <CommentInput
+          place="top-left"
           ref={inputRef}
           nextMaxCount={nextMaxCount}
           postId={postId}

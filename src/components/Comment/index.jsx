@@ -4,14 +4,14 @@ import PropTypes from "prop-types";
 
 import { FaCaretRight } from "react-icons/fa";
 import { BsReply } from "react-icons/bs";
-import { VscTriangleRight } from "react-icons/vsc";
+import { VscTriangleRight, VscTriangleUp } from "react-icons/vsc";
 import LoaderCmt from "../LoaderCmt";
 // scss
 import styles from "./Comment.module.scss";
 import classNames from "classNames/bind";
 import CommentInput from "../CommentInput";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { commentServices, userServices } from "../../services";
+import { useCallback, useRef, useState } from "react";
+import { commentServices } from "../../services";
 const cx = classNames.bind(styles);
 
 function Comment({
@@ -242,6 +242,7 @@ function Comment({
 
             {!isChild && showCmt && (
               <div
+                title="Hidden comments"
                 onClick={() => {
                   setChildCmt([]);
                   setShowCmt(false);
@@ -255,7 +256,7 @@ function Comment({
                 }}
                 className={cx("hide_cmt")}
               >
-                [hide comment]
+                [<VscTriangleUp />]
               </div>
             )}
           </div>

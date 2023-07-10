@@ -1,9 +1,11 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 // scss
 import styles from "./PostDetailsPage.module.scss";
 import classNames from "classNames/bind";
 import { SlLike } from "react-icons/sl";
+import { VscTriangleLeft } from "react-icons/vsc";
+
 import CommentsBox from "../../components/CommentsBox";
 import { useCallback, useEffect, useState } from "react";
 import { commentServices, likeServices, postServices } from "../../services";
@@ -16,6 +18,10 @@ import { useAuth } from "../../hooks";
 const cx = classNames.bind(styles);
 
 function PostDetailsPage() {
+  const location = useLocation();
+  const navigation = useNavigate();
+  const { source } = location.state || {};
+
   const { _id } = useParams();
   const [, , user] = useAuth();
   const [likeInfo, setLikeInfo] = useState({
@@ -90,6 +96,12 @@ function PostDetailsPage() {
   return (
     <div className={cx("wrap")}>
       <div className="container">
+        {source && (
+          <div className={cx("back")} onClick={() => navigation(-1)}>
+            <VscTriangleLeft />
+            <span>Back</span>
+          </div>
+        )}
         <div className="row">
           <div className="col-xl-7">
             <div className="p-4">
@@ -189,7 +201,7 @@ function PostDetailsPage() {
           </div>
 
           <div className="col-xl-5">
-            <div className="p-4">
+            <div className="p-4 pe-0">
               <div className={cx("box")}>
                 <h5 className={cx("title")}>
                   Comment <span>({maxCountCmt})</span>

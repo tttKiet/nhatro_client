@@ -4,21 +4,6 @@
 
   .wrap {
     position: relative;
-    .hide_cmt {
-      font-size: 14px;
-      opacity: 0.8;
-      padding-right: 46px;
-      text-align: right;
-      position: absolute;
-      bottom: 14px;
-      right: 12px;
-      cursor: pointer;
-      transition: all 0.2s linear;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
     &.pa {
       &::after {
         display: block;
@@ -96,6 +81,28 @@
       .content {
         max-width: calc(100% - 26px);
         font-size: 14px;
+
+        .hide_cmt {
+          font-size: 14px;
+          opacity: 0.8;
+          position: absolute;
+          z-index: 100;
+          transform: translateX(-50%);
+          bottom: 14px;
+          right: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          transition: all 0.2s linear;
+          svg {
+            font-size: 18px;
+          }
+
+          &:hover {
+            opacity: 1;
+          }
+        }
 
         .loader {
           max-width: calc(100% - 26px);

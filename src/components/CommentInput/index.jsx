@@ -24,7 +24,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 const cx = classNames.bind(styles);
 
 const CommentInput = forwardRef(function (
-  { postId, parentId, send, showComment, setTagUser, nextMaxCount },
+  { postId, place, parentId, send, showComment, setTagUser, nextMaxCount },
   ref
 ) {
   const [, , user] = useAuth();
@@ -187,7 +187,9 @@ const CommentInput = forwardRef(function (
 
       {showIcon && (
         <div
-          className={cx("input_comment", "icons_comment")}
+          className={cx("input_comment", "icons_comment", {
+            topLeft: place === "top-left",
+          })}
           ref={iconsCommentRef}
         >
           <div className={cx("emoji")}>
@@ -210,6 +212,7 @@ CommentInput.propTypes = {
   showComment: PropTypes.func,
   setTagUser: PropTypes.func,
   nextMaxCount: PropTypes.func,
+  place: PropTypes.string,
 };
 
 CommentInput.displayName = "CommentInput";
