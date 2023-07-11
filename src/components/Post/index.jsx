@@ -4,6 +4,7 @@ import Image from "react-bootstrap/Image";
 import Like from "../../assets/svg/like.svg";
 import moment from "moment";
 import ImageLoader from "../ImageLoader";
+import { BsPatchCheck } from "react-icons/bs";
 import { commentServices, likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
 import More from "./more";
@@ -41,6 +42,10 @@ function Post({
 
   const nextMaxCount = useCallback(() => {
     setMaxCount((pre) => pre + 1);
+  }, []);
+
+  const minusMaxCount = useCallback(() => {
+    setMaxCount((pre) => pre - 1);
   }, []);
 
   const toggleLike = () => {
@@ -114,7 +119,9 @@ function Post({
           </div>
           <div className={cx("info")}>
             <div className={cx("user")}>
-              <h5 className={cx("name")}>{authorName}</h5>
+              <h5 className={cx("name", "pe-1")}>{authorName}</h5>
+              {/* Chua handle tich xanh */}
+              <BsPatchCheck color="hsl(214, 89%, 52%)" width={22} />
             </div>
             <span className={cx("time")}>
               {moment(createdAt).startOf("minutes").fromNow()}
@@ -245,6 +252,8 @@ function Post({
         </footer>
 
         <CommentsBox
+          minusMaxCount={minusMaxCount}
+          setShowComments={setShowComments}
           showComments={showComments}
           postId={postId}
           nextMaxCount={nextMaxCount}
