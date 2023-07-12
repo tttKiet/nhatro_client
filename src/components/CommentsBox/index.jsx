@@ -10,10 +10,20 @@ import CommentInput from "../CommentInput";
 
 const cx = classNames.bind(styles);
 
-function CommentsBox({ postId, nextMaxCount, showComments }) {
+function CommentsBox({
+  postId,
+  nextMaxCount,
+  showComments,
+  setShowComments,
+  minusMaxCount,
+}) {
   const coutDoc = useMemo(() => 3, []);
   const [isScroll, setIsScroll] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [editOb, setEditOb] = useState({
+    id: "",
+    value: "",
+  });
   const [cmtPage, setCmtPage] = useState(2);
   const [maxCountCmtParent, setMaxCountCmtParent] = useState(1);
   const inputRef = useRef(null);
@@ -44,6 +54,35 @@ function CommentsBox({ postId, nextMaxCount, showComments }) {
         setLoading(false);
       });
   }, [postId, cmtPage]);
+
+  const handleCLickEditParent = (id, value) => {
+    setEditOb(() => {
+      return { id, value };
+    });
+    if (inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
+  const updateCmtEdit = (updateCmtEdit) => {
+    setCmts((prev) => {
+      const newCmts = prev.map((cmt) => {
+        if (cmt._id === updateCmtEdit._id) return { ...updateCmtEdit };
+        else {
+          return cmt;
+        }
+      });
+      return newCmts;
+    });
+    setEditOb({
+      id: "",
+      value: "",
+    });
+  };
 
   const handleClickMore = useCallback(async () => {
     if (loading) return;
@@ -99,9 +138,12 @@ function CommentsBox({ postId, nextMaxCount, showComments }) {
               <>
                 {cmts.map((cmt) => (
                   <Comment
+                    minusMaxCount={minusMaxCount}
+                    handleCLickEditParent={handleCLickEditParent}
                     id={cmt._id}
                     key={cmt._id}
                     postId={postId}
+                    setCmts={setCmts}
                     user={cmt.user}
                     content={cmt.content}
                     createdAt={cmt.createdAt}
@@ -171,12 +213,14 @@ function CommentsBox({ postId, nextMaxCount, showComments }) {
 
       <div className={cx("input_comment")}>
         <CommentInput
+          editOb={editOb}
+          updateCmtEdit={updateCmtEdit}
           place="top-left"
           ref={inputRef}
           nextMaxCount={nextMaxCount}
           postId={postId}
           send={handleMergeCmt}
-          showComment={() => {}}
+          showComment={() => setShowComments(true)}
         />
       </div>
     </div>
@@ -186,6 +230,8 @@ function CommentsBox({ postId, nextMaxCount, showComments }) {
 CommentsBox.propTypes = {
   postId: PropTypes.string,
   nextMaxCount: PropTypes.func,
+  setShowComments: PropTypes.func,
+  minusMaxCount: PropTypes.func,
   showComments: PropTypes.bool,
 };
 

@@ -2,60 +2,36 @@ import { IoIosMore } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import { HiOutlinePencil } from "react-icons/hi";
-import { BsHeart } from "react-icons/bs";
 import PropTypes from "prop-types";
 
 // scss
 import styles from "./More.module.scss";
 import classNames from "classNames/bind";
 import { useContext, useEffect, useRef, useState } from "react";
-import ModalUpPost from "../modal/ModalUpPost";
 import { useAuth } from "../../hooks";
 import { AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
 import { ToastContext } from "../../untils/context";
-import postServices from "../../services/postServices";
 const cx = classNames.bind(styles);
 
-function More({ postId, details, postInfo, setPosts }) {
+function More({ handleClickEdit, deleteCmt }) {
   const toast = useContext(ToastContext);
   const [, , user] = useAuth();
   const [show, setShow] = useState(false);
-  const [openModalEdit, setOpenModalEdit] = useState(false);
   const menuRef = useRef(null);
   const moreRef = useRef(null);
 
-  const handleClickEdit = () => {
-    setShow(false);
-    setOpenModalEdit(true);
-  };
+  // const handleClickEdit = () => {
+  //   setShow(false);
+  //   setOpenModalEdit(true);
+  // };
 
-  const handleDeletePost = (offToastId) => {
-    toast.dismiss(offToastId);
-    toast
-      .promise(postServices.deletePost(postId), {
-        loading: "Deleting...",
-        success: <span>Deleted!</span>,
-        error: <span>Could not delete.</span>,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          setPosts((prev) => {
-            let index;
-            for (let i = 0; i < prev.length; i++) {
-              if (prev[i]._id === postId) {
-                index = i;
-                break;
-              }
-            }
-            const newPosts = [...prev];
-            newPosts.splice(index, 1);
-            return newPosts;
-          });
-        }
-      });
+  const clickOk = (id) => {
+    toast.dismiss(id);
+    deleteCmt();
   };
 
   const handleClickDelete = () => {
+    setShow(false);
     toast.success(
       (t) => (
         <div className="d-flex justify-content-center align-items-center">
@@ -63,7 +39,7 @@ function More({ postId, details, postInfo, setPosts }) {
             Are you sure to <b>delete</b>?
           </p>
           <AiOutlineCheckCircle
-            onClick={() => handleDeletePost(t.id)}
+            onClick={() => clickOk(t.id)}
             style={{
               color: "#0075f5",
               fontSize: "20px",
@@ -89,20 +65,6 @@ function More({ postId, details, postInfo, setPosts }) {
     );
   };
 
-  const handleMergePostsEdit = (postEdit) => {
-    setPosts((prev) => {
-      const newPosts = prev.map((v) => {
-        if (v._id === postEdit._id) {
-          return postEdit;
-        } else {
-          return v;
-        }
-      });
-
-      return newPosts;
-    });
-  };
-
   // Toggle show menu
   useEffect(() => {
     const handleClickWindow = (e) => {
@@ -124,12 +86,6 @@ function More({ postId, details, postInfo, setPosts }) {
 
   return (
     <>
-      <ModalUpPost
-        show={openModalEdit}
-        mergePostsNew={handleMergePostsEdit}
-        setShow={setOpenModalEdit}
-        postInfo={postInfo}
-      />
       <div className={cx("more")}>
         <div
           className={cx("icon")}
@@ -150,29 +106,23 @@ function More({ postId, details, postInfo, setPosts }) {
             <path d="M20.685.12c-2.229.424-4.278 1.914-6.181 3.403L5.4 10.94c-2.026 2.291-5.434.62-5.4-2.648V.12h20.684z"></path>
           </svg>
           <ul className={cx("list")}>
-            {user?._id === postInfo?.author_id && (
-              <li className={cx("item")}>
-                <button onClick={handleClickEdit}>
-                  <HiOutlinePencil />
-                  <span className={cx("title")}>Edit</span>
-                </button>
-              </li>
-            )}
-
-            {user?._id === postInfo?.author_id && (
-              <li className={cx("item")}>
-                <button onClick={handleClickDelete}>
-                  <CiTrash />
-                  <span className={cx("title")}>Delete</span>
-                </button>
-              </li>
-            )}
+            <li className={cx("item")}>
+              <button
+                onClick={() => {
+                  handleClickEdit();
+                  setShow(false);
+                }}
+              >
+                <HiOutlinePencil />
+                <span className={cx("title")}>Edit</span>
+              </button>
+            </li>
 
             <li className={cx("item")}>
-              <Link to={`/post/${postId}`}>
-                <BsHeart />
-                <span className={cx("title")}>Save</span>
-              </Link>
+              <button onClick={handleClickDelete}>
+                <CiTrash />
+                <span className={cx("title")}>Delete</span>
+              </button>
             </li>
           </ul>
         </div>

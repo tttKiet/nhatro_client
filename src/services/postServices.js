@@ -40,6 +40,15 @@ const postServices = {
     }
   },
 
+  async deletePost(_id) {
+    try {
+      const res = await axios.delete(`/api/v1/post/${_id}`);
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+
   async getPostPage({ page = 1 }) {
     try {
       const res = await axios.get(`/api/v1/posts?page=${page}`);

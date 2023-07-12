@@ -10,25 +10,35 @@ import LoaderCmt from "../LoaderCmt";
 import styles from "./Comment.module.scss";
 import classNames from "classNames/bind";
 import CommentInput from "../CommentInput";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useContext, useRef, useState } from "react";
 import { commentServices } from "../../services";
+import More from "./more";
+import { useAuth } from "../../hooks";
+import { ToastContext } from "../../untils/context";
 const cx = classNames.bind(styles);
 
 function Comment({
   postId,
   content,
-  createdAt,
+  // createdAt,
+  // child,
   updatedAt,
   user,
-  child,
   isChild,
   onclickRes,
   id,
   countChildren = 0,
   commentParent,
   focusInput,
+  onclickEditCmtChild,
+  handleCLickEditParent,
   nextMaxCount,
+  deleteCmtPa,
+  setCmts,
+  minusMaxCount,
 }) {
+  const [, , userCurr] = useAuth();
+  const toast = useContext(ToastContext);
   const [showInput, setShowInput] = useState(false);
   const [showText, setShowText] = useState(false);
   const [showCmt, setShowCmt] = useState(false);
@@ -36,6 +46,10 @@ function Comment({
   const responseRef = useRef(null);
   const inputRef = useRef(null);
   let textCommentRef = useRef(null);
+  const [editOb, setEditOb] = useState({
+    id: "",
+    value: "",
+  });
   const [loading, setLoading] = useState(false);
   const [childCmt, setChildCmt] = useState([]);
   const [countChild, setCountChild] = useState(countChildren);
@@ -61,21 +75,28 @@ function Comment({
     });
   };
 
-  const handleClickRes = () => {
-    if (onclickRes) {
-      onclickRes(user.fullName);
+  const updateCmtEdit = (newCmt) => {
+    setChildCmt((prev) => {
+      const newCmts = prev.map((cmt) => {
+        if (cmt._id === newCmt._id) return { ...newCmt };
+        else {
+          return cmt;
+        }
+      });
+      return newCmts;
+    });
+    setEditOb({
+      id: "",
+      value: "",
+    });
+  };
+
+  const handleClickEdit = () => {
+    if (onclickEditCmtChild) {
+      onclickEditCmtChild(id, content);
       focusInput();
     } else {
-      setShowInput(true);
-      setTagUser(user.fullName);
-      if (inputRef.current && textCommentRef.current) {
-        // console.log([textCommentRef.current, textCommentRef]);
-        // textCommentRef.current.focus();
-        // // inputRef.current.scrollIntoView({
-        // //   behavior: "smooth",
-        // //   block: "center",
-        // // });
-      }
+      handleCLickEditParent(id, content);
       setTimeout(() => {
         if (inputRef.current && textCommentRef.current) {
           textCommentRef.current.focus();
@@ -86,6 +107,83 @@ function Comment({
         }
       }, 0);
     }
+  };
+
+  const handleClickRes = () => {
+    if (onclickRes) {
+      onclickRes(user.fullName);
+      focusInput();
+    } else {
+      setShowInput(true);
+      setTagUser(user.fullName);
+      setTimeout(() => {
+        if (inputRef.current && textCommentRef.current) {
+          textCommentRef.current.focus();
+          inputRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 0);
+    }
+  };
+
+  const onclickEditCmt = (id, value) => {
+    setEditOb(() => {
+      return { id, value: value };
+    });
+  };
+
+  const handleClickDeleteCmt = () => {
+    if (!isChild && deleteCmtPa) {
+      deleteCmtPa(id);
+    } else {
+      deleteCmt(id);
+    }
+  };
+
+  const deleteCmt = (_id) => {
+    toast
+      .promise(commentServices.deleteComment(_id), {
+        loading: "Deleting...",
+        success: <span>Deleted!</span>,
+        error: <span>Could not Delete!.</span>,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          minusMaxCount();
+          if (!isChild) {
+            setCmts((prev) => {
+              let index;
+              for (let i = 0; i < prev.length; i++) {
+                if (prev[i]._id === _id) {
+                  index = i;
+                  break;
+                }
+              }
+              const newCmts = [...prev];
+              newCmts.splice(index, 1);
+              return newCmts;
+            });
+          } else {
+            setChildCmt((prev) => {
+              let index;
+              for (let i = 0; i < prev.length; i++) {
+                if (prev[i]._id === _id) {
+                  index = i;
+                  break;
+                }
+              }
+              const newCmts = [...prev];
+              newCmts.splice(index, 1);
+              return newCmts;
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleClickViewMoreChildCmt = () => {
@@ -190,6 +288,12 @@ function Comment({
                   </pre>
                 </div>
               </div>
+              {user?._id === userCurr._id && (
+                <More
+                  handleClickEdit={handleClickEdit}
+                  deleteCmt={handleClickDeleteCmt}
+                />
+              )}
             </div>
             <div className={cx("actives")}>
               <div
@@ -220,6 +324,7 @@ function Comment({
             </div>
             {childCmt.map((cmt, index) => (
               <Comment
+                deleteCmtPa={deleteCmt}
                 id={cmt._id}
                 isChild={true}
                 key={index}
@@ -231,9 +336,11 @@ function Comment({
                 updatedAt={cmt.updatedAt}
                 child={cmt.child}
                 focusInput={focus}
+                onclickEditCmtChild={onclickEditCmt}
                 onclickRes={(fullName) => handleClickResponseChild(fullName)}
               />
             ))}
+
             {loading && (
               <div className={cx("loader")}>
                 <LoaderCmt />
@@ -287,6 +394,8 @@ function Comment({
         <div className={cx("commentInput")} ref={inputRef}>
           <div className={cx("comment_enter")}>
             <CommentInput
+              editOb={editOb}
+              updateCmtEdit={updateCmtEdit}
               ref={textCommentRef}
               parentId={id}
               send={handleMergeCmtChild}
@@ -315,6 +424,11 @@ Comment.propTypes = {
   commentParent: PropTypes.object,
   focusInput: PropTypes.func,
   nextMaxCount: PropTypes.func,
+  onclickEditCmtChild: PropTypes.func,
+  handleCLickEditParent: PropTypes.func,
+  deleteCmtPa: PropTypes.func,
+  setCmts: PropTypes.func,
+  minusMaxCount: PropTypes.func,
 };
 
 export default Comment;

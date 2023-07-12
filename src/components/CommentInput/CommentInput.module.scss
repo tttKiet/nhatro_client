@@ -43,8 +43,18 @@
       transition: all 0.2s ease-in-out;
       position: relative;
 
+      .edit {
+        padding: 4px 10px;
+        font-size: 14px;
+
+        .title {
+          font-weight: 700;
+        }
+      }
+
       .input {
         padding: 4px 10px;
+        position: relative;
         .input_com {
           height: 24px;
           width: 100%;

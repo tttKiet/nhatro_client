@@ -19,18 +19,30 @@ const configEmoji = {
 // scss
 import styles from "./CommentInput.module.scss";
 import classNames from "classNames/bind";
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useContext, useEffect, useRef, useState } from "react";
+import { ToastContext } from "../../untils/context";
 //
 const cx = classNames.bind(styles);
 
 const CommentInput = forwardRef(function (
-  { postId, place, parentId, send, showComment, setTagUser, nextMaxCount },
+  {
+    postId,
+    place,
+    parentId,
+    send,
+    showComment,
+    setTagUser,
+    nextMaxCount,
+    editOb,
+    updateCmtEdit,
+  },
   ref
 ) {
   const [, , user] = useAuth();
   const inputRef = useRef(null);
+  const toast = useContext(ToastContext);
   const iconsCommentRef = useRef(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(editOb?.value || "");
   const [focus, setFocus] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
 
@@ -75,6 +87,29 @@ const CommentInput = forwardRef(function (
       setTagUser("");
     }
 
+    if (editOb?.id) {
+      return toast
+        .promise(commentServices.editComment(editOb.id, content), {
+          loading: "Saving...",
+          success: <span>change saved!</span>,
+          error: <span>Could not save.</span>,
+        })
+        .then((res) => {
+          console.log(res);
+          setFocus(false);
+          setContent("");
+          setShowIcon(false);
+          nextMaxCount();
+          if (showComment) {
+            showComment();
+          }
+          updateCmtEdit(res?.data.newComment);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     const data = {
       content: content.trim(),
       postId,
@@ -84,7 +119,6 @@ const CommentInput = forwardRef(function (
     commentServices
       .createCmt({ ...data })
       .then((response) => {
-        console.log(response);
         if (response.status === 200 && response.data.err === 0) {
           setFocus(false);
           setContent("");
@@ -102,6 +136,12 @@ const CommentInput = forwardRef(function (
   };
 
   useEffect(() => {
+    if (editOb?.value) {
+      setContent(editOb.value);
+    }
+  }, [editOb?.value]);
+
+  useEffect(() => {
     const handleClick = (e) => {
       const isIcon = e.target.closest(".icons_comment, .icon-open, .main_icon");
       if (!isIcon) {
@@ -114,6 +154,7 @@ const CommentInput = forwardRef(function (
       window.removeEventListener("click", handleClick);
     };
   }, []);
+
   useEffect(() => {
     if (showIcon && iconsCommentRef.current) {
       iconsCommentRef.current.scrollIntoView({
@@ -122,6 +163,7 @@ const CommentInput = forwardRef(function (
       });
     }
   }, [showIcon]);
+
   return (
     <div className={cx("wrap")}>
       <div className={cx("layout")}>
@@ -147,6 +189,11 @@ const CommentInput = forwardRef(function (
           </div>
         </div>
         <div className={cx("main", "main_icon")}>
+          {editOb?.id && (
+            <div className={cx("edit")}>
+              <span className={cx("title")}>Edit:</span> {editOb.id}
+            </div>
+          )}
           <div className={cx("input")}>
             <textarea
               onInput={handleInput}
@@ -213,6 +260,8 @@ CommentInput.propTypes = {
   setTagUser: PropTypes.func,
   nextMaxCount: PropTypes.func,
   place: PropTypes.string,
+  updateCmtEdit: PropTypes.func,
+  editOb: PropTypes.object,
 };
 
 CommentInput.displayName = "CommentInput";

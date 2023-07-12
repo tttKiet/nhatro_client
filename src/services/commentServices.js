@@ -1,4 +1,3 @@
-import { flushSync } from "react-dom";
 import axios from "../axios";
 
 const commentServices = {
@@ -21,6 +20,16 @@ const commentServices = {
     const res = await axios.get(
       `/api/v1/comment/${parentId}/child?page=${page}&type=${all}`
     );
+    return res;
+  },
+
+  async editComment(id, content) {
+    const res = await axios.patch(`/api/v1/comment/${id}`, { content });
+    return res;
+  },
+
+  async deleteComment(id) {
+    const res = await axios.delete(`/api/v1/comment/${id}`);
     return res;
   },
 
