@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import NavLeftMyPost from "../../components/navs/NavLeftMyPost";
 import { useAuth } from "../../hooks";
 import { favouritePostServices, postServices } from "../../services";
 import styles from "./MyFavouritePostPage.module.scss";
 import classNames from "classNames/bind";
 import FavouritePost from "../../components/FavouritePost";
+import { VscTriangleLeft } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +17,7 @@ function MyFavouritePostPage() {
   const [posts, setPosts] = useState([]);
   const [fvPost, setFvPost] = useState([]);
   const [isFilter, setIsFilter] = useState(false);
+  const navigate = useNavigate();
 
   const mergePostsNew = () => {
     postServices
@@ -30,7 +33,7 @@ function MyFavouritePostPage() {
       });
   };
 
-  const getFavouritePost = async () => {
+  const getFavouritePost = useCallback(async () => {
     try {
       const res = await favouritePostServices.getFavouritePost(user._id);
       if (res.err === 0) {
@@ -44,7 +47,7 @@ function MyFavouritePostPage() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [user._id]);
 
   function handleChangeSelect(e) {
     if (e.target.value === "newest" && !isFilter) {
@@ -65,7 +68,7 @@ function MyFavouritePostPage() {
 
   useEffect(() => {
     getFavouritePost();
-  }, []);
+  }, [getFavouritePost]);
 
   return (
     <div className={cx("wrap")}>
@@ -74,9 +77,13 @@ function MyFavouritePostPage() {
       </div>
       <div className={cx("my-favourite-post")}>
         <div className="container">
+          <div className={cx("back")} onClick={() => navigate(-1)}>
+            <VscTriangleLeft />
+            <span>Back</span>
+          </div>
           {/* filter */}
           <div className="row ">
-            <div className="mb-3 d-flex flex-row-reverse">
+            <div className="mb-3 d-flex flex-row-reverse w-100">
               <div style={{ width: "120px" }}>
                 <select
                   ref={selectRef}

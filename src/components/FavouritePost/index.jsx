@@ -13,6 +13,7 @@ import { ToastContext } from "../../untils/context";
 import { useAuth } from "../../hooks";
 import PropTypes from "prop-types";
 import { favouritePostServices } from "../../services";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 function FavouritePost({ post, getFvPost }) {
@@ -73,11 +74,6 @@ function FavouritePost({ post, getFvPost }) {
     );
   }
 
-  // View details
-  function handleViewDetails() {
-    toast.success("Coming Soon!");
-  }
-
   return (
     <div className={cx("wrap")}>
       <div className={cx("favourite-post", "shadow-sm mb-3")}>
@@ -103,12 +99,15 @@ function FavouritePost({ post, getFvPost }) {
 
           {/* Action */}
           <div>
-            <button
-              onClick={() => handleViewDetails()}
-              className={cx("btn-action", "bg-primary shadow-sm")}
+            <Link
+              to={`/post/${post.postId._id}`}
+              state={{ source: "other-page" }}
             >
-              View <AiOutlineEye className="fs-l"></AiOutlineEye>
-            </button>
+              <button className={cx("btn-action", "bg-primary shadow-sm")}>
+                View <AiOutlineEye className="fs-l"></AiOutlineEye>
+              </button>
+            </Link>
+
             <button
               onClick={() => handleToggleConfirm(user._id, post._id)}
               className={cx("btn-action", "shadow-sm")}

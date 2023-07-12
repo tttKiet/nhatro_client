@@ -23,6 +23,7 @@ function MyProfile() {
   const [fileUrl, setFileUrl] = useState([]);
   const [showModalAvatar, setShowModalAvatar] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalIsOpen, setIsOpen] = useState(
     searchParams.get("modal") == "open" ? true : false
@@ -69,6 +70,7 @@ function MyProfile() {
     async function handleUploadAvatar() {
       setIsUploaded(false);
       toast.loading("Uploading avatar...");
+      setIsLoading(true);
       let imgToDelete;
       if (userInfo.avatar.includes("https:")) {
         imgToDelete = userInfo.avatar;
@@ -86,6 +88,7 @@ function MyProfile() {
           toast.success("Upload avatar successfully");
           setIsUploaded(true);
           setShowModalAvatar(false);
+          setIsLoading(false);
         } else {
           toast.dismiss();
           toast.error("Wrong");
@@ -111,6 +114,7 @@ function MyProfile() {
         </div>
         <div className="d-flex justify-content-end">
           <button
+            disabled={isLoading}
             onClick={() => handleUploadAvatar(file)}
             className="btn  btn-primary  "
             style={{ width: "30px", margin: "16px" }}
@@ -146,8 +150,11 @@ function MyProfile() {
       ></ModalCustom>
       <div className={cx("avt-info")}>
         <div className={cx("contai")}>
+          {/* avatar */}
           <div className={cx("avt")}>
-            {userInfo?.avatar?.includes("https:") ? (
+            {/* avatar-img */}
+
+            {!isLoading && userInfo?.avatar?.includes("https:") ? (
               <Image src={userInfo?.avatar} />
             ) : (
               <div className={cx("svg")}>

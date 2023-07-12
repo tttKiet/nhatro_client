@@ -5,7 +5,7 @@ import styles from "./AnotherProfilePage.module.scss";
 import classNames from "classNames/bind";
 import {
   BsEnvelopeFill,
-  BsFillCalendarEventFill,
+  BsFillFilePostFill,
   BsHouseFill,
   BsMapFill,
   BsMessenger,
@@ -110,12 +110,18 @@ function AnotherProfilePage() {
               <div className={cx("user")}>
                 <h2 className="m-0 fw-bold mb-1">
                   {strangeUser?.fullName}
-                  <BsPatchCheck
-                    className="ms-2 mb-1 fs-xl"
-                    style={{ color: "hsl(214, 89%, 52%)" }}
-                  ></BsPatchCheck>
+                  {strangeUser?.type === "user" &&
+                    strangeUser?.emailVerified && (
+                      <BsPatchCheck
+                        className="ms-2 mb-1 fs-xl"
+                        style={{ color: "hsl(214, 89%, 52%)" }}
+                      ></BsPatchCheck>
+                    )}
                 </h2>
-                <p className="text-body-tertiary fs-m">520K người theo dõi</p>
+                <p className="text-body-tertiary fs-m">
+                  Has joined since &nbsp;
+                  {moment(strangeUser.createdAt).format("MMM Do YY")}
+                </p>
               </div>
               <div className={cx("message")}>
                 <button className={cx("message-btn", "me-2")}>
@@ -186,11 +192,10 @@ function AnotherProfilePage() {
 
               {strangeUser?.createdAt && (
                 <p className="fs-m d-flex align-items-center">
-                  <BsFillCalendarEventFill
+                  <BsFillFilePostFill
                     className={cx("icon")}
-                  ></BsFillCalendarEventFill>{" "}
-                  Joined &nbsp;
-                  {moment(strangeUser.createdAt).format("MMM Do YY")}
+                  ></BsFillFilePostFill>{" "}
+                  Has had {posts.posts?.length} posts.
                 </p>
               )}
             </div>

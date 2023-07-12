@@ -14,6 +14,7 @@ import { useAuth } from "../../hooks";
 import { AiOutlineCheckCircle, AiOutlineDelete } from "react-icons/ai";
 import { ToastContext } from "../../untils/context";
 import postServices from "../../services/postServices";
+import { favouritePostServices } from "../../services";
 const cx = classNames.bind(styles);
 
 function More({ postId, details, postInfo, setPosts }) {
@@ -88,6 +89,23 @@ function More({ postId, details, postInfo, setPosts }) {
       }
     );
   };
+
+  async function handleSavePost(postId) {
+    try {
+      const res = await favouritePostServices.addFavouritePost(
+        user._id,
+        postId
+      );
+      if (res.err === 0) {
+        toast.success(res.message);
+        setShow(false);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleMergePostsEdit = (postEdit) => {
     setPosts((prev) => {
@@ -168,11 +186,18 @@ function More({ postId, details, postInfo, setPosts }) {
               </li>
             )}
 
-            <li className={cx("item")}>
+            {/* <li className={cx("item")}>
               <Link to={`/post/${postId}`}>
                 <BsHeart />
                 <span className={cx("title")}>Save</span>
               </Link>
+            </li> */}
+
+            <li className={cx("item")}>
+              <button onClick={() => handleSavePost(postId)}>
+                <BsHeart />
+                <span className={cx("title")}>Save</span>
+              </button>
             </li>
           </ul>
         </div>
