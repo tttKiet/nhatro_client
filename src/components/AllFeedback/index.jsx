@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks";
 import { feedbackService } from "../../services";
 import styles from "./AllFeedback.module.scss";
@@ -20,8 +20,9 @@ function AllFeedback() {
   const columnHelper = createColumnHelper();
   const toast = useContext(ToastContext);
 
-  const getFeedback = async () => {
+  const getFeedback = useCallback(async () => {
     try {
+      console.log("first");
       const res = await feedbackService.getAllFeedback(user._id);
       if (res.err === 0) {
         // {
@@ -43,7 +44,7 @@ function AllFeedback() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [user._id]);
 
   // Confirm and remove favourite post
   function ToggleToastConfirm(userId, fbId) {
@@ -99,7 +100,7 @@ function AllFeedback() {
 
   useEffect(() => {
     getFeedback();
-  }, []);
+  }, [getFeedback]);
 
   const columns = useMemo(
     () => [
