@@ -51,6 +51,7 @@ function PostPage() {
   useEffect(() => {
     postServices.getPostPage({ page: 1 }).then((res) => {
       if (res?.status === 200) {
+        // console.log(res.data.data.posts);
         setPosts([...res.data.data.posts]);
         setMaxDocPost(res.data.data.limit);
       }
@@ -92,6 +93,7 @@ function PostPage() {
                 {posts.map((post, index) => (
                   <Suspense key={index} fallback={<PrevPost />}>
                     <PostLazy
+                      userEmailVerified={post?.user?.emailVerified || false}
                       setPosts={setPosts}
                       content={post.content}
                       createdAt={post.createdAt}

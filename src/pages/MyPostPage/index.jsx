@@ -107,11 +107,11 @@ function MyPostPage() {
                     <BarLoading />
                   </div>
                 )}
-                {console.log(posts)}
                 {posts.length > 0 ? (
                   posts.map((post, index) => (
                     <Suspense key={index} fallback={<PrevPost />}>
                       <PostLazy
+                        userEmailVerified={post?.user?.emailVerified || false}
                         setPosts={setPosts}
                         content={post?.content}
                         createdAt={post?.createdAt}

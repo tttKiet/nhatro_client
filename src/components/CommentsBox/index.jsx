@@ -25,13 +25,39 @@ function CommentsBox({
     value: "",
   });
   const [cmtPage, setCmtPage] = useState(2);
-  const [maxCountCmtParent, setMaxCountCmtParent] = useState(1);
   const inputRef = useRef(null);
-  const [cmts, setCmts] = useState([]);
+  const [maxCountCmtParent, setMaxCountCmtParent] = useState(); // All comments no reply
+  const [cmts, setCmts] = useState([]); // All comments of post
   const body = useRef(null);
 
   const handleMergeCmt = (newCmt) => {
     setCmts((prev) => [newCmt, ...prev]);
+  };
+
+  const handleMinusOneCmt = (type) => {
+    minusMaxCount();
+
+    if (type !== -1) {
+      commentServices
+        .getComment(postId, Math.ceil(cmts.length / 3))
+        .then((res) => {
+          if (res.status === 200 && res.data.err === 0) {
+            const leng = res?.data?.data.length;
+            if (maxCountCmtParent > 3 && leng > 0) {
+              setCmts((prev) => {
+                if (
+                  prev?.[prev.length - 1]._id ===
+                  res?.data?.data?.[leng - 1]._id
+                ) {
+                  return prev;
+                }
+                return [...prev, res?.data?.data?.[leng - 1]];
+              });
+            }
+            setMaxCountCmtParent(res.data.count);
+          }
+        });
+    }
   };
 
   const nextPageCmt = useCallback(() => {
@@ -138,7 +164,7 @@ function CommentsBox({
               <>
                 {cmts.map((cmt) => (
                   <Comment
-                    minusMaxCount={minusMaxCount}
+                    minusMaxCount={handleMinusOneCmt}
                     handleCLickEditParent={handleCLickEditParent}
                     id={cmt._id}
                     key={cmt._id}
@@ -158,6 +184,13 @@ function CommentsBox({
                   <div className="pe-4">
                     <LoaderCmt />
                   </div>
+                )}
+
+                {console.log("maxCountCmtParent", maxCountCmtParent)}
+                {console.log(" cmts.length", cmts.length)}
+                {console.log(
+                  " cmts.Math.round(cmts.length / 3)",
+                  Math.ceil(cmts.length / 3)
                 )}
 
                 {maxCountCmtParent > cmts.length && (
@@ -220,7 +253,11 @@ function CommentsBox({
           nextMaxCount={nextMaxCount}
           postId={postId}
           send={handleMergeCmt}
-          showComment={() => setShowComments(true)}
+          showComment={() => {
+            if (setShowComments) {
+              setShowComments(true);
+            }
+          }}
         />
       </div>
     </div>
