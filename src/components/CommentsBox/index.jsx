@@ -5,7 +5,7 @@ import Comment from "../Comment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { commentServices } from "../../services";
 import LoaderCmt from "../LoaderCmt";
-import { TbLoader, TbLoaderQuarter } from "react-icons/tb";
+import { TbLoaderQuarter } from "react-icons/tb";
 import CommentInput from "../CommentInput";
 
 const cx = classNames.bind(styles);
@@ -18,33 +18,77 @@ function CommentsBox({
   minusMaxCount,
 }) {
   const coutDoc = useMemo(() => 3, []);
-  const [isScroll, setIsScroll] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editOb, setEditOb] = useState({
     id: "",
     value: "",
   });
   const [cmtPage, setCmtPage] = useState(2);
-  const [maxCountCmtParent, setMaxCountCmtParent] = useState(1);
   const inputRef = useRef(null);
-  const [cmts, setCmts] = useState([]);
+  const [maxCountCmtParent, setMaxCountCmtParent] = useState(); // All comments no reply
+  const [cmts, setCmts] = useState([]); // All comments of post
   const body = useRef(null);
 
   const handleMergeCmt = (newCmt) => {
     setCmts((prev) => [newCmt, ...prev]);
+    setMaxCountCmtParent((prev) => prev + 1);
+  };
+
+  const isDuplicate = useCallback(
+    (arr, item) => arr.some((el) => el._id === item._id),
+    []
+  );
+
+  const handleMinusOneCmt = (type) => {
+    minusMaxCount();
+
+    if (type !== -1) {
+      commentServices
+        .getComment(postId, Math.ceil(cmts.length / 3))
+        .then((res) => {
+          if (res.status === 200 && res.data.err === 0) {
+            const leng = res?.data?.data.length;
+            if (maxCountCmtParent > 3 && leng > 0) {
+              setCmts((prev) => {
+                if (
+                  prev?.[prev.length - 1]._id ===
+                  res?.data?.data?.[leng - 1]._id
+                ) {
+                  return prev;
+                }
+                return [...prev, res?.data?.data?.[leng - 1]];
+              });
+            }
+            setMaxCountCmtParent(res.data.count);
+          }
+        });
+    }
   };
 
   const nextPageCmt = useCallback(() => {
-    if (coutDoc * cmtPage < maxCountCmtParent) setCmtPage((v) => v + 1);
+    if (coutDoc * cmtPage < maxCountCmtParent) {
+      setCmtPage((v) => v + 1);
+    }
   }, [cmtPage, coutDoc, maxCountCmtParent]);
 
   const getCmts = useCallback(() => {
     setLoading(true);
     commentServices
-      .getComment(postId, cmtPage)
+      .getComment(postId, Math.round(cmts.length / 3) + 1)
       .then((res) => {
         if (res.status === 200 && res.data.err === 0) {
-          setCmts((cmt) => [...cmt, ...res.data.data]);
+          setCmts((cmt) => {
+            const newCmts = [...cmt];
+            console.log("newCmts", newCmts);
+            res.data.data.forEach((c) => {
+              if (!isDuplicate(newCmts, c)) {
+                newCmts.push(c);
+              }
+            });
+            console.log("after", newCmts);
+
+            return newCmts;
+          });
         }
       })
       .catch((err) => {
@@ -53,7 +97,7 @@ function CommentsBox({
       .finally(() => {
         setLoading(false);
       });
-  }, [postId, cmtPage]);
+  }, [postId, cmts.length, isDuplicate]);
 
   const handleCLickEditParent = (id, value) => {
     setEditOb(() => {
@@ -85,40 +129,13 @@ function CommentsBox({
   };
 
   const handleClickMore = useCallback(async () => {
-    if (loading) return;
-    await getCmts();
-    nextPageCmt();
-  }, [getCmts, loading, nextPageCmt]);
-
-  const handleClickMoreAll = () => {
-    handleClickMore();
-    setIsScroll(true);
-  };
-
-  const handleScroll = useCallback(() => {
-    const scrollHeight = body.current.scrollHeight;
-    const scrollTop = body.current.scrollTop;
-    const clientHeight = body.current.clientHeight;
-
-    if (scrollTop + clientHeight + 10 >= scrollHeight && !loading) {
-      handleClickMore();
-    }
-  }, [handleClickMore, loading]);
-
-  useEffect(() => {
-    if (cmts.length >= maxCountCmtParent) {
+    if (cmts.length >= maxCountCmtParent || loading) {
       return;
+    } else {
+      await getCmts();
+      nextPageCmt();
     }
-    if (isScroll && body.current) {
-      body.current.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (body.current && isScroll) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        body.current.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isScroll, handleScroll, cmts.length, maxCountCmtParent]);
+  }, [cmts.length, getCmts, loading, maxCountCmtParent, nextPageCmt]);
 
   useEffect(() => {
     commentServices.getComment(postId, 1).then((res) => {
@@ -138,7 +155,7 @@ function CommentsBox({
               <>
                 {cmts.map((cmt) => (
                   <Comment
-                    minusMaxCount={minusMaxCount}
+                    minusMaxCount={handleMinusOneCmt}
                     handleCLickEditParent={handleCLickEditParent}
                     id={cmt._id}
                     key={cmt._id}
@@ -154,11 +171,18 @@ function CommentsBox({
                     nextMaxCount={nextMaxCount}
                   />
                 ))}
-                {loading && (
+                {/* {loading && (
                   <div className="pe-4">
                     <LoaderCmt />
                   </div>
-                )}
+                )} */}
+
+                {/* {console.log("maxCountCmtParent", maxCountCmtParent)}
+                {console.log(" cmts.length", cmts.length)}
+                {console.log(
+                  " cmts.Math.round(cmts.length / 3)",
+                  Math.ceil(cmts.length / 3)
+                )} */}
 
                 {maxCountCmtParent > cmts.length && (
                   <div className="d-flex my-3 ps-3">
@@ -169,16 +193,6 @@ function CommentsBox({
                       view more
                       <div className={cx("show_more_cmt-icon")}>
                         <TbLoaderQuarter />
-                      </div>
-                    </div>
-
-                    <div
-                      className={cx("show_more_cmt")}
-                      onClick={handleClickMoreAll}
-                    >
-                      view all
-                      <div className={cx("show_more_cmt-icon")}>
-                        <TbLoader />
                       </div>
                     </div>
                   </div>
@@ -220,7 +234,11 @@ function CommentsBox({
           nextMaxCount={nextMaxCount}
           postId={postId}
           send={handleMergeCmt}
-          showComment={() => setShowComments(true)}
+          showComment={() => {
+            if (setShowComments) {
+              setShowComments(true);
+            }
+          }}
         />
       </div>
     </div>

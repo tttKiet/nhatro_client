@@ -14,6 +14,8 @@ import More from "../../components/Post/more";
 import moment from "moment";
 import Image from "react-bootstrap/Image";
 import { useAuth } from "../../hooks";
+import { BsPatchCheck } from "react-icons/bs";
+import EmailVerified from "../../components/EmailVerified";
 
 const cx = classNames.bind(styles);
 
@@ -47,6 +49,14 @@ function PostDetailsPage() {
       .catch((err) => {
         console.log(err);
       });
+  }, [_id]);
+
+  const minusMaxCount = useCallback(() => {
+    commentServices.getLimitComments(_id).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setMaxCountCmt(res.data.countCmt);
+      }
+    });
   }, [_id]);
 
   const nextMaxCount = useCallback(() => {
@@ -102,6 +112,7 @@ function PostDetailsPage() {
             <span>Back</span>
           </div>
         )}
+
         <div className="row">
           <div className="col-xl-7">
             <div className="p-4">
@@ -130,6 +141,7 @@ function PostDetailsPage() {
                 <div className={cx("info")}>
                   <div className={cx("user")}>
                     <h5 className={cx("name")}>{postInfo?.user?.fullName}</h5>
+                    {postInfo?.user?.emailVerified && <EmailVerified />}
                   </div>
                   <span className={cx("time")}>
                     {moment(postInfo?.createdAt).startOf("minutes").fromNow()}
@@ -207,6 +219,7 @@ function PostDetailsPage() {
                   Comment <span>({maxCountCmt})</span>
                 </h5>
                 <CommentsBox
+                  minusMaxCount={minusMaxCount}
                   showComments={true}
                   nextMaxCount={nextMaxCount}
                   postId={_id}

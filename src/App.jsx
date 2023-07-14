@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProviderGetUserLogin from "./components/ProviderGetUserLogin";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "moment-timezone";
+import { Tooltip } from "react-tooltip";
 import moment from "moment";
 moment().format("MMM Do YY");
 // react alert2 animation
@@ -121,6 +122,7 @@ function App() {
               </ToastBar>
             )}
           </Toaster>
+          <Tooltip style={{ zIndex: 1000 }} anchorSelect=".check" />
           <RouterProvider router={route} />
         </ToastContext.Provider>
       </GlobalStyles>

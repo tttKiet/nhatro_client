@@ -15,6 +15,7 @@ import { commentServices } from "../../services";
 import More from "./more";
 import { useAuth } from "../../hooks";
 import { ToastContext } from "../../untils/context";
+import EmailVerified from "../EmailVerified";
 const cx = classNames.bind(styles);
 
 function Comment({
@@ -36,6 +37,7 @@ function Comment({
   deleteCmtPa,
   setCmts,
   minusMaxCount,
+  setChildCmtPa,
 }) {
   const [, , userCurr] = useAuth();
   const toast = useContext(ToastContext);
@@ -151,7 +153,8 @@ function Comment({
       })
       .then((res) => {
         if (res.status === 200) {
-          minusMaxCount();
+          if (minusMaxCount) minusMaxCount();
+
           if (!isChild) {
             setCmts((prev) => {
               let index;
@@ -166,7 +169,8 @@ function Comment({
               return newCmts;
             });
           } else {
-            setChildCmt((prev) => {
+            setChildCmtPa((prev) => {
+              console.log("prev: ", prev);
               let index;
               for (let i = 0; i < prev.length; i++) {
                 if (prev[i]._id === _id) {
@@ -255,7 +259,10 @@ function Comment({
             <div className={cx("contai")}>
               <div className={cx("main")}>
                 <div className={cx("info")}>
-                  <h4 className={cx("author")}>{user?.fullName}</h4>
+                  <h4 className={cx("author")}>
+                    {user?.fullName}
+                    {true && <EmailVerified />}
+                  </h4>
 
                   {commentParent && commentParent._id !== user._id && (
                     <>
@@ -327,6 +334,7 @@ function Comment({
                 deleteCmtPa={deleteCmt}
                 id={cmt._id}
                 isChild={true}
+                minusMaxCount={() => minusMaxCount(-1)}
                 key={index}
                 postId={postId}
                 user={cmt.user}
@@ -335,6 +343,7 @@ function Comment({
                 createdAt={cmt.createdAt}
                 updatedAt={cmt.updatedAt}
                 child={cmt.child}
+                setChildCmtPa={setChildCmt}
                 focusInput={focus}
                 onclickEditCmtChild={onclickEditCmt}
                 onclickRes={(fullName) => handleClickResponseChild(fullName)}
@@ -429,6 +438,7 @@ Comment.propTypes = {
   deleteCmtPa: PropTypes.func,
   setCmts: PropTypes.func,
   minusMaxCount: PropTypes.func,
+  setChildCmtPa: PropTypes.func,
 };
 
 export default Comment;

@@ -4,7 +4,6 @@ import Image from "react-bootstrap/Image";
 import Like from "../../assets/svg/like.svg";
 import moment from "moment";
 import ImageLoader from "../ImageLoader";
-import { BsPatchCheck } from "react-icons/bs";
 import { commentServices, likeServices, postServices } from "../../services";
 import { useAuth } from "../../hooks";
 import More from "./more";
@@ -14,6 +13,7 @@ import styles from "./Post.module.scss";
 import classNames from "classNames/bind";
 import CommentsBox from "../CommentsBox";
 import { Link } from "react-router-dom";
+import EmailVerified from "../EmailVerified";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -26,6 +26,7 @@ function Post({
   hashTag,
   postId,
   author_id,
+  userEmailVerified,
 }) {
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
@@ -45,8 +46,12 @@ function Post({
   }, []);
 
   const minusMaxCount = useCallback(() => {
-    setMaxCount((pre) => pre - 1);
-  }, []);
+    commentServices.getLimitComments(postId).then((res) => {
+      if (res.status === 200 && res.data.err === 0) {
+        setMaxCount(res.data.countCmt);
+      }
+    });
+  }, [postId]);
 
   const toggleLike = () => {
     likeServices
@@ -119,9 +124,8 @@ function Post({
           </div>
           <div className={cx("info")}>
             <div className={cx("user")}>
-              <h5 className={cx("name", "pe-1")}>{authorName}</h5>
-              {/* Chua handle tich xanh */}
-              <BsPatchCheck color="hsl(214, 89%, 52%)" width={22} />
+              <h5 className={cx("name", "pt-1")}>{authorName}</h5>
+              {userEmailVerified && <EmailVerified />}
             </div>
             <span className={cx("time")}>
               {moment(createdAt).startOf("minutes").fromNow()}
@@ -273,6 +277,7 @@ Post.propTypes = {
   setPosts: PropTypes.func,
   postId: PropTypes.string,
   author_id: PropTypes.string,
+  userEmailVerified: PropTypes.bool,
 };
 
 export default Post;
