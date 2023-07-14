@@ -438,6 +438,7 @@ Comment.propTypes = {
   deleteCmtPa: PropTypes.func,
   setCmts: PropTypes.func,
   minusMaxCount: PropTypes.func,
+  setChildCmtPa: PropTypes.func,
 };
 
 export default Comment;

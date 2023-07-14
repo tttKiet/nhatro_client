@@ -5,7 +5,7 @@ import Comment from "../Comment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { commentServices } from "../../services";
 import LoaderCmt from "../LoaderCmt";
-import { TbLoader, TbLoaderQuarter } from "react-icons/tb";
+import { TbLoaderQuarter } from "react-icons/tb";
 import CommentInput from "../CommentInput";
 
 const cx = classNames.bind(styles);
@@ -18,7 +18,6 @@ function CommentsBox({
   minusMaxCount,
 }) {
   const coutDoc = useMemo(() => 3, []);
-  const [isScroll, setIsScroll] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editOb, setEditOb] = useState({
     id: "",
@@ -32,7 +31,13 @@ function CommentsBox({
 
   const handleMergeCmt = (newCmt) => {
     setCmts((prev) => [newCmt, ...prev]);
+    setMaxCountCmtParent((prev) => prev + 1);
   };
+
+  const isDuplicate = useCallback(
+    (arr, item) => arr.some((el) => el._id === item._id),
+    []
+  );
 
   const handleMinusOneCmt = (type) => {
     minusMaxCount();
@@ -61,16 +66,29 @@ function CommentsBox({
   };
 
   const nextPageCmt = useCallback(() => {
-    if (coutDoc * cmtPage < maxCountCmtParent) setCmtPage((v) => v + 1);
+    if (coutDoc * cmtPage < maxCountCmtParent) {
+      setCmtPage((v) => v + 1);
+    }
   }, [cmtPage, coutDoc, maxCountCmtParent]);
 
   const getCmts = useCallback(() => {
     setLoading(true);
     commentServices
-      .getComment(postId, cmtPage)
+      .getComment(postId, Math.round(cmts.length / 3) + 1)
       .then((res) => {
         if (res.status === 200 && res.data.err === 0) {
-          setCmts((cmt) => [...cmt, ...res.data.data]);
+          setCmts((cmt) => {
+            const newCmts = [...cmt];
+            console.log("newCmts", newCmts);
+            res.data.data.forEach((c) => {
+              if (!isDuplicate(newCmts, c)) {
+                newCmts.push(c);
+              }
+            });
+            console.log("after", newCmts);
+
+            return newCmts;
+          });
         }
       })
       .catch((err) => {
@@ -79,7 +97,7 @@ function CommentsBox({
       .finally(() => {
         setLoading(false);
       });
-  }, [postId, cmtPage]);
+  }, [postId, cmts.length, isDuplicate]);
 
   const handleCLickEditParent = (id, value) => {
     setEditOb(() => {
@@ -111,40 +129,13 @@ function CommentsBox({
   };
 
   const handleClickMore = useCallback(async () => {
-    if (loading) return;
-    await getCmts();
-    nextPageCmt();
-  }, [getCmts, loading, nextPageCmt]);
-
-  const handleClickMoreAll = () => {
-    handleClickMore();
-    setIsScroll(true);
-  };
-
-  const handleScroll = useCallback(() => {
-    const scrollHeight = body.current.scrollHeight;
-    const scrollTop = body.current.scrollTop;
-    const clientHeight = body.current.clientHeight;
-
-    if (scrollTop + clientHeight + 10 >= scrollHeight && !loading) {
-      handleClickMore();
-    }
-  }, [handleClickMore, loading]);
-
-  useEffect(() => {
-    if (cmts.length >= maxCountCmtParent) {
+    if (cmts.length >= maxCountCmtParent || loading) {
       return;
+    } else {
+      await getCmts();
+      nextPageCmt();
     }
-    if (isScroll && body.current) {
-      body.current.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      if (body.current && isScroll) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        body.current.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [isScroll, handleScroll, cmts.length, maxCountCmtParent]);
+  }, [cmts.length, getCmts, loading, maxCountCmtParent, nextPageCmt]);
 
   useEffect(() => {
     commentServices.getComment(postId, 1).then((res) => {
@@ -180,18 +171,18 @@ function CommentsBox({
                     nextMaxCount={nextMaxCount}
                   />
                 ))}
-                {loading && (
+                {/* {loading && (
                   <div className="pe-4">
                     <LoaderCmt />
                   </div>
-                )}
+                )} */}
 
-                {console.log("maxCountCmtParent", maxCountCmtParent)}
+                {/* {console.log("maxCountCmtParent", maxCountCmtParent)}
                 {console.log(" cmts.length", cmts.length)}
                 {console.log(
                   " cmts.Math.round(cmts.length / 3)",
                   Math.ceil(cmts.length / 3)
-                )}
+                )} */}
 
                 {maxCountCmtParent > cmts.length && (
                   <div className="d-flex my-3 ps-3">
@@ -202,16 +193,6 @@ function CommentsBox({
                       view more
                       <div className={cx("show_more_cmt-icon")}>
                         <TbLoaderQuarter />
-                      </div>
-                    </div>
-
-                    <div
-                      className={cx("show_more_cmt")}
-                      onClick={handleClickMoreAll}
-                    >
-                      view all
-                      <div className={cx("show_more_cmt-icon")}>
-                        <TbLoader />
                       </div>
                     </div>
                   </div>
