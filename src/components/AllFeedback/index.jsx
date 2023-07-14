@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks";
 import { feedbackService } from "../../services";
 import styles from "./AllFeedback.module.scss";
@@ -20,13 +20,11 @@ function AllFeedback() {
   const columnHelper = createColumnHelper();
   const toast = useContext(ToastContext);
 
-  const getFeedback = async () => {
+  const getFeedback = useCallback(async () => {
     try {
+      console.log("first");
       const res = await feedbackService.getAllFeedback(user._id);
       if (res.err === 0) {
-        // {
-        //   console.log("feedback", res.data);
-        // }
         setFeedbacks(
           res.data.map((feedback, index) => ({
             _id: feedback._id,
@@ -43,7 +41,7 @@ function AllFeedback() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [user._id]);
 
   // Confirm and remove favourite post
   function ToggleToastConfirm(userId, fbId) {
@@ -99,7 +97,7 @@ function AllFeedback() {
 
   useEffect(() => {
     getFeedback();
-  }, []);
+  }, [getFeedback]);
 
   const columns = useMemo(
     () => [
@@ -150,6 +148,19 @@ function AllFeedback() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  if (feedbacks.length === 0) {
+    return (
+      <div className={cx("wrap-alert")}>
+        <button type="button" className="btn btn-secondary position-relative">
+          You don&apos;t have any feedback
+          <span className="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+            <span className="visually-hidden">New alerts</span>
+          </span>
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className={cx("wrap")}>

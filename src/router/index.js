@@ -39,6 +39,7 @@ const MyPostPage = lazy(() => import("../pages/MyPostPage"));
 const PostDetailsPage = lazy(() => import("../pages/PostDetailsPage"));
 
 const MyFavouritePostPage = lazy(() => import("../pages/MyFavouritePostPage"));
+const AnotherProfilePage = lazy(() => import("../pages/AnotherProfilePage"));
 
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -131,6 +132,13 @@ const router = [
     isProtected: true,
     layout: "None",
     element: MyFavouritePostPage,
+  },
+
+  {
+    path: "/user/:_id",
+    isProtected: true,
+    layout: DefaultLayout,
+    element: AnotherProfilePage,
   },
 
   // Admin router [The Van]

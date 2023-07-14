@@ -1,10 +1,26 @@
 .wrap{
-    margin-top: 30px;
+    margin: 30px 0;
     --width-nav: 420px;
     .my-favourite-post{
         margin-left: calc(var(--width-nav) + 20px);
         margin-right: 116px;
 
+        .back {
+          width: 100px;
+          font-size: 16px;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 4px;
+          user-select: none;
+          opacity: 0.7;
+          transition: all 0.2s ease;
+          cursor: pointer;
+      
+          &:hover {
+            opacity: 1;
+          }
+        }
         
     }
 }
@@ -25,6 +41,13 @@
       margin-right: 0;
 
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .back {
+    margin-left: 40px;
+    margin-top: 10px;
   }
 }
 

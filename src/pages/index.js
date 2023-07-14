@@ -23,6 +23,7 @@ export { default as RootViewAccountPermissions } from "./RootViewAccountPermissi
 export { default as UserHomePage } from "./UserHomePage";
 export { default as MyPostPage } from "./MyPostPage";
 export { default as UserProfilePage } from "./UserProfilePage";
+export { default as AnotherProfilePage } from "./AnotherProfilePage";
 
 // Admin pages
 export { default as AdminHomePage } from "./AdminHomePage";
