@@ -91,6 +91,7 @@ function MyFavouritePostPage() {
                   className="form-select p-2 rounded-3 border border-primary-subtle shadow-sm border-1"
                   aria-label="Default select example"
                   defaultValue="all"
+                  disabled={fvPost.length > 0 ? false : true}
                 >
                   <option value="all">All</option>
                   <option value="newest">Newest</option>
@@ -100,14 +101,22 @@ function MyFavouritePostPage() {
             </div>
           </div>
 
+          {fvPost.length === 0 && (
+            <p className="fst-italic mt-3 shadow-sm p-3 border text-center rounded-3">
+              {" "}
+              You don&apos;t have any favourite post!{" "}
+            </p>
+          )}
+
           {/* Favourite post */}
-          {fvPost.map((post, index) => (
-            <FavouritePost
-              key={index}
-              post={post}
-              getFvPost={() => getFavouritePost()}
-            ></FavouritePost>
-          ))}
+          {fvPost.length > 0 &&
+            fvPost.map((post, index) => (
+              <FavouritePost
+                key={index}
+                post={post}
+                getFvPost={() => getFavouritePost()}
+              ></FavouritePost>
+            ))}
         </div>
       </div>
     </div>

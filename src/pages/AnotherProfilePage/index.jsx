@@ -21,6 +21,7 @@ import { postServices } from "../../services";
 
 import ErrorPage from "../ErrorPage";
 import moment from "moment";
+import { PulseLoader } from "react-spinners";
 
 const cx = classNames.bind(styles);
 
@@ -75,9 +76,17 @@ function AnotherProfilePage() {
     return <ErrorPage></ErrorPage>;
   }
 
+  if (Object.keys(strangeUser).length === 0) {
+    return (
+      <div className="h-100 w-100 d-flex justify-content-center align-items-center mt-5">
+        <PulseLoader color="rgb(120, 193, 243)" margin={6} size={30} />
+      </div>
+    );
+  }
+
   return (
     <div>
-      {console.log("post", strangeUser)}
+      {console.log("strangeUser", strangeUser)}
       <div className={cx("wrap-all", "shadow-sm")}>
         <div className={cx("wrap", "container")}>
           <div className={cx("upper")}>
