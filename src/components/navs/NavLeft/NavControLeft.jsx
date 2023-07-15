@@ -1,12 +1,11 @@
 import classNames from "classNames/bind";
 import styles from "./NavLeft.module.scss";
-import { GiCaptainHatProfile } from "react-icons/gi";
-import { HiOutlineMail } from "react-icons/hi";
-import { BsFileEarmark, BsHouse } from "react-icons/bs";
+import { HiOutlineMail, HiOutlineUserCircle } from "react-icons/hi";
+import { BsFileEarmark, BsHouse, BsTrash } from "react-icons/bs";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { TbBrandBooking } from "react-icons/tb";
 import { TiArrowBack } from "react-icons/ti";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdLogout, MdOutlineAdminPanelSettings } from "react-icons/md";
 
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -15,6 +14,7 @@ import { userServices } from "../../../services";
 import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../../hooks";
+import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
 function NavControlLeft({ setActive, active }) {
@@ -60,7 +60,7 @@ function NavControlLeft({ setActive, active }) {
             className={cx({ active: active === "my-profile" })}
             to={`/profile?tag=my-profile`}
           >
-            <GiCaptainHatProfile />
+            <HiOutlineUserCircle />
             My profile
           </Link>
         </li>
@@ -111,11 +111,52 @@ function NavControlLeft({ setActive, active }) {
         </li>
       </ul>
 
-      <div className="d-flex flex-column gap-1 mb-5">
-        <button className={cx("button-user-profile")}>Delete account</button>
-        <button onClick={handleLogout} className={cx("button-user-profile")}>
-          Sign out
+      <div className="d-flex flex-column align-items-center justify-content-center gap-3 mb-5">
+        {/* <a
+          data-tooltip-id="my-tooltip"
+          data-tooltip-content="Hello world!"
+          data-tooltip-variant="success"
+        >
+          <p className="text-light">test tooltip</p>
+        </a>
+        <Tooltip id="my-tooltip" /> */}
+        {/* <button className={cx("button-user-profile")}>
+          <BsTrash className="fs-l ms-1"></BsTrash>
+        </button> */}
+
+        <button className={cx("btn")}>
+          <div>
+            <span>
+              <p className="m-0 text-center">
+                <BsTrash className="fs-l"></BsTrash>
+              </p>
+            </span>
+          </div>
+          <div>
+            <span>
+              <p className="m-0 text-center fs-m">Delete account</p>
+            </span>
+          </div>
         </button>
+
+        <button onClick={handleLogout} className={cx("btn")}>
+          <div>
+            <span>
+              <p className="m-0 text-center">
+                <MdLogout className="fs-l "></MdLogout>
+              </p>
+            </span>
+          </div>
+          <div>
+            <span>
+              <p className="m-0 text-center fs-m">Logout</p>
+            </span>
+          </div>
+        </button>
+
+        {/* <button onClick={handleLogout} className={cx("button-user-profile")}>
+          Sign out <MdLogout className="fs-l ms-1"></MdLogout>
+        </button> */}
       </div>
     </div>
   );

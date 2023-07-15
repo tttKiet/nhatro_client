@@ -2,7 +2,7 @@ import { useAuth } from "../../../hooks";
 import { useContext, useState } from "react";
 import { ToastContext } from "../../../untils/context";
 import { useFormik } from "formik";
-import { cloudinaryServices, reqRoomOwnerServices } from "../../../services";
+import { reqRoomOwnerServices } from "../../../services";
 // scss
 import styles from "./ModalReqOwner.module.scss";
 import classNames from "classNames/bind";
@@ -56,103 +56,34 @@ function ModalReqOwner({ setActiveTab }) {
     return errors;
   };
 
-  const convertBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
-  async function uploadSingleImage(base64) {
-    const res = await cloudinaryServices.uploadImage(base64);
-    return res;
-  }
-
-  async function uploadMultipleImages(images) {
-    const res = await cloudinaryServices.uploadImages(images);
-    return res;
-  }
-
   const handleSubmit = async (values) => {
-    const handlePromise = new Promise((resolve, reject) => {
-      try {
-        const { images } = values;
-        const convertedImages = [];
-        for (const image of images) {
-          try {
-            const convertedImage = convertBase64(image);
-            convertedImages.push(convertedImage);
-          } catch (error) {
-            reject(error);
-          }
-        }
-        Promise.all(convertedImages)
-          .then(async (convertFromPromise) => {
-            let res;
-            try {
-              if (convertFromPromise.length === 1) {
-                res = await uploadSingleImage(convertFromPromise[0]);
-              } else if (convertFromPromise.length > 1) {
-                res = await uploadMultipleImages(convertFromPromise);
-              }
-              if (res.err === 0) {
-                const data = {
-                  ...values,
-                  images: Array.isArray(res.data)
-                    ? res.data.filter((i) => i.err === 0).map((img) => img.data)
-                    : [res.data],
-                };
+    try {
+      toast.loading("Creating...");
+      const dataCreate = {
+        files: values.images,
+        data: {
+          name: values.name,
+          address: values.address,
+          phone: values.phone,
+          electric: values.electric,
+          water: values.water,
+          description: values.description,
+          userId: user._id,
+        },
+      };
 
-                try {
-                  const response =
-                    await reqRoomOwnerServices.createReqBoardHouse(
-                      data,
-                      user._id
-                    );
-                  if (response.err === 0) {
-                    formik.resetForm();
-                    setImgs([]);
-
-                    resolve();
-                  }
-                } catch (error) {
-                  console.log(error);
-                  reject(error);
-                }
-
-                resolve(data);
-              }
-            } catch (res) {
-              toast.error(res?.response?.data?.message);
-              console.log(res);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            reject(err);
-          });
-      } catch (error) {
-        console.log(error);
-
-        reject(error);
+      const res = await reqRoomOwnerServices.createReqBoardHouse(dataCreate);
+      if (res.err === 0) {
+        formik.resetForm();
+        setImgs([]);
+        toast.dismiss();
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
       }
-    });
-
-    toast
-      .promise(handlePromise, {
-        loading: <>This process will take a few minutes...</>,
-        success: <i>Payloaded!</i>,
-        error: <b>Could not request!.</b>,
-      })
-      .then(() => setActiveTab("information"));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const formik = useFormik({

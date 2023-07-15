@@ -16,6 +16,7 @@ import Image from "react-bootstrap/Image";
 import { useAuth } from "../../hooks";
 import { BsPatchCheck } from "react-icons/bs";
 import EmailVerified from "../../components/EmailVerified";
+import ModalFullScreen from "../../components/Post/ModalFullScreen";
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,15 @@ function PostDetailsPage() {
   const [postInfo, setPostInfo] = useState({});
   const [maxCountCmt, setMaxCountCmt] = useState();
   const [showText, setShowText] = useState(false);
+  const [showFullImg, setShowFullImg] = useState(false);
+  const [imgToView, setImgToView] = useState([]);
+
+  function handleViewFullImg(index) {
+    const imgsClone = [...postInfo.images];
+    [imgsClone[0], imgsClone[index]] = [imgsClone[index], imgsClone[0]];
+    setImgToView(imgsClone);
+    setShowFullImg(true);
+  }
 
   const toggleShowText = () => {
     setShowText((s) => !s);
@@ -105,6 +115,11 @@ function PostDetailsPage() {
 
   return (
     <div className={cx("wrap")}>
+      <ModalFullScreen
+        imgToView={imgToView}
+        show={showFullImg}
+        onHide={() => setShowFullImg(false)}
+      ></ModalFullScreen>
       <div className="container">
         {source && (
           <div className={cx("back")} onClick={() => navigation(-1)}>
@@ -115,7 +130,7 @@ function PostDetailsPage() {
 
         <div className="row">
           <div className="col-xl-7">
-            <div className="p-4">
+            <div className="mt-2 p-4 bg-white rounded-3">
               <header className={cx("header")}>
                 <div className={cx("avatar")}>
                   <div className={cx("img")}>
@@ -189,7 +204,11 @@ function PostDetailsPage() {
                     )}
                   >
                     {postInfo.images.map((image, index) => (
-                      <div key={index} className={cx("img")}>
+                      <div
+                        key={index}
+                        className={cx("img")}
+                        onClick={() => handleViewFullImg(index)}
+                      >
                         <ImageLoader image={{ src: image }} />
                       </div>
                     ))}

@@ -30,6 +30,7 @@ function AnotherProfilePage() {
   const [isError, setIsError] = useState(false);
   const [posts, setPosts] = useState([]);
   const [strangeUser, setStrangeUser] = useState([]);
+  const [isEmptyPost, setIsEmptyPost] = useState(false);
 
   const coverImg = [
     "https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547_1280.jpg",
@@ -67,8 +68,13 @@ function AnotherProfilePage() {
   }, [getPost, _id]);
 
   useEffect(() => {
-    if (posts.length !== 0) {
-      setStrangeUser(posts.posts[0].user);
+    console.log("posts", posts);
+    if (posts && posts.length !== 0) {
+      if (posts.posts.length > 0) {
+        setStrangeUser(posts.posts[0].user);
+      } else {
+        setIsEmptyPost(true);
+      }
     }
   }, [posts, setPosts]);
 
@@ -76,7 +82,7 @@ function AnotherProfilePage() {
     return <ErrorPage></ErrorPage>;
   }
 
-  if (Object.keys(strangeUser).length === 0) {
+  if (!isEmptyPost && Object.keys(strangeUser).length === 0) {
     return (
       <div className="h-100 w-100 d-flex justify-content-center align-items-center mt-5">
         <PulseLoader color="rgb(120, 193, 243)" margin={6} size={30} />
@@ -84,9 +90,13 @@ function AnotherProfilePage() {
     );
   }
 
+  if (isEmptyPost) {
+    return <h1>Errorr</h1>;
+  }
+
   return (
     <div>
-      {console.log("strangeUser", strangeUser)}
+      {/* {console.log("strangeUser", strangeUser)} */}
       <div className={cx("wrap-all", "shadow-sm")}>
         <div className={cx("wrap", "container")}>
           <div className={cx("upper")}>
@@ -109,7 +119,7 @@ function AnotherProfilePage() {
                   <ImageLazy
                     className={cx("avatar-img")}
                     src={
-                      strangeUser?.avatar
+                      strangeUser?.avatar.length > 0
                         ? strangeUser?.avatar
                         : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
                     }
@@ -151,33 +161,37 @@ function AnotherProfilePage() {
       {/* Content */}
       <div className="container-xl">
         <div className={cx("content", "row")}>
-          <div className={cx("introduce", "col-xxl-5 col-lg-4  shadow")}>
+          <div className={cx("introduce", "col-xxl-5 col-lg-4  ")}>
             <div className={cx("title")}>
               <p className="fs-xl fw-bold mb-1">Introduce</p>
-              <p className="fs-m text-center mb-1 fst-italic">
-                {strangeUser?.bio}
-              </p>
+              {strangeUser?.bio.length > 0 && (
+                <p className="fs-m text-center mb-1 fst-italic">
+                  {strangeUser?.bio}
+                </p>
+              )}
             </div>
 
             <div className={cx("about")}>
-              <p className="fs-m d-flex align-items-center">
-                <BsPostcardHeartFill
-                  className={cx("icon")}
-                ></BsPostcardHeartFill>
-                {strangeUser?.personalities?.map((item, index) => (
-                  <span
-                    key={index}
-                    className="badge rounded me-2"
-                    style={{
-                      background: "#78C1F3",
-                      color: "white",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </p>
+              {strangeUser?.personalities.length > 0 && (
+                <p className="fs-m d-flex align-items-center">
+                  <BsPostcardHeartFill
+                    className={cx("icon")}
+                  ></BsPostcardHeartFill>
+                  {strangeUser?.personalities?.map((item, index) => (
+                    <span
+                      key={index}
+                      className="badge rounded me-2"
+                      style={{
+                        background: "#78C1F3",
+                        color: "white",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </p>
+              )}
 
               <p className="fs-m d-flex align-items-center">
                 <BsEnvelopeFill className={cx("icon")}></BsEnvelopeFill>{" "}
@@ -189,10 +203,12 @@ function AnotherProfilePage() {
                 {strangeUser?.address}
               </p>
 
-              <p className="fs-m d-flex align-items-center">
-                <BsHouseFill className={cx("icon")}></BsHouseFill> Was studying
-                at {strangeUser?.school}
-              </p>
+              {strangeUser?.school.length > 0 && (
+                <p className="fs-m d-flex align-items-center">
+                  <BsHouseFill className={cx("icon")}></BsHouseFill> Was
+                  studying at {strangeUser?.school}
+                </p>
+              )}
 
               <p className="fs-m d-flex align-items-center">
                 <BsTelephoneFill className={cx("icon")}></BsTelephoneFill>{" "}
@@ -209,9 +225,11 @@ function AnotherProfilePage() {
               )}
             </div>
           </div>
+
           <div className={cx("post-wrap", "col-xxl-7 col-lg-8 col-md-12")}>
             {posts.posts?.map((post) => (
               <Post
+                size="lg"
                 key={post._id}
                 content={post?.content}
                 createdAt={post?.createdAt}
