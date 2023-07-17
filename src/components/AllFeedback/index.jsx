@@ -22,7 +22,6 @@ function AllFeedback() {
 
   const getFeedback = useCallback(async () => {
     try {
-      console.log("first");
       const res = await feedbackService.getAllFeedback(user._id);
       if (res.err === 0) {
         setFeedbacks(

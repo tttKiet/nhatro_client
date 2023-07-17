@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks";
 import { boardHouseServices } from "../../../services/";
 import CheckUpdateBoardHouse from "../../CheckUpdateBoardHouse";
+import ErrorPage from "../../../pages/ErrorPage";
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children }) {
@@ -17,7 +18,7 @@ function AdminLayout({ children }) {
     if (response.err == 0) {
       setBoardHouse(response.data);
     } else {
-      console.log(response.err);
+      console.log(response);
     }
   }
 
@@ -26,7 +27,7 @@ function AdminLayout({ children }) {
   }, [dataAdmin._id]);
 
   if (dataAdmin.type !== "admin") {
-    return <h1>You are not admin</h1>;
+    return <ErrorPage></ErrorPage>;
   }
 
   let shouldRenderUpdateBoardHouse = false;

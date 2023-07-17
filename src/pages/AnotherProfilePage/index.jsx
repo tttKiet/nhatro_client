@@ -1,6 +1,5 @@
 import { Image } from "react-bootstrap";
-import { useCallback, useEffect, useState, Suspense, lazy } from "react";
-const ImageLazy = lazy(() => import("react-bootstrap/Image"));
+import { useCallback, useEffect, useState } from "react";
 import styles from "./AnotherProfilePage.module.scss";
 import classNames from "classNames/bind";
 import {
@@ -17,7 +16,7 @@ import {
 
 import Post from "../../components/Post";
 import { useParams } from "react-router-dom";
-import { postServices } from "../../services";
+import { postServices, userServices } from "../../services";
 
 import ErrorPage from "../ErrorPage";
 import moment from "moment";
@@ -30,7 +29,7 @@ function AnotherProfilePage() {
   const [isError, setIsError] = useState(false);
   const [posts, setPosts] = useState([]);
   const [strangeUser, setStrangeUser] = useState([]);
-  const [isEmptyPost, setIsEmptyPost] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const coverImg = [
     "https://cdn.pixabay.com/photo/2018/08/14/13/23/ocean-3605547_1280.jpg",
@@ -53,6 +52,9 @@ function AnotherProfilePage() {
       const res = await postServices.getPostUser({ _author: _id });
       if (res.data.err === 0) {
         setPosts(res.data.data);
+        if (res.data.data.posts.length === 0) {
+          setIsEmpty(true);
+        }
         setIsError(false);
       } else {
         setIsError(true);
@@ -63,26 +65,42 @@ function AnotherProfilePage() {
     }
   }, [_id]);
 
+  const getUserById = async () => {
+    try {
+      const res = await userServices.getUserById(_id);
+      if (res.err === 0) {
+        setStrangeUser(res.dataUser);
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getPost();
   }, [getPost, _id]);
 
   useEffect(() => {
-    console.log("posts", posts);
+    // console.log("posts", posts);
     if (posts && posts.length !== 0) {
       if (posts.posts.length > 0) {
         setStrangeUser(posts.posts[0].user);
       } else {
-        setIsEmptyPost(true);
+        getUserById();
       }
     }
+    // else {
+    //   getUserById();
+    // }
   }, [posts, setPosts]);
 
   if (isError) {
     return <ErrorPage></ErrorPage>;
   }
 
-  if (!isEmptyPost && Object.keys(strangeUser).length === 0) {
+  if (!isEmpty && Object.keys(strangeUser).length === 0) {
     return (
       <div className="h-100 w-100 d-flex justify-content-center align-items-center mt-5">
         <PulseLoader color="rgb(120, 193, 243)" margin={6} size={30} />
@@ -90,13 +108,14 @@ function AnotherProfilePage() {
     );
   }
 
-  if (isEmptyPost) {
-    return <h1>Errorr</h1>;
-  }
+  // if (isEmpty) {
+  //   return <h1>Errorr</h1>;
+  // }
 
   return (
     <div>
-      {/* {console.log("strangeUser", strangeUser)} */}
+      {console.log("strangeUser", strangeUser)}
+      {console.log("isEmpty", isEmpty)}
       <div className={cx("wrap-all", "shadow-sm")}>
         <div className={cx("wrap", "container")}>
           <div className={cx("upper")}>
@@ -111,20 +130,14 @@ function AnotherProfilePage() {
             {/* Title */}
             <div className={cx("title")}>
               <div className={cx("avatar-wrap")}>
-                <Suspense
-                  fallback={
-                    <BsEnvelopeFill className="fs-xxl"></BsEnvelopeFill>
+                <Image
+                  className={cx("avatar-img")}
+                  src={
+                    strangeUser.avatar && strangeUser.avatar.length > 4
+                      ? strangeUser.avatar
+                      : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
                   }
-                >
-                  <ImageLazy
-                    className={cx("avatar-img")}
-                    src={
-                      strangeUser?.avatar.length > 0
-                        ? strangeUser?.avatar
-                        : "https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
-                    }
-                  ></ImageLazy>
-                </Suspense>
+                ></Image>
               </div>
               <div className={cx("user")}>
                 <h2 className="m-0 fw-bold mb-1">
@@ -164,7 +177,7 @@ function AnotherProfilePage() {
           <div className={cx("introduce", "col-xxl-5 col-lg-4  ")}>
             <div className={cx("title")}>
               <p className="fs-xl fw-bold mb-1">Introduce</p>
-              {strangeUser?.bio.length > 0 && (
+              {strangeUser.bio && (
                 <p className="fs-m text-center mb-1 fst-italic">
                   {strangeUser?.bio}
                 </p>
@@ -172,26 +185,27 @@ function AnotherProfilePage() {
             </div>
 
             <div className={cx("about")}>
-              {strangeUser?.personalities.length > 0 && (
-                <p className="fs-m d-flex align-items-center">
-                  <BsPostcardHeartFill
-                    className={cx("icon")}
-                  ></BsPostcardHeartFill>
-                  {strangeUser?.personalities?.map((item, index) => (
-                    <span
-                      key={index}
-                      className="badge rounded me-2"
-                      style={{
-                        background: "#78C1F3",
-                        color: "white",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </p>
-              )}
+              {strangeUser.personalities &&
+                strangeUser.personalities.length > 0 && (
+                  <p className="fs-m d-flex align-items-center">
+                    <BsPostcardHeartFill
+                      className={cx("icon")}
+                    ></BsPostcardHeartFill>
+                    {strangeUser?.personalities?.map((item, index) => (
+                      <span
+                        key={index}
+                        className="badge rounded me-2"
+                        style={{
+                          background: "#78C1F3",
+                          color: "white",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </p>
+                )}
 
               <p className="fs-m d-flex align-items-center">
                 <BsEnvelopeFill className={cx("icon")}></BsEnvelopeFill>{" "}
@@ -203,7 +217,7 @@ function AnotherProfilePage() {
                 {strangeUser?.address}
               </p>
 
-              {strangeUser?.school.length > 0 && (
+              {strangeUser.school && (
                 <p className="fs-m d-flex align-items-center">
                   <BsHouseFill className={cx("icon")}></BsHouseFill> Was
                   studying at {strangeUser?.school}
@@ -215,7 +229,7 @@ function AnotherProfilePage() {
                 {strangeUser?.phone?.slice(0, 7)}***
               </p>
 
-              {strangeUser?.createdAt && (
+              {!isEmpty && strangeUser?.createdAt && (
                 <p className="fs-m d-flex align-items-center">
                   <BsFillFilePostFill
                     className={cx("icon")}
@@ -227,20 +241,28 @@ function AnotherProfilePage() {
           </div>
 
           <div className={cx("post-wrap", "col-xxl-7 col-lg-8 col-md-12")}>
-            {posts.posts?.map((post) => (
-              <Post
-                size="lg"
-                key={post._id}
-                content={post?.content}
-                createdAt={post?.createdAt}
-                images={post?.images || []}
-                authorName={post?.user.fullName}
-                authorImage={post?.user.avatar}
-                author_id={post?.user._id}
-                hashTag={post?.hashTag}
-                postId={post?._id}
-              ></Post>
-            ))}
+            {isEmpty && (
+              <div className="fs-m h-100 p-2 d-flex flex-column justify-content-center align-items-center shadow-sm w-75 text-center  bg-white rounded-3">
+                <p className="fs-l fst-italic">
+                  This user has not had any posts.
+                </p>
+              </div>
+            )}
+            {!isEmpty &&
+              posts.posts?.map((post) => (
+                <Post
+                  size="lg"
+                  key={post._id}
+                  content={post?.content}
+                  createdAt={post?.createdAt}
+                  images={post?.images || []}
+                  authorName={post?.user.fullName}
+                  authorImage={post?.user.avatar}
+                  author_id={post?.user._id}
+                  hashTag={post?.hashTag}
+                  postId={post?._id}
+                ></Post>
+              ))}
           </div>
         </div>
       </div>

@@ -3,15 +3,18 @@ import styles from "./AdminHomePage.module.scss";
 import classNames from "classNames/bind";
 import { useAuth } from "../../hooks";
 import Notification from "../../components/Notification";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import ErrorPage from "../ErrorPage";
 
 const cx = classNames.bind(styles);
 
 function AdminHomePage() {
   const [, , dataAdmin] = useAuth();
+  const location = useLocation();
+  console.log("location: ", location);
 
   if (dataAdmin.type !== "admin") {
-    return <h1>You are not admin</h1>;
+    return <ErrorPage></ErrorPage>;
   }
 
   return (

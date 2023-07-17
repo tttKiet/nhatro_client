@@ -7,6 +7,7 @@ import { userSlice } from "../../../redux/reducers";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from "../../../hooks";
+import { TbSwitchHorizontal } from "react-icons/tb";
 
 const cx = classNames.bind(styles);
 function AdminNav() {
@@ -99,6 +100,11 @@ function AdminNav() {
           </svg>
           All Rooms
         </Link>
+
+        <button className={cx("link", "btn")}>
+          <TbSwitchHorizontal className="fs-l"></TbSwitchHorizontal>
+          Switch to user page
+        </button>
 
         <button className={cx("link", "btn")} onClick={handleLogout}>
           <svg
