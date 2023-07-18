@@ -52,7 +52,7 @@ function AdminAllRoomsPage() {
   const handleUpdateData = async () => {
     const res = await roomServices.getAllRoomsByAdminId(adminData._id);
     if (res.err === 0) {
-      console.log("res ddata", res.data);
+      // console.log("res ddata", res.data);
       setDataRoom(res.data);
     }
   };
@@ -92,9 +92,6 @@ function AdminAllRoomsPage() {
     }
     setDataRoomToEdit(data);
   }
-
-  // console.log("rooms", rooms);
-  console.log("boardHouse", boardHouse);
 
   const columns = useMemo(
     () => [
@@ -253,7 +250,14 @@ function AdminAllRoomsPage() {
       </div>
 
       <div className="row mt-2">
-        <TableSort data={rooms} columns={columns}></TableSort>
+        {rooms && rooms.length === 0 && (
+          <p className=" mt-5 w-25 m-auto text-center rounded text-bg-primary p-2 shadow">
+            You don&apos;t have any rooms, let&apos;s create it!
+          </p>
+        )}
+        {rooms && rooms.length > 0 && (
+          <TableSort data={rooms} columns={columns}></TableSort>
+        )}
       </div>
 
       {/* Modal create a new room */}

@@ -117,10 +117,9 @@ function RoomForm({
     try {
       const res = await roomServices.updateRoom(id, dataRoom, fileImgs);
       if (res.err === 0) {
+        updateData();
         toast.dismiss();
         toast.success(`Update room successfully`);
-        onDisableClose(true);
-        updateData();
         onHide();
       }
     } catch (error) {
@@ -274,7 +273,8 @@ function RoomForm({
             {isUpdate ? "Update" : "Submit"}
           </button>
         </form>
-        <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
+
+        <div className="col-md-7 d-flex flex-column justify-content-center align-items-center mt-4 ">
           {formik.values.images?.length > 0 ? (
             <Carousel
               selectedItem={formik.values.images?.length - 1}
@@ -314,7 +314,7 @@ function RoomForm({
               ))}
             </Carousel>
           ) : (
-            <div className="alert alert-light shadow">
+            <div className="alert alert-light shadow-sm">
               Imgs were uploaded will show here!
             </div>
           )}

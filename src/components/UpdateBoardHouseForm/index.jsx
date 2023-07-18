@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { boardHouseServices, cloudinaryServices } from "../../services";
+import { boardHouseServices } from "../../services";
 import PropTypes from "prop-types";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
@@ -17,8 +17,9 @@ function UpdateBoardHouseForm({
   data,
   id,
   isCreate,
-  onDisableClose,
   dataExisted,
+  onHide,
+  updateData,
 }) {
   // const [loading, setLoading] = useState(false);
   const [, , adminData] = useAuth();
@@ -78,14 +79,15 @@ function UpdateBoardHouseForm({
           // navigate(`/admin/profile/${adminData?._id}`);
           window.location.reload();
         } else {
-          navigate("/");
+          updateData();
+          onHide();
+          navigate(`/admin/profile/${adminData?._id}`);
         }
       });
     }
   }
 
   async function handleDeleteImage(img) {
-    toast.success("Deleting...");
     setImgToDelete(img);
   }
 
@@ -124,7 +126,6 @@ function UpdateBoardHouseForm({
 
   return (
     <div className={cx("wrap", "row p-3")}>
-      {console.log("formik", formik.values)}
       <form className="col-md-5" onSubmit={formik.handleSubmit}>
         <label htmlFor="name" className="fw-bold">
           Name of board house:
@@ -215,7 +216,11 @@ function UpdateBoardHouseForm({
           <WidgetCloudinary formik={formik}></WidgetCloudinary>
         </div> */}
 
-        <button className="btn btn-primary m-auto" type="submit">
+        <button
+          className="btn btn-primary m-auto"
+          type="submit"
+          disabled={formik.values.images?.length > 0 ? false : true}
+        >
           Submit
         </button>
       </form>
@@ -257,8 +262,9 @@ function UpdateBoardHouseForm({
             ))}
           </Carousel>
         ) : (
-          <div className="alert alert-light shadow">
-            Imgs were uploaded will show here!
+          <div className="alert alert-light rounded-3 shadow text-danger fst-italic fw-bold">
+            You must upload at least two images. If you don&apos;t, you
+            can&apos;t update it.
           </div>
         )}
         <UploadImage
@@ -284,6 +290,8 @@ UpdateBoardHouseForm.propTypes = {
     PropTypes.array,
     PropTypes.string,
   ]),
+  onHide: PropTypes.func,
+  updateData: PropTypes.func,
 };
 
 export default UpdateBoardHouseForm;

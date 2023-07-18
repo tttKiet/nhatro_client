@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks";
 import { useParams } from "react-router-dom";
 import AdminCardRoom from "../../components/AdminCardRoom";
 import ModalCustom from "../../components/ModalCustom";
+import Image from "react-bootstrap/Image";
 
 const cx = classNames.bind(styles);
 
@@ -18,42 +19,65 @@ function AdminProfilePage() {
   const [admin, setAdmin] = useState([]);
   const { id } = useParams();
 
-  async function getAdminData(id) {
-    const res = await userServices.getUserById(id);
-    if (res.err === 0) {
-      setAdmin(res.dataUser);
-      console.log(res.dataUser);
+  // async function getAdminData(id) {
+  //   const res = await userServices.getUserById(id);
+  //   if (res.err === 0) {
+  //     setAdmin(res.dataUser);
+  //   }
+  // }
+
+  const getAdminData = async () => {
+    try {
+      const res = await userServices.getUserById(id);
+      if (res.err === 0) {
+        setAdmin(res.dataUser);
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
+
+  const getBoardHouse = async () => {
+    try {
+      const res = await boardHouseServices.getBoardHouseById(id);
+      setRooms(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    getAdminData(id);
-    getBoardHouse(id);
+    getAdminData();
+    getBoardHouse();
   }, []);
 
   function handleShowUpdateInformation() {
     setShowUpdateInformation(!showUpdateInformation);
   }
 
-  async function getBoardHouse(adminId) {
-    const res = await boardHouseServices.getBoardHouseById(adminId);
-    setRooms(res.data);
-  }
+  // async function getBoardHouse(adminId) {
+  //   const res = await boardHouseServices.getBoardHouseById(adminId);
+  //   setRooms(res.data);
+  // }
 
   return (
     <div className={cx("wrap")}>
       <div className="container pt-3">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-lg-4">
             <div
               className="card shadow  mb-5 bg-body-tertiary rounded overflow-hidden"
-              style={{ width: 18 + "rem" }}
+              // style={{ width: 20 + "rem" }}
             >
-              <img
-                src="https://kynguyenlamdep.com/wp-content/uploads/2022/06/avatar-cute-meo-con-than-chet.jpg"
-                className="card-img-top"
-                alt="admin-avatar"
-              />
+              {admin.avatar && admin.avatar.length > 4 ? (
+                <Image src={admin.avatar} className={cx("card-img")}></Image>
+              ) : (
+                <Image
+                  src="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg?size=626&ext=jpg&ga=GA1.1.994684043.1684584897&semt=sph"
+                  className={cx("card-img")}
+                />
+              )}
+
               <div className="card-body">
                 <h5 className="card-title">{admin.fullName}</h5>
                 <span
@@ -116,7 +140,7 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text">{dataAdmin.email}</p>
+                  <p className="card-text text-break">{dataAdmin.email}</p>
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
@@ -140,7 +164,7 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text">{admin.address}</p>
+                  <p className="card-text text-break">{admin.address}</p>
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
@@ -171,9 +195,13 @@ function AdminProfilePage() {
               <span className={cx("line-admin-profile")}></span>
             </div>
           </div>
-          <div className="col-md-9">
+          <div className="col-lg-8">
             {rooms.map((room, index) => (
-              <AdminCardRoom key={index} room={room}></AdminCardRoom>
+              <AdminCardRoom
+                updateData={getBoardHouse}
+                key={index}
+                room={room}
+              ></AdminCardRoom>
             ))}
 
             <ModalCustom

@@ -46,6 +46,25 @@ function UserControl() {
       }
     });
   }, [dispatch, navigate]);
+
+  function handleSwitchToAdmin() {
+    Swal.fire({
+      title: "Are you sure to switch admin page?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      text: "You will access to admin page soon!",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+      confirmButtonColor: "#176B87",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        navigate("/admin");
+      }
+    });
+  }
+
   const bodyMenuUser = useMemo(() => {
     return (
       <div className={cx("menu", "User_Control-user-menu")}>
@@ -114,8 +133,8 @@ function UserControl() {
           {/*  Click to switch admin page */}
           {userCur.type === "admin" && (
             <MenuItem
+              onClick={handleSwitchToAdmin}
               title="Switch to admin"
-              to={"/admin"}
               svg={
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
