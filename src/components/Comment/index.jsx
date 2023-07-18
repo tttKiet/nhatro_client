@@ -16,6 +16,7 @@ import More from "./more";
 import { useAuth } from "../../hooks";
 import { ToastContext } from "../../untils/context";
 import EmailVerified from "../EmailVerified";
+import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function Comment({
@@ -235,7 +236,7 @@ function Comment({
       >
         <div className={cx("layout")}>
           <div className={cx("avt")}>
-            <div className={cx("img")}>
+            <Link to={`/user/${user?._id}`} className={cx("img")}>
               {user.avatar === "svg" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -253,21 +254,31 @@ function Comment({
               ) : (
                 <Image src={user.avatar} />
               )}
-            </div>
+            </Link>
           </div>
           <div className={cx("content")}>
             <div className={cx("contai")}>
               <div className={cx("main")}>
                 <div className={cx("info")}>
                   <h4 className={cx("author")}>
-                    {user?.fullName}
+                    <Link className={cx("name")} to={`/user/${user?._id}`}>
+                      {user?.fullName}
+                    </Link>
                     {true && <EmailVerified />}
                   </h4>
 
                   {commentParent && commentParent._id !== user._id && (
                     <>
                       <VscTriangleRight />
-                      <h4 className={cx("author")}>{commentParent.fullName}</h4>
+                      <h4 className={cx("author")}>
+                        <Link
+                          className={cx("name")}
+                          to={`/user/${commentParent._id}`}
+                        >
+                          {commentParent.fullName}
+                        </Link>
+                        {true && <EmailVerified />}
+                      </h4>
                     </>
                   )}
                 </div>

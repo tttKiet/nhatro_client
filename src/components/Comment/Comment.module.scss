@@ -160,9 +160,19 @@
               }
 
               .author {
-                font-weight: 500;
-                font-size: 14px;
                 margin-bottom: 0;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                user-select: none;
+
+                .name {
+                  line-height: 22px;
+                  font-weight: 500;
+                  color: #000;
+                  font-size: 14px;
+                  text-decoration: none;
+                }
               }
             }
             .description {

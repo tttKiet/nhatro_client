@@ -209,7 +209,7 @@ function UserControl() {
 
   return (
     <>
-      <div className="d-flex align-items-center">
+      <div className={cx("d-flex align-items-center", "info_user_login")}>
         <div className="d-none d-xl-block">
           <h4 className={cx("title")}>Motel your home</h4>
         </div>

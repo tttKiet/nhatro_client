@@ -39,6 +39,11 @@ const boardHouseServices = {
       console.error(err);
     }
   },
+
+  async getBoardHousePage({ page }) {
+    const res = await axios.get(`/api/v1/board-house/page/${page}`);
+    return res;
+  },
 };
 
 export default boardHouseServices;
