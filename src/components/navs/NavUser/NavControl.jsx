@@ -24,62 +24,67 @@ function NavControl() {
   }, []);
 
   return (
-    <div className={cx("nav_middle", "d-none d-md-block")}>
-      <nav className="d-flex align-items-center">
-        <div className={cx("nav_middle-link")}>
-          <Link to="/" className={cx("control_item", { active: url === "/" })}>
-            Home
-          </Link>
-        </div>
-        <div className={cx("nav_middle-link")}>
-          <Link
-            to="/post"
-            className={cx("control_item", { active: url.includes("/post") })}
-          >
-            Post
-          </Link>
-        </div>
-        <div className={cx("nav_middle-link")}>
-          <Link
-            to="/motel"
-            className={cx("control_item", { active: url.includes("/motel") })}
-          >
-            Motel
-          </Link>
-        </div>
-        <div className={cx("nav_middle-link")}>
-          <div
-            className={cx(
-              "search",
-              { show: isShowSearch },
-              "nav_control-search"
-            )}
-          >
-            <div className={cx("input")}>
-              <input type="text" placeholder="Looking for motel name... " />
-            </div>
-            <div
-              className={cx("svg")}
-              onClick={() => setIsShowSearch((prev) => !prev)}
+    <div className={cx("middle")}>
+      <div className={cx("nav_middle", "d-none d-md-block")}>
+        <nav className="d-flex align-items-center">
+          <div className={cx("nav_middle-link")}>
+            <Link
+              to="/"
+              className={cx("control_item", { active: url === "/" })}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
+              Home
+            </Link>
+          </div>
+          <div className={cx("nav_middle-link")}>
+            <Link
+              to="/post"
+              className={cx("control_item", { active: url.includes("/post") })}
+            >
+              Post
+            </Link>
+          </div>
+          <div className={cx("nav_middle-link")}>
+            <Link
+              to="/motel"
+              className={cx("control_item", { active: url.includes("/motel") })}
+            >
+              Motel
+            </Link>
+          </div>
+          <div className={cx("nav_middle-link")}>
+            <div
+              className={cx(
+                "search",
+                { show: isShowSearch },
+                "nav_control-search"
+              )}
+            >
+              <div className={cx("input")}>
+                <input type="text" placeholder="Looking for motel name... " />
+              </div>
+              <div
+                className={cx("svg")}
+                onClick={() => setIsShowSearch((prev) => !prev)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </div>
   );
 }

@@ -9,7 +9,12 @@ function NavUser() {
   return (
     <div className={cx("wrap")}>
       <div className="container">
-        <div className={"d-flex align-items-center justify-content-between"}>
+        <div
+          className={cx(
+            "d-flex align-items-center justify-content-between",
+            "navbar"
+          )}
+        >
           <Logo />
           <NavControl />
           <UserControl />

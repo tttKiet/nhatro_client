@@ -81,14 +81,6 @@ function Post({
     getLike();
   }, [getLike]);
 
-  //   commentServices.getComment(postId, 1).then((res) => {
-  //     if (res.status === 200 && res.data.err === 0) {
-  //       setCmts([...res.data.data]);
-  //       setMaxCountCmtParent(res.data.count);
-  //     }
-  //   });
-  // }, [postId]);
-
   useEffect(() => {
     commentServices.getLimitComments(postId).then((res) => {
       if (res.status === 200 && res.data.err === 0) {
@@ -102,7 +94,7 @@ function Post({
       <div>
         <header className={cx("header")}>
           <div className={cx("avatar")}>
-            <div className={cx("img")}>
+            <Link to={`/user/${author_id}`} className={cx("img")}>
               {authorImage === "svg" ? (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -120,11 +112,13 @@ function Post({
               ) : (
                 <Image src={authorImage} />
               )}
-            </div>
+            </Link>
           </div>
           <div className={cx("info")}>
             <div className={cx("user")}>
-              <h5 className={cx("name", "pt-1")}>{authorName}</h5>
+              <Link to={`/user/${author_id}`} className={cx("name", "pt-1")}>
+                {authorName}
+              </Link>
               {userEmailVerified && <EmailVerified />}
             </div>
             <span className={cx("time")}>

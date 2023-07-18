@@ -19,7 +19,6 @@
 import { lazy } from "react";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
-const AboutPage = lazy(() => import("../pages/AboutPage"));
 const LoginPage = lazy(() => import("../pages/LoginPage"));
 const RootAccount = lazy(() => import("../pages/RootAccount"));
 const RootAddAccount = lazy(() => import("../pages/RootAddAccount"));
@@ -40,7 +39,7 @@ const PostDetailsPage = lazy(() => import("../pages/PostDetailsPage"));
 
 const MyFavouritePostPage = lazy(() => import("../pages/MyFavouritePostPage"));
 const AnotherProfilePage = lazy(() => import("../pages/AnotherProfilePage"));
-
+const MotelPage = lazy(() => import("../pages/MotelPage"));
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
 
@@ -64,9 +63,9 @@ const router = [
     element: PostPage,
   },
   {
-    path: "/about",
+    path: "/motel",
     isProtected: true,
-    element: AboutPage,
+    element: MotelPage,
     layout: DefaultLayout,
   },
   {
