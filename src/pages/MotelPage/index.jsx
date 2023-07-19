@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 function MotelPage() {
   const [boaHouseData, setBoaHouseData] = useState([]);
+
   useEffect(() => {
     boardHouseServices
       .getBoardHousePage({ page: 1 })

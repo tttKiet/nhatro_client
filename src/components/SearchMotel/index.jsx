@@ -1,23 +1,104 @@
 import Select from "react-select";
 import { BiSend } from "react-icons/bi";
+import { ToastContext } from "../../untils/context";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import styles from "./SearchMotel.module.scss";
 import classNames from "classNames/bind";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 
 const cx = classNames.bind(styles);
 
 function SearchMotel() {
+  const [showLocation, setShowLocation] = useState(false);
+  const [showDate, setShowDate] = useState(false);
+  const toast = useContext(ToastContext);
+  const locationRef = useRef(null);
+  const dateRef = useRef(null);
+  const searchRef = useRef(null);
   const [options, setOptions] = useState([]);
+  const [optionsDistrict, setOptionsDistrict] = useState([]);
+  const [optionsWard, setOptionsWard] = useState([]);
   const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const position = [10.030136944598407, 105.76775186033446];
+  const position = useMemo(() => [16.522677034140713, 107.16528901370049], []);
+
+  const toggleOpenLocation = () => {
+    setShowLocation((o) => !o);
+  };
+
+  const toggleShowDate = () => {
+    setShowDate((o) => !o);
+  };
+
+  const handleSearchToSelect = () => {
+    const data = {
+      province: selectedProvince,
+      district: selectedDistrict,
+      ward: selectedWard,
+    };
+
+    console.log(data);
+    setShowLocation(false);
+    setShowDate(true);
+  };
+
   const handleChangeProvince = (e) => {
     setSelectedProvince(e);
+    axios
+      .get(`https://provinces.open-api.vn/api/p/${e.value}?depth=2`)
+      .then((res) => {
+        const data = res?.data.districts.map((d) => ({
+          label: d.name,
+          value: d.code,
+        }));
+        setOptionsDistrict(data);
+      })
+      .catch((error) => {
+        toast.error("Error fetching data. Please try again or F5 reload page!");
+        console.error("Error fetching data:", error);
+      });
     setSelectedDistrict(null);
+    setSelectedWard(null);
   };
+
+  const handleChangeDistrict = (e) => {
+    setSelectedDistrict(e);
+    axios
+      .get(`https://provinces.open-api.vn/api/d/${e.value}?depth=2`)
+      .then((res) => {
+        const data = res?.data.wards.map((d) => ({
+          label: d.name,
+          value: d.code,
+        }));
+        setOptionsWard(data);
+      })
+      .catch((error) => {
+        toast.error("Error fetching data...Please or F5 reload page!");
+        console.error("Error fetching data:", error);
+      });
+    setSelectedWard(null);
+  };
+
+  useEffect(() => {
+    const handleClickWindow = (e) => {
+      if (locationRef?.current && !locationRef.current.contains(e.target)) {
+        setShowLocation(false);
+      }
+
+      if (dateRef?.current && !dateRef.current.contains(e.target)) {
+        setShowDate(false);
+      }
+    };
+
+    window.addEventListener("click", handleClickWindow, true);
+
+    return () => {
+      window.removeEventListener("click", handleClickWindow, true);
+    };
+  }, []);
 
   useEffect(() => {
     axios
@@ -30,33 +111,63 @@ function SearchMotel() {
         setOptions(data);
       })
       .catch((error) => {
+        toast.error("Error fetching data...Please or F5 reload page!");
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [toast]);
   return (
     <div className={cx("wrap")}>
       <div className={cx("d-flex justify-content-center")}>
-        <div className={cx("search")}>
-          <div className={cx("contai")}>
+        <div className={cx("search")} ref={searchRef}>
+          {/* location */}
+          <div
+            className={cx("contai", { open: showLocation })}
+            ref={locationRef}
+          >
             <div className={cx("search_location")}>
-              <h4>Province:</h4>
-              <Select
-                className={cx("select")}
-                value={selectedProvince}
-                onChange={handleChangeProvince}
-                placeholder="Choose province"
-                options={options}
-              />
-              <BiSend size={22} />
+              <div className={cx("select")}>
+                <h4>Province:</h4>
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedProvince}
+                  onChange={handleChangeProvince}
+                  placeholder="Choose province"
+                  options={options}
+                />
+              </div>
+              <div className={cx("select")}>
+                <h4>District:</h4>
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedDistrict}
+                  onChange={handleChangeDistrict}
+                  placeholder="Choose district"
+                  options={optionsDistrict}
+                />
+              </div>
+              <div className={cx("select")}>
+                <h4>Ward:</h4>
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedWard}
+                  onChange={(e) => setSelectedWard(e)}
+                  placeholder="Choose ward"
+                  options={optionsWard}
+                />
+              </div>
+              <div className={cx("send")} onClick={handleSearchToSelect}>
+                <span className="fs-m pe-2">Continues</span>
+                <BiSend size={22} />
+              </div>
             </div>
             <MapContainer
+              dragging={false}
               center={position}
-              zoom={13}
-              scrollWheelZoom={true}
+              zoom={5}
+              scrollWheelZoom={false}
               className={cx("map")}
             >
               <TileLayer
-                // zIndex={10000}
                 className={cx("map_c")}
                 crossOrigin={true}
                 url="https://api.maptiler.com/maps/backdrop/256/{z}/{x}/{y}.png?key=AmdWRYOjlbYKSBcuCHul"
@@ -64,18 +175,36 @@ function SearchMotel() {
 
               <Marker position={position}>
                 <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
+                  We are living in VietNam <br /> I love it so much!!!
                 </Popup>
               </Marker>
             </MapContainer>
           </div>
+
+          {/* rent date */}
+          <div className={cx("contai", { open: showDate })} ref={dateRef}>
+            <div className={cx("search_location")}>
+              <div>Date</div>
+              <div className={cx("send")}>
+                <span className="fs-m pe-2">Continues</span>
+                <BiSend size={22} />
+              </div>
+            </div>
+          </div>
           <div className={cx("gr")}>
             <div className={cx("title")}>Location</div>
-            <span className={cx("description")}>Check in</span>
+            <span
+              className={cx("description")}
+              onClick={() => toggleOpenLocation()}
+            >
+              Add check in
+            </span>
           </div>
           <div className={cx("gr")}>
             <div className={cx("title")}>Received date</div>
-            <div className={cx("description")}>Add date</div>
+            <div className={cx("description")} onClick={toggleShowDate}>
+              Add date
+            </div>
           </div>
           <div className={cx("gr")}>
             <div className={cx("title")}>Price</div>

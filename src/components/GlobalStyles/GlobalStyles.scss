@@ -65,6 +65,11 @@ body {
   }
 }
 
+.css-13cymwt-control {
+  transition: visibility 0s !important;
+  -webkit-transition: visibility 0s !important;
+}
+
 .leaflet-control-zoom,
 .leaflet-top.leaflet-left .leaflet-control-zoom {
   display: none !important;
