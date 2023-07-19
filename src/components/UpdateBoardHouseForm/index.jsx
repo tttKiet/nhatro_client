@@ -5,14 +5,15 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAuth } from "../../hooks";
 import UploadImage from "../UploadImage";
-import toast, { Toaster } from "react-hot-toast";
-
 import styles from "./UpdateBoardHouseForm.module.scss";
 import classNames from "classNames/bind";
+import { ToastContext } from "../../untils/context";
+
 const cx = classNames.bind(styles);
+
 function UpdateBoardHouseForm({
   data,
   id,
@@ -25,6 +26,7 @@ function UpdateBoardHouseForm({
   const [, , adminData] = useAuth();
   const [imgToDelete, setImgToDelete] = useState(null);
   const navigate = useNavigate();
+  const toast = useContext(ToastContext);
 
   const validate = (values) => {
     const errors = {};
@@ -219,7 +221,7 @@ function UpdateBoardHouseForm({
         <button
           className="btn btn-primary m-auto"
           type="submit"
-          disabled={formik.values.images?.length > 0 ? false : true}
+          disabled={formik.values.images?.length >= 2 ? false : true}
         >
           Submit
         </button>
@@ -262,11 +264,16 @@ function UpdateBoardHouseForm({
             ))}
           </Carousel>
         ) : (
+          ""
+        )}
+
+        {formik.values.images?.length < 2 && (
           <div className="alert alert-light rounded-3 shadow text-danger fst-italic fw-bold">
             You must upload at least two images. If you don&apos;t, you
             can&apos;t update it.
           </div>
         )}
+
         <UploadImage
           formik={formik}
           dataExisted={dataExisted}
@@ -274,7 +281,6 @@ function UpdateBoardHouseForm({
           imgToDelete={imgToDelete}
         ></UploadImage>
       </div>
-      <Toaster></Toaster>
     </div>
   );
 }

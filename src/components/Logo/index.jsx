@@ -26,11 +26,11 @@ function Logo() {
         </svg>
         Future Motel
       </Link>
-      {content && (
+      {/* {content && (
         <p className={cx("des")}>
           <b>{content}</b>
         </p>
-      )}
+      )} */}
     </div>
   );
 }

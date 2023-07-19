@@ -1,6 +1,19 @@
 .wrap {
     .wrap-table{
         padding-top: 18px;
-        
+        .btn-delete{
+            border: none;
+            padding: 6px 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background-color: #F24C3D;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            transition: all 0.2s ease-out;
+            color: white;
+
+            &:hover{
+                opacity: 0.8;
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
+import classNames from "classNames/bind";
+import styles from "./ModalCustom.module.scss";
+const cx = classNames.bind(styles);
 
 function ModalCustom({
   show,
@@ -45,9 +47,9 @@ function ModalCustom({
         isUpdate={isUpdate}
       ></Component>
       <Modal.Footer>
-        <Button variant="warning" onClick={handleCloseModal}>
+        <button className={cx("icon-close")} onClick={handleCloseModal}>
           Close
-        </Button>
+        </button>
       </Modal.Footer>
     </Modal>
   );
