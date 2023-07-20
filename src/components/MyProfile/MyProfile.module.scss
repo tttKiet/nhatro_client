@@ -45,7 +45,6 @@
         .svg {
           width: 140px;
           border-radius: 100px;
-          width: 140px;
           height: 140px;
           object-fit: cover;
           border: 4px solid #f81a1a;
@@ -180,4 +179,44 @@
   }
 
  
+}
+
+@media screen and (max-width: 650px) {
+  .contai{
+    left: 10px !important;
+    right: 10px !important;
+
+    // Reponsive my profile
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .contai{
+    left: 10px !important;
+    right: 10px !important;
+
+    .avt{
+      img{
+        width: 100px !important;
+        height: 100px !important;
+      }
+    }
+
+    .info{
+      padding: 10px 10px !important;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .pen{
+    top: 5px !important;
+    right: 0 !important;
+  }
+
+  .upload-avatar{
+    bottom: 1px !important;
+    right: -1px !important;
+    padding: 2px 4px !important;
+  }
 }

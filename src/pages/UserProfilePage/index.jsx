@@ -3,7 +3,7 @@ import { Button, Tab, Tabs } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import StarsCanvas from "../../components/StarsCanvas";
 import MyProfile from "../../components/MyProfile";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import VerifyEmail from "../../components/VerifyEmail";
 import { useSearchParams } from "react-router-dom";
 import ReqUpOwner from "../../components/ReqUpOwner";
@@ -24,6 +24,7 @@ const tagName = [
 ];
 
 function UserProfilePage() {
+  const navBarRef = useRef(null);
   const [searchParams] = useSearchParams();
   const [active, setActive] = useState(
     tagName.includes(searchParams.get("tag"))
@@ -31,10 +32,16 @@ function UserProfilePage() {
       : "my-profile"
   );
 
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  useEffect(() => {
+    if (show === true) {
+      navBarRef.current.style.display = "block";
+    }
+  }, [show]);
 
   useEffect(() => {
     if (tagName.includes(searchParams.get("tag"))) {
@@ -44,46 +51,60 @@ function UserProfilePage() {
 
   return (
     <div className={cx("min-vh-100", "wrap", "position-relative")}>
-      <StarsCanvas />
-      <div className={cx("nav-reponsive")}>
-        <NavLeft setActive={setActive} active={active} />
-      </div>
-      <div className={cx("header-responsive")}>
-        <HiMenu className={cx("icon-menu")}></HiMenu>
-      </div>
-      <span style={{ height: "60px", width: "100%", display: "block" }}></span>
+      <div
+        className={cx(`${show ? "blur" : ""}`)}
+        onClick={() => handleClose()}
+      ></div>
 
-      <Container fluid="md">
-        <div className={cx("contai")}>
-          <div className={cx("nav", "d-lg-block", "d-none")}>
-            <NavLeft setActive={setActive} active={active} />
-          </div>
-          <div className={cx("child")}>
-            <Tabs
-              defaultActiveKey={"my-profile"}
-              activeKey={active}
-              className="mb-3"
-              style={{ display: "none" }}
-            >
-              <Tab eventKey="my-profile" title="my-profile">
-                <MyProfile />
-              </Tab>
-              <Tab eventKey="verify-email" title="verify-email">
-                <VerifyEmail />
-              </Tab>
-              <Tab
-                eventKey="req-owner-broad-house"
-                title="req-owner-broad-house"
+      {/* <StarsCanvas /> */}
+      <div
+        className={cx("nav-reponsive", `${!show ? "nav-exit" : ""}`)}
+        ref={navBarRef}
+      >
+        <NavLeft setActive={setActive} active={active} onHide={handleClose} />
+      </div>
+      <div
+        className={cx(
+          "header-responsive",
+          `${show ? "header-responsive-exit" : ""}`
+        )}
+      >
+        <HiMenu className={cx("icon-menu")} onClick={handleShow}></HiMenu>
+      </div>
+
+      <div style={{ padding: "60px 0" }}>
+        <Container fluid="md">
+          <div className={cx("contai")}>
+            <div className={cx("nav", "d-lg-block", "d-none")}>
+              <NavLeft setActive={setActive} active={active} />
+            </div>
+            <div className={cx("child")}>
+              <Tabs
+                defaultActiveKey={"my-profile"}
+                activeKey={active}
+                className="mb-3"
+                style={{ display: "none" }}
               >
-                <ReqUpOwner />
-              </Tab>
-              <Tab eventKey="my-feedback" title="my-feedback">
-                <AllFeedback />
-              </Tab>
-            </Tabs>
+                <Tab eventKey="my-profile" title="my-profile">
+                  <MyProfile />
+                </Tab>
+                <Tab eventKey="verify-email" title="verify-email">
+                  <VerifyEmail />
+                </Tab>
+                <Tab
+                  eventKey="req-owner-broad-house"
+                  title="req-owner-broad-house"
+                >
+                  <ReqUpOwner />
+                </Tab>
+                <Tab eventKey="my-feedback" title="my-feedback">
+                  <AllFeedback />
+                </Tab>
+              </Tabs>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 }

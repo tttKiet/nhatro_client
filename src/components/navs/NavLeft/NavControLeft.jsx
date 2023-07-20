@@ -14,10 +14,9 @@ import { userServices } from "../../../services";
 import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../../hooks";
-import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
-function NavControlLeft({ setActive, active }) {
+function NavControlLeft({ setActive, active, onHide }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [, , userCur] = useAuth();
@@ -59,6 +58,7 @@ function NavControlLeft({ setActive, active }) {
           <Link
             className={cx({ active: active === "my-profile" })}
             to={`/profile?tag=my-profile`}
+            onClick={onHide ? () => onHide() : ""}
           >
             <HiOutlineUserCircle />
             My profile
@@ -68,6 +68,7 @@ function NavControlLeft({ setActive, active }) {
           <Link
             className={cx({ active: active === "verify-email" })}
             to={`/profile?tag=verify-email`}
+            onClick={onHide ? () => onHide() : ""}
           >
             <HiOutlineMail />
             Verify email
@@ -77,13 +78,14 @@ function NavControlLeft({ setActive, active }) {
           <Link
             className={cx({ active: active === "req-owner-broad-house" })}
             to={`/profile?tag=req-owner-broad-house`}
+            onClick={onHide ? () => onHide() : ""}
           >
             <MdOutlineAdminPanelSettings />
             Request to be the board house owner
           </Link>
         </li>
         <li>
-          <Link>
+          <Link onClick={onHide ? () => onHide() : ""}>
             <BsHouse />
             My rooms
           </Link>
@@ -92,19 +94,20 @@ function NavControlLeft({ setActive, active }) {
           <Link
             className={cx({ active: active === "my-feedback" })}
             to={`/profile?tag=my-feedback`}
+            onClick={onHide ? () => onHide() : ""}
           >
             <BsFileEarmark />
             My feedbacks
           </Link>
         </li>
         <li>
-          <Link>
+          <Link onClick={onHide ? () => onHide() : ""}>
             <FaMoneyBillWave />
             Bill on month
           </Link>
         </li>
         <li>
-          <Link>
+          <Link onClick={onHide ? () => onHide() : ""}>
             <TbBrandBooking />
             Motel rent
           </Link>
@@ -112,18 +115,6 @@ function NavControlLeft({ setActive, active }) {
       </ul>
 
       <div className="d-flex flex-column align-items-center justify-content-center gap-3 mb-5">
-        {/* <a
-          data-tooltip-id="my-tooltip"
-          data-tooltip-content="Hello world!"
-          data-tooltip-variant="success"
-        >
-          <p className="text-light">test tooltip</p>
-        </a>
-        <Tooltip id="my-tooltip" /> */}
-        {/* <button className={cx("button-user-profile")}>
-          <BsTrash className="fs-l ms-1"></BsTrash>
-        </button> */}
-
         <button className={cx("btn")}>
           <div>
             <span>
