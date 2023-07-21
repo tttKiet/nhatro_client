@@ -1,6 +1,7 @@
 import Carousel from "react-responsive-carousel/lib/js/components/Carousel";
 import styles from "./MotelItem.module.scss";
 import { AiFillStar } from "react-icons/ai";
+import { Link } from "react-router-dom";
 import { CiLocationArrow1 } from "react-icons/ci";
 import { GiMoneyStack } from "react-icons/gi";
 
@@ -16,6 +17,7 @@ function MotelItem({
   phone,
   address,
   userId: owner,
+  _id,
 }) {
   return (
     <div className={cx("wrap", "col-xxl-3 col-lg-4 col-sm-6 col-12")}>
@@ -32,14 +34,18 @@ function MotelItem({
               animationHandler="fade"
             >
               {images.map((image, index) => (
-                <div key={index} className={cx("sildes_item")}>
+                <Link
+                  to={`/motel/${_id}`}
+                  key={index}
+                  className={cx("sildes_item")}
+                >
                   <Image src={image} />
-                </div>
+                </Link>
               ))}
             </Carousel>
           </div>
         </div>
-        <div className={cx("info")}>
+        <Link to={`/motel/${_id}`} className={cx("info")}>
           <div className={cx("name_star", "mb-2")}>
             <h4 className={cx("name")}>{boadrHouseName}</h4>
             <span className={cx("star")}>
@@ -62,7 +68,7 @@ function MotelItem({
               <span className={cx("price_hl")}>1.8M</span>
             </h4>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

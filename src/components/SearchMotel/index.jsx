@@ -4,15 +4,19 @@ import { ToastContext } from "../../untils/context";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import styles from "./SearchMotel.module.scss";
-import classNames from "classNames/bind";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
+import moment from "moment";
+import classNames from "classNames/bind";
+import CalendarDate from "../Calendar";
 
 const cx = classNames.bind(styles);
 
 function SearchMotel() {
   const [showLocation, setShowLocation] = useState(false);
   const [showDate, setShowDate] = useState(false);
+  const [textLocation, setTextLocation] = useState("");
+  const [textDate, setTextDate] = useState("");
   const toast = useContext(ToastContext);
   const locationRef = useRef(null);
   const dateRef = useRef(null);
@@ -24,6 +28,21 @@ function SearchMotel() {
   const [selectedWard, setSelectedWard] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const position = useMemo(() => [16.522677034140713, 107.16528901370049], []);
+  const [selectionRange, setSelectionRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+
+  const handleChangeDate = (event) => {
+    setSelectionRange({ ...event.selection });
+    console.log(event.selection);
+    setTextDate(
+      `From ${moment(event.selection.startDate).calendar()} to ${moment(
+        event.selection.endDate
+      ).calendar()}`
+    );
+  };
 
   const toggleOpenLocation = () => {
     setShowLocation((o) => !o);
@@ -40,6 +59,12 @@ function SearchMotel() {
       ward: selectedWard,
     };
 
+    setTextLocation(
+      `${selectedWard?.label ? `${selectedWard?.label}, ` : ""}
+        ${selectedDistrict?.label ? `${selectedDistrict?.label}, ` : ""}
+        ${selectedProvince?.label ? `${selectedProvince?.label}` : ""}
+      `
+    );
     console.log(data);
     setShowLocation(false);
     setShowDate(true);
@@ -183,13 +208,17 @@ function SearchMotel() {
 
           {/* rent date */}
           <div className={cx("contai", { open: showDate })} ref={dateRef}>
-            <div className={cx("search_location")}>
-              <div>Date</div>
+            <div className={cx("date_slect")}>
+              <div>Select check-in date</div>
               <div className={cx("send")}>
                 <span className="fs-m pe-2">Continues</span>
                 <BiSend size={22} />
               </div>
             </div>
+            <CalendarDate
+              selectionRange={selectionRange}
+              onChange={handleChangeDate}
+            />
           </div>
           <div className={cx("gr")}>
             <div className={cx("title")}>Location</div>
@@ -197,19 +226,19 @@ function SearchMotel() {
               className={cx("description")}
               onClick={() => toggleOpenLocation()}
             >
-              Add check in
+              {textLocation ? textLocation : "Add check in"}
             </span>
           </div>
           <div className={cx("gr")}>
             <div className={cx("title")}>Received date</div>
             <div className={cx("description")} onClick={toggleShowDate}>
-              Add date
+              {textDate ? textDate : "Add date "}
             </div>
           </div>
-          <div className={cx("gr")}>
+          {/* <div className={cx("gr")}>
             <div className={cx("title")}>Price</div>
             <div className={cx("description")}>Choose price</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

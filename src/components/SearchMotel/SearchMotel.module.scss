@@ -38,6 +38,24 @@
         transform: translateY(-0%);
       }
 
+      .date_slect {
+        padding: 12px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .send {
+          user-select: none;
+          cursor: pointer;
+          opacity: 0.7;
+          transition: opacity 0.2s linear;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
       .search_location {
         position: relative;
         z-index: 1000;

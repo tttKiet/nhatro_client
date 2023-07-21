@@ -11,6 +11,8 @@ export { default as LoginPage } from "./LoginPage";
 export { default as ErrorPage } from "./ErrorPage";
 export { default as ContactPage } from "./ContactPage";
 export { default as RegisterPage } from "./RegisterPage";
+export { default as MotelPage } from "./MotelPage";
+export { default as MotelDetailsPage } from "./MotelDetailsPage";
 
 // Root pages
 export { default as RootAccount } from "./RootAccount";

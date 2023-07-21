@@ -1,9 +1,17 @@
 .wrap {
   padding-bottom: 12px;
   user-select: none;
+  cursor: pointer;
+
+  * a {
+    text-decoration: none;
+    display: block;
+  }
+
   .contair {
     // border: 1px solid #ccc;
     border-radius: 0.6rem;
+    text-decoration: none;
     .slides {
       .custom-carousel {
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
