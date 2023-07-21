@@ -12,7 +12,7 @@
 
     .contai {
       position: absolute;
-      min-width: 500px;
+      min-width: 100%;
       top: calc(100% + 8px);
       background-color: #f0f2f5;
       left: 0;
@@ -23,6 +23,38 @@
       padding: 22px 24px;
       border: 1px solid #dddddd;
       border-radius: 22px;
+      // display: none;
+      visibility: hidden;
+      overflow: hidden;
+      transition: all 0.3s linear;
+      transition-timing-function: cubic-bezier(0.28, 0.52, 0.19, -0.2);
+      opacity: 0;
+      transform: translateY(-10px);
+
+      &.open {
+        // display: block;
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(-0%);
+      }
+
+      .date_slect {
+        padding: 12px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .send {
+          user-select: none;
+          cursor: pointer;
+          opacity: 0.7;
+          transition: opacity 0.2s linear;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
 
       .search_location {
         position: relative;
@@ -34,19 +66,25 @@
 
         h4 {
           font-size: 16px;
-          margin-bottom: 0;
+          margin-bottom: 6px;
           opacity: 0.7;
         }
 
         .select {
           flex-shrink: 0;
           flex-grow: 1;
+
+          .d_slect {
+            width: 190px;
+            transition: all 0 linear;
+          }
         }
 
-        svg {
+        .send {
+          user-select: none;
           cursor: pointer;
           opacity: 0.7;
-          transition: all 0.2s linear;
+          transition: opacity 0.2s linear;
 
           &:hover {
             opacity: 1;
