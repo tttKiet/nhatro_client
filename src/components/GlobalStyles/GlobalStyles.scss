@@ -66,12 +66,12 @@ body {
 }
 
 .rdrMonth {
-  width: 100% !important;
+  // width: 100% !important;
 }
 
 .rdrCalendarWrapper {
   font-style: 16px !important;
-  width: 100% !important;
+  // width: 100% !important;
 }
 
 .css-13cymwt-control {
@@ -322,24 +322,22 @@ h2 {
 
 // }
 
-.table-responsive{
+.table-responsive {
   &::-webkit-scrollbar {
-		width: 10px;
-	}
-	&::-webkit-scrollbar:horizontal {
-		height: 10px;
-
-	}
-	&::-webkit-scrollbar-track {
-		background-color: transparentize(#ccc, 0.7);
-    
-	}
-	&::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		background: transparentize(#ccc, 0.5);
+    width: 10px;
+  }
+  &::-webkit-scrollbar:horizontal {
+    height: 10px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparentize(#ccc, 0.7);
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: transparentize(#ccc, 0.5);
     // background-color: #e5e4e4;
-		box-shadow: inset 0 0 6px rgba(140, 137, 137, 0.35); 
-	}
+    box-shadow: inset 0 0 6px rgba(140, 137, 137, 0.35);
+  }
 }
 
 // arrow btn of react carousel
@@ -347,8 +345,7 @@ h2 {
   border-right: 8px solid rgb(63, 63, 63) !important;
 }
 
-
-.carousel.carousel-slider .control-arrow:hover{
+.carousel.carousel-slider .control-arrow:hover {
   background-color: transparent !important;
 }
 
