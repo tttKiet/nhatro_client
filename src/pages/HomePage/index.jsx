@@ -21,7 +21,7 @@ function HomePage() {
         </RootLayout>
       ) : (
         <>
-          {type === "admin" ? (
+          {/* {type === "admin" ? (
             <AdminLayout>
               <AdminHomePage />
             </AdminLayout>
@@ -29,10 +29,11 @@ function HomePage() {
             <DefaultLayout>
               <UserHomePage />
             </DefaultLayout>
-          )}
+          )} */}
+          <DefaultLayout>
+            <UserHomePage />
+          </DefaultLayout>
         </>
-
-
       )}
     </>
   );

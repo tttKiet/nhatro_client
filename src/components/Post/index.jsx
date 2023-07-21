@@ -14,6 +14,7 @@ import classNames from "classNames/bind";
 import CommentsBox from "../CommentsBox";
 import { Link } from "react-router-dom";
 import EmailVerified from "../EmailVerified";
+import ModalFullScreen from "./ModalFullScreen";
 const cx = classNames.bind(styles);
 
 function Post({
@@ -27,6 +28,7 @@ function Post({
   postId,
   author_id,
   userEmailVerified,
+  size,
 }) {
   const [showComments, setShowComments] = useState(false);
   const [, , user] = useAuth();
@@ -36,6 +38,8 @@ function Post({
   });
   const [maxCount, setMaxCount] = useState(1);
   const [showText, setShowText] = useState(false);
+  const [showFullImg, setShowFullImg] = useState(false);
+  const [imgToView, setImgToView] = useState([]);
 
   const toggleShowText = () => {
     setShowText((s) => !s);
@@ -77,6 +81,13 @@ function Post({
     });
   }, [postId]);
 
+  function handleViewFullImg(index) {
+    const imgsClone = [...images];
+    [imgsClone[0], imgsClone[index]] = [imgsClone[index], imgsClone[0]];
+    setImgToView(imgsClone);
+    setShowFullImg(true);
+  }
+
   useEffect(() => {
     getLike();
   }, [getLike]);
@@ -90,7 +101,12 @@ function Post({
   }, [postId]);
 
   return (
-    <div className={cx("wrap")}>
+    <div className={cx("wrap", `${size === "lg" ? "wrap-lg" : ""}`)}>
+      <ModalFullScreen
+        imgToView={imgToView}
+        show={showFullImg}
+        onHide={() => setShowFullImg(false)}
+      ></ModalFullScreen>
       <div>
         <header className={cx("header")}>
           <div className={cx("avatar")}>
@@ -165,7 +181,11 @@ function Post({
           {images?.length > 0 && (
             <div className={cx("images", `layout_${images?.length}`)}>
               {images.map((image, index) => (
-                <div key={index} className={cx("img")}>
+                <div
+                  key={index}
+                  className={cx("img")}
+                  onClick={() => handleViewFullImg(index)}
+                >
                   <ImageLoader image={{ src: image }} />
                 </div>
               ))}
@@ -272,6 +292,7 @@ Post.propTypes = {
   postId: PropTypes.string,
   author_id: PropTypes.string,
   userEmailVerified: PropTypes.bool,
+  size: PropTypes.string,
 };
 
 export default Post;

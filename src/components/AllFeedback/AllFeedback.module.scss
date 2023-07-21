@@ -1,5 +1,9 @@
 .wrap{
     
+   .small-screen{
+    padding-bottom: 10px;
+   }
+
     .btn-icon{
         font-size: 18px;
         cursor: pointer;
@@ -15,6 +19,18 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .small-screen{
+        max-width: 460px;
+    }
+}
+
+@media screen and (max-width: 510px) {
+    .small-screen{
+        max-width: 360px;
     }
 }
 

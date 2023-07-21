@@ -28,10 +28,15 @@ const roomServices = {
     const res = await axios.get(`/api/v1/board-house/room?adminId=${adminId}`);
     return res.data;
   },
-  async deleteRoom(roomId) {
-    const res = await axios.delete(`/api/v1/board-house/room/delete/${roomId}`);
+
+  async deleteRoom(roomId, imgsToDelete) {
+    const res = await axios.post(
+      `/api/v1/board-house/room/delete/${roomId}`,
+      imgsToDelete
+    );
     return res.data;
   },
+
   async updateRoom(roomId, dataRoom, fileImgs) {
     let formData = new FormData();
     formData.append("description", dataRoom.description);

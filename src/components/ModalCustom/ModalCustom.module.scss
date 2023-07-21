@@ -1,14 +1,16 @@
-.wrap{
-  .feature-icon{
-    width: 3rem;
-    height: 3rem;
-    background-color: rgb(89, 89, 255);
-    color: white;
-    border-radius: 0.5rem;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-  }
 
-  
+.icon-close{
+  border: none;
+  background-color: #E7B10A;
+  color: white;
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  transition: all 0.2s ease-out;
+
+  &:hover{
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
 }

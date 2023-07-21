@@ -1,29 +1,32 @@
 import { useFormik } from "formik";
-import { boardHouseServices, cloudinaryServices } from "../../services";
+import { boardHouseServices } from "../../services";
 import PropTypes from "prop-types";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAuth } from "../../hooks";
 import UploadImage from "../UploadImage";
-import toast, { Toaster } from "react-hot-toast";
-
 import styles from "./UpdateBoardHouseForm.module.scss";
 import classNames from "classNames/bind";
+import { ToastContext } from "../../untils/context";
+
 const cx = classNames.bind(styles);
+
 function UpdateBoardHouseForm({
   data,
   id,
   isCreate,
-  onDisableClose,
   dataExisted,
+  onHide,
+  updateData,
 }) {
   // const [loading, setLoading] = useState(false);
   const [, , adminData] = useAuth();
   const [imgToDelete, setImgToDelete] = useState(null);
   const navigate = useNavigate();
+  const toast = useContext(ToastContext);
 
   const validate = (values) => {
     const errors = {};
@@ -78,14 +81,15 @@ function UpdateBoardHouseForm({
           // navigate(`/admin/profile/${adminData?._id}`);
           window.location.reload();
         } else {
-          navigate("/");
+          updateData();
+          onHide();
+          navigate(`/admin/profile/${adminData?._id}`);
         }
       });
     }
   }
 
   async function handleDeleteImage(img) {
-    toast.success("Deleting...");
     setImgToDelete(img);
   }
 
@@ -124,7 +128,6 @@ function UpdateBoardHouseForm({
 
   return (
     <div className={cx("wrap", "row p-3")}>
-      {console.log("formik", formik.values)}
       <form className="col-md-5" onSubmit={formik.handleSubmit}>
         <label htmlFor="name" className="fw-bold">
           Name of board house:
@@ -215,7 +218,11 @@ function UpdateBoardHouseForm({
           <WidgetCloudinary formik={formik}></WidgetCloudinary>
         </div> */}
 
-        <button className="btn btn-primary m-auto" type="submit">
+        <button
+          className="btn btn-primary m-auto"
+          type="submit"
+          disabled={formik.values.images?.length >= 2 ? false : true}
+        >
           Submit
         </button>
       </form>
@@ -257,10 +264,16 @@ function UpdateBoardHouseForm({
             ))}
           </Carousel>
         ) : (
-          <div className="alert alert-light shadow">
-            Imgs were uploaded will show here!
+          ""
+        )}
+
+        {formik.values.images?.length < 2 && (
+          <div className="alert alert-light rounded-3 shadow text-danger fst-italic fw-bold">
+            You must upload at least two images. If you don&apos;t, you
+            can&apos;t update it.
           </div>
         )}
+
         <UploadImage
           formik={formik}
           dataExisted={dataExisted}
@@ -268,7 +281,6 @@ function UpdateBoardHouseForm({
           imgToDelete={imgToDelete}
         ></UploadImage>
       </div>
-      <Toaster></Toaster>
     </div>
   );
 }
@@ -284,6 +296,8 @@ UpdateBoardHouseForm.propTypes = {
     PropTypes.array,
     PropTypes.string,
   ]),
+  onHide: PropTypes.func,
+  updateData: PropTypes.func,
 };
 
 export default UpdateBoardHouseForm;

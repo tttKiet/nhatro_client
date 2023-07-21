@@ -116,8 +116,14 @@ function MyProfile() {
           <button
             disabled={isLoading}
             onClick={() => handleUploadAvatar(file)}
-            className="btn  btn-primary  "
-            style={{ width: "30px", margin: "16px" }}
+            className="text-bg-primary"
+            style={{
+              width: "70px",
+              margin: "16px",
+              border: "none",
+              padding: "5px 0",
+              borderRadius: "8px",
+            }}
           >
             Save
           </button>
@@ -173,6 +179,7 @@ function MyProfile() {
                 </svg>
               </div>
             )}
+
             {/* upload avatar */}
             <label htmlFor="avatar" className={cx("upload-avatar", "shadow")}>
               <AiFillCamera className="fs-xl"></AiFillCamera>
@@ -184,6 +191,7 @@ function MyProfile() {
               hidden
             ></input>
           </div>
+
           <div className={cx("info")}>
             <h2>{userInfo?.fullName}</h2>
             <div className={cx("info-item")}>An Giang</div>

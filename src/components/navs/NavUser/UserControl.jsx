@@ -46,6 +46,25 @@ function UserControl() {
       }
     });
   }, [dispatch, navigate]);
+
+  function handleSwitchToAdmin() {
+    Swal.fire({
+      title: "Are you sure to switch admin page?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      text: "You will access to admin page soon!",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+      confirmButtonColor: "#176B87",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        navigate("/admin");
+      }
+    });
+  }
+
   const bodyMenuUser = useMemo(() => {
     return (
       <div className={cx("menu", "User_Control-user-menu")}>
@@ -110,6 +129,31 @@ function UserControl() {
               </svg>
             }
           />
+
+          {/*  Click to switch admin page */}
+          {userCur.type === "admin" && (
+            <MenuItem
+              onClick={handleSwitchToAdmin}
+              title="Switch to admin"
+              svg={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+                  />
+                </svg>
+              }
+            />
+          )}
+
           <MenuItem
             onClick={handleLogout}
             title="Loggout"

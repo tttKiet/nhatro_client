@@ -8,7 +8,7 @@ import UpdateBoardHouseForm from "../UpdateBoardHouseForm";
 import ModalCustom from "../ModalCustom";
 const cx = classNames.bind(styles);
 
-function AdminCardRoom({ room }) {
+function AdminCardRoom({ room, updateData }) {
   const [showModal, setShowModal] = useState(false);
 
   const dataExisted = {
@@ -141,11 +141,12 @@ function AdminCardRoom({ room }) {
             onClick={() => setShowModal(true)}
             className="btn btn-primary"
           >
-            Update room
+            Update board house
           </button>
         </div>
       </div>
       <ModalCustom
+        updateData={updateData}
         show={showModal}
         onHide={() => setShowModal(false)}
         data={room}

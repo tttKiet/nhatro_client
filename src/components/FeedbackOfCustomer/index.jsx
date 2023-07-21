@@ -89,8 +89,9 @@ function FeedbackOfCustomer() {
         transitionTime={1000}
         showStatus={false}
         emulateTouch={true}
-        showArrows={false}
+        showArrows={true}
         showIndicators={true}
+        swipeable={false}
       >
         {data.map((fb, index) => (
           <Feedback fb={fb} key={index}></Feedback>

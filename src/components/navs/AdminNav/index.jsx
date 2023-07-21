@@ -7,6 +7,7 @@ import { userSlice } from "../../../redux/reducers";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from "../../../hooks";
+import { TbSwitchHorizontal } from "react-icons/tb";
 
 const cx = classNames.bind(styles);
 function AdminNav() {
@@ -22,9 +23,9 @@ function AdminNav() {
       showConfirmButton: true,
       showDenyButton: false,
       showCancelButton: true,
-      cancelButtonText: "Hủy",
-      text: "Bạn có thật sự muốn đăng xuất?",
-      confirmButtonText: "Đăng xuất ngay",
+      cancelButtonText: "Cancel",
+      text: "You will logout our system",
+      confirmButtonText: "Confirm",
       reverseButtons: true,
       confirmButtonColor: "#d55",
     }).then(async (result) => {
@@ -35,12 +36,33 @@ function AdminNav() {
     });
   }
 
+  function handleSwitchUserPage() {
+    Swal.fire({
+      title: "Are you sure to switch user page?",
+      showConfirmButton: true,
+      showDenyButton: false,
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      text: "You will access to user page soon!",
+      confirmButtonText: "Confirm",
+      reverseButtons: true,
+      confirmButtonColor: "#176B87",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        navigate("/");
+      }
+    });
+  }
+
   return (
     <div className={cx("wrap")}>
       <Logo />
       <hr />
       <div className={cx("d-flex mt-5 flex-column")}>
-        <Link className={cx("link", { active: url === "/" })} to={"/"}>
+        <Link
+          className={cx("link", { active: url === "/admin" })}
+          to={"/admin"}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -99,6 +121,11 @@ function AdminNav() {
           </svg>
           All Rooms
         </Link>
+
+        <button className={cx("link", "btn")} onClick={handleSwitchUserPage}>
+          <TbSwitchHorizontal className="fs-l"></TbSwitchHorizontal>
+          Switch to user page
+        </button>
 
         <button className={cx("link", "btn")} onClick={handleLogout}>
           <svg

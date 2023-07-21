@@ -40,6 +40,7 @@ const PostDetailsPage = lazy(() => import("../pages/PostDetailsPage"));
 const MyFavouritePostPage = lazy(() => import("../pages/MyFavouritePostPage"));
 const AnotherProfilePage = lazy(() => import("../pages/AnotherProfilePage"));
 const MotelPage = lazy(() => import("../pages/MotelPage"));
+const AdminHomePage = lazy(() => import("../pages/AdminHomePage"));
 const MotelDetailsPage = lazy(() => import("../pages/MotelDetailsPage"));
 
 import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
@@ -148,6 +149,13 @@ const router = [
   },
 
   // Admin router [The Van]
+  {
+    path: "/admin",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminHomePage,
+  },
+
   {
     path: "/admin/profile/:id",
     isProtected: true,

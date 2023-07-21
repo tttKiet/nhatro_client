@@ -1,17 +1,16 @@
 import styles from "./AdminAllRoomsPage.module.scss";
 import classNames from "classNames/bind";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks";
 import roomServices from "../../services/roomServices";
 import boardHouseServices from "../../services/boardHouseServices";
 import TableSort from "../../components/TableSort";
 import ModalCustom from "../../components/ModalCustom";
 import RoomForm from "../../components/RoomForm";
-import toast, { Toaster } from "react-hot-toast";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Tooltip from "react-bootstrap/Tooltip";
 import InfoToDelete from "../../components/InfoToDelete";
+import { ToastContext } from "../../untils/context";
+import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +25,7 @@ function AdminAllRoomsPage() {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [dataRoomToEdit, setDataRoomToEdit] = useState([]);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const toast = useContext(ToastContext);
 
   async function handleGetBoardHouseById(adminId) {
     const res = await boardHouseServices.getBoardHouseById(adminId);
@@ -52,7 +52,7 @@ function AdminAllRoomsPage() {
   const handleUpdateData = async () => {
     const res = await roomServices.getAllRoomsByAdminId(adminData._id);
     if (res.err === 0) {
-      console.log("res ddata", res.data);
+      // console.log("res ddata", res.data);
       setDataRoom(res.data);
     }
   };
@@ -93,9 +93,6 @@ function AdminAllRoomsPage() {
     setDataRoomToEdit(data);
   }
 
-  // console.log("rooms", rooms);
-  console.log("boardHouse", boardHouse);
-
   const columns = useMemo(
     () => [
       columnHelper.accessor("Number", {
@@ -110,14 +107,27 @@ function AdminAllRoomsPage() {
       columnHelper.accessor("Price", {
         cell: (info) => <div>{formatNumber(info.getValue())} VND</div>,
       }),
+      // columnHelper.accessor("Description", {
+      //   cell: (info) => (
+      //     <OverlayTrigger
+      //       placement="top"
+      //       overlay={<Tooltip>{info.getValue()}</Tooltip>}
+      //     >
+      //       <div className={cx("text-description")}>{info.getValue()}</div>
+      //     </OverlayTrigger>
+      //   ),
+      // }),
       columnHelper.accessor("Description", {
         cell: (info) => (
-          <OverlayTrigger
-            placement="top"
-            overlay={<Tooltip>{info.getValue()}</Tooltip>}
-          >
-            <div className={cx("text-description")}>{info.getValue()}</div>
-          </OverlayTrigger>
+          <>
+            <Tooltip id="my-tooltip" />
+            <a
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={info.getValue()}
+            >
+              <div className={cx("text-description")}>{info.getValue()}</div>
+            </a>
+          </>
         ),
       }),
       columnHelper.accessor("Status", {
@@ -253,7 +263,14 @@ function AdminAllRoomsPage() {
       </div>
 
       <div className="row mt-2">
-        <TableSort data={rooms} columns={columns}></TableSort>
+        {rooms && rooms.length === 0 && (
+          <p className=" mt-5 w-25 m-auto text-center rounded text-bg-primary p-2 shadow">
+            You don&apos;t have any rooms, let&apos;s create it!
+          </p>
+        )}
+        {rooms && rooms.length > 0 && (
+          <TableSort data={rooms} columns={columns}></TableSort>
+        )}
       </div>
 
       {/* Modal create a new room */}
@@ -290,8 +307,6 @@ function AdminAllRoomsPage() {
         isUpdate={true}
         updateData={handleUpdateData}
       ></ModalCustom>
-
-      <Toaster></Toaster>
     </div>
   );
 }

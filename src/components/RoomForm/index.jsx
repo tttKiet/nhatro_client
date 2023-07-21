@@ -117,10 +117,9 @@ function RoomForm({
     try {
       const res = await roomServices.updateRoom(id, dataRoom, fileImgs);
       if (res.err === 0) {
+        updateData();
         toast.dismiss();
         toast.success(`Update room successfully`);
-        onDisableClose(true);
-        updateData();
         onHide();
       }
     } catch (error) {
@@ -148,7 +147,7 @@ function RoomForm({
   return (
     <div className={cx("wrap")}>
       <div className={cx("wrap", "row p-3")}>
-        <form className="col-md-5" onSubmit={formik.handleSubmit}>
+        <form className="col-lg-5" onSubmit={formik.handleSubmit}>
           <label htmlFor="number" className="fw-bold">
             Number of room:{" "}
           </label>
@@ -270,11 +269,16 @@ function RoomForm({
             ))}
           </select>
 
-          <button className="btn btn-primary m-auto mt-3" type="submit">
+          <button
+            className="btn btn-primary m-auto mt-3"
+            type="submit"
+            disabled={formik.values.images?.length >= 2 ? false : true}
+          >
             {isUpdate ? "Update" : "Submit"}
           </button>
         </form>
-        <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
+
+        <div className="col-lg-7 d-flex flex-column justify-content-center align-items-center mt-4 ">
           {formik.values.images?.length > 0 ? (
             <Carousel
               selectedItem={formik.values.images?.length - 1}
@@ -314,8 +318,15 @@ function RoomForm({
               ))}
             </Carousel>
           ) : (
-            <div className="alert alert-light shadow">
-              Imgs were uploaded will show here!
+            ""
+            // <div className="alert alert-light shadow-sm">
+            //   Imgs were uploaded will show here!
+            // </div>
+          )}
+
+          {formik.values.images?.length < 2 && (
+            <div className="alert alert-light shadow-sm text-danger fst-italic fw-bold mt-3">
+              You must upload at least 2 images for this room.
             </div>
           )}
 
