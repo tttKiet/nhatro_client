@@ -163,7 +163,7 @@ function AllFeedback() {
 
   return (
     <div className={cx("wrap")}>
-      <div className="container bg-white rounded-3 p-4 ">
+      <div className={cx("small-screen", "container bg-white rounded-3  ")}>
         <div className=" fs-m">
           <TableSort columns={columns} data={feedbacks}></TableSort>
         </div>

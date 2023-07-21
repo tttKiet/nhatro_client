@@ -73,7 +73,7 @@ function UserProfilePage() {
       </div>
 
       <div style={{ padding: "60px 0" }}>
-        <Container fluid="md">
+        <Container fluid="xl">
           <div className={cx("contai")}>
             <div className={cx("nav", "d-lg-block", "d-none")}>
               <NavLeft setActive={setActive} active={active} />

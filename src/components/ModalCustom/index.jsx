@@ -31,7 +31,7 @@ function ModalCustom({
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header>
         <Modal.Title className="fs-l" id="contained-modal-title-vcenter">
           {action}: {data?._id}
         </Modal.Title>

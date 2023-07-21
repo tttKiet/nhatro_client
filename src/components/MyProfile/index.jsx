@@ -116,8 +116,14 @@ function MyProfile() {
           <button
             disabled={isLoading}
             onClick={() => handleUploadAvatar(file)}
-            className="btn  btn-primary  "
-            style={{ width: "30px", margin: "16px" }}
+            className="text-bg-primary"
+            style={{
+              width: "70px",
+              margin: "16px",
+              border: "none",
+              padding: "5px 0",
+              borderRadius: "8px",
+            }}
           >
             Save
           </button>
