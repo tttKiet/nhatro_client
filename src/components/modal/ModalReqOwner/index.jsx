@@ -7,8 +7,12 @@ import { reqRoomOwnerServices } from "../../../services";
 import styles from "./ModalReqOwner.module.scss";
 import classNames from "classNames/bind";
 import SettingImage from "./SettingImage";
+import { BsSend, BsSkipBackward } from "react-icons/bs";
+import { MdOutlineRestartAlt } from "react-icons/md";
+
 const cx = classNames.bind(styles);
 
+// eslint-disable-next-line react/prop-types
 function ModalReqOwner({ setActiveTab }) {
   const [, , user] = useAuth();
   const [imgs, setImgs] = useState([]);
@@ -78,6 +82,7 @@ function ModalReqOwner({ setActiveTab }) {
         setImgs([]);
         toast.dismiss();
         toast.success(res.message);
+        setActiveTab("information");
       } else {
         toast.error(res.message);
       }
@@ -230,33 +235,19 @@ function ModalReqOwner({ setActiveTab }) {
             />
           </div>
         </div>
-        <div className={cx("button", "d-flex gap-3")}>
+        <div className={cx("button", "d-flex gap-3 mt-2")}>
           <button
-            className={cx("btn btn-default transparent")}
+            className={cx("btn-create")}
             onClick={() => setActiveTab("information")}
             type="button"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z"
-              />
-            </svg>
-            Back
+            Back <BsSkipBackward className="ms-1"></BsSkipBackward>
           </button>
-          <button type="reset" className="btn btn-default transparent">
-            Reset
+          <button type="reset" className={cx("btn-create")}>
+            Reset <MdOutlineRestartAlt className="ms-1"></MdOutlineRestartAlt>
           </button>
-          <button type="submit" className="btn btn-primary transparent">
-            Request
+          <button type="submit" className={cx("btn-create")}>
+            Request <BsSend className="ms-1"></BsSend>
           </button>
         </div>
       </form>

@@ -7,6 +7,7 @@ import { AiFillStar } from "react-icons/ai";
 
 import { useEffect, useState } from "react";
 import { boardHouseServices } from "../../services";
+import FeedbackOfBoardHouse from "../../components/FeedbackOfBoardHouse";
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
@@ -74,6 +75,8 @@ function MotelDetailsPage() {
             </div>
           </div>
         </div>
+
+        <FeedbackOfBoardHouse></FeedbackOfBoardHouse>
       </div>
     </div>
   );

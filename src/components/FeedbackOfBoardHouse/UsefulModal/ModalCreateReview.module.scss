@@ -1,0 +1,221 @@
+.button-close{
+    padding: 10px 20px;
+    .close{
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+
+        &:hover{
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+    }
+}
+
+
+
+.wrap{
+    .wrap-rating{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 20px 0;
+    }
+
+    .info-form{
+      padding: 20px 0;
+
+      input:disabled, textarea:disabled{
+        background-color: inherit;
+        opacity: 0.7;
+      }
+    }
+
+    .btn-submit{
+      padding: 6px 10px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      background-color: #FF8989;
+      color: white;
+      transition: all 0.2s ease-in;
+      margin-left: 12px;
+      &:hover{
+          opacity: 0.8;
+         
+      }
+    }
+}
+
+@media screen and (max-width: 575px) {
+  .wrap-content{
+      margin-top: 40px;
+      max-height: none;
+      overflow: unset;
+  }
+
+  .wrap-all-reviews{
+
+      position: relative;
+      .header{
+          position: fixed;
+          top: 40px;
+          left: 0;
+          width: 100%;
+          padding: 0 18px;
+          background-color: #fff;
+          z-index: 1;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #ccc;
+          
+      }
+  }
+}
+
+
+
+
+// css rating
+.rating {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.3rem;
+    --stroke: #666;
+    --fill: #ffc73a;
+  }
+  
+  .rating input {
+    appearance: unset;
+  }
+  
+  .rating label {
+    cursor: pointer;
+  }
+  
+  .rating svg {
+    width: 3rem;
+    height: 3rem;
+    overflow: visible;
+    fill: transparent;
+    stroke: var(--stroke);
+    stroke-linejoin: bevel;
+    stroke-dasharray: 12;
+    animation: idle 4s linear infinite;
+    transition: stroke 0.2s, fill 0.5s;
+  }
+  
+  @keyframes idle {
+    from {
+      stroke-dashoffset: 24;
+    }
+  }
+  
+  .rating label:hover svg {
+    stroke: var(--fill);
+  }
+  
+  .rating input:checked ~ label svg {
+    transition: 0s;
+    animation: idle 4s linear infinite, yippee 0.75s backwards;
+    fill: var(--fill);
+    stroke: var(--fill);
+    stroke-opacity: 0;
+    stroke-dasharray: 0;
+    stroke-linejoin: miter;
+    stroke-width: 8px;
+  }
+  
+  @keyframes yippee {
+    0% {
+      transform: scale(1);
+      fill: var(--fill);
+      fill-opacity: 0;
+      stroke-opacity: 1;
+      stroke: var(--stroke);
+      stroke-dasharray: 10;
+      stroke-width: 1px;
+      stroke-linejoin: bevel;
+    }
+  
+    30% {
+      transform: scale(0);
+      fill: var(--fill);
+      fill-opacity: 0;
+      stroke-opacity: 1;
+      stroke: var(--stroke);
+      stroke-dasharray: 10;
+      stroke-width: 1px;
+      stroke-linejoin: bevel;
+    }
+  
+    30.1% {
+      stroke: var(--fill);
+      stroke-dasharray: 0;
+      stroke-linejoin: miter;
+      stroke-width: 8px;
+    }
+  
+    60% {
+      transform: scale(1.2);
+      fill: var(--fill);
+    }
+  }
+  
+
+// css input
+
+.input-container {
+  position: relative;
+  margin: 15px 10px;
+  
+}
+
+
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  background-color: transparent;
+}
+
+
+.input-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 14px;
+  color: rgba(204, 204, 204, 0);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+
+.input-highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background-color: #FF8989;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus + .input-label {
+  top: -10px;
+  font-size: 12px;
+  color: #FF8989;
+}
+
+.input-field:focus + .input-label + .input-highlight {
+  width: 100%;
+}
+
+
+
+
+
