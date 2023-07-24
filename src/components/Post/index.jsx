@@ -209,7 +209,7 @@ function Post({
             <button
               type="button"
               className={cx("active", "col-4", {
-                liked: !!likeInfo.user.find((u) => u.user._id === user._id),
+                liked: !!likeInfo.user.find((u) => u?.user?._id === user?._id),
               })}
               onClick={() => toggleLike()}
             >
@@ -231,7 +231,7 @@ function Post({
               </div>
 
               <span>
-                {likeInfo.user.find((u) => u.user._id === user._id)
+                {likeInfo.user.find((u) => u?.user?._id === user?._id)
                   ? "Liked"
                   : "Like"}
               </span>

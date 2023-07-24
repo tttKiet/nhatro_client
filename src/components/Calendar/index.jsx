@@ -12,6 +12,7 @@ function CalendarDate({ selectionRange, onChange, monthsShown = 1 }) {
     <div className={cx("wrapper")}>
       <div className={cx("date")}>
         <DateRange
+          className="fs-s"
           rangeColors={["#262626"]}
           ranges={[selectionRange]}
           direction="horizontal"

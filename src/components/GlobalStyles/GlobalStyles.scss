@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+:root {
+  --toastify-toast-min-height: 54px !important;
+}
+
 html {
   box-sizing: border-box;
 
@@ -70,8 +74,15 @@ body {
 }
 
 .rdrCalendarWrapper {
-  font-style: 16px !important;
+  font-size: 16px !important;
   // width: 100% !important;
+}
+
+.fs-s {
+  &.rdrCalendarWrapper {
+    font-size: 15px !important;
+    // width: 100% !important;
+  }
 }
 
 .css-13cymwt-control {

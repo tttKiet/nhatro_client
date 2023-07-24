@@ -44,6 +44,11 @@ const boardHouseServices = {
     const res = await axios.get(`/api/v1/board-house/page/${page}`);
     return res;
   },
+
+  async getBoardHouseInfoById({ id }) {
+    const res = await axios.get(`/api/v1/board-house/${id}`);
+    return res;
+  },
 };
 
 export default boardHouseServices;

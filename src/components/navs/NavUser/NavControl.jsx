@@ -60,7 +60,11 @@ function NavControl() {
               )}
             >
               <div className={cx("input")}>
-                <input type="text" placeholder="Looking for motel name... " />
+                <input
+                  hidden={!isShowSearch}
+                  type="text"
+                  placeholder="Looking for motel name... "
+                />
               </div>
               <div
                 className={cx("svg")}

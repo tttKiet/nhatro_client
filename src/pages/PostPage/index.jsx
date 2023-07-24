@@ -95,13 +95,13 @@ function PostPage() {
                     <PostLazy
                       userEmailVerified={post?.user?.emailVerified || false}
                       setPosts={setPosts}
-                      content={post.content}
-                      createdAt={post.createdAt}
-                      images={post.images}
-                      authorName={post.user.fullName}
-                      authorImage={post.user.avatar}
-                      author_id={post.user._id}
-                      hashTag={post.hashTag}
+                      content={post?.content}
+                      createdAt={post?.createdAt}
+                      images={post?.images}
+                      authorName={post?.user?.fullName}
+                      authorImage={post?.user?.avatar}
+                      author_id={post?.user?._id}
+                      hashTag={post?.hashTag}
                       postId={post?._id}
                     />
                   </Suspense>

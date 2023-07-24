@@ -10,6 +10,7 @@ import SettingImage from "./SettingImage";
 const cx = classNames.bind(styles);
 
 function ModalReqOwner({ setActiveTab }) {
+  const [loading, setLoading] = useState(false);
   const [, , user] = useAuth();
   const [imgs, setImgs] = useState([]);
   const [show, setShow] = useState(false);
@@ -57,8 +58,10 @@ function ModalReqOwner({ setActiveTab }) {
   };
 
   const handleSubmit = async (values) => {
+    let toastId = null;
     try {
-      toast.loading("Creating...");
+      setLoading(true);
+      toastId = toast.loading("Creating...");
       const dataCreate = {
         files: values.images,
         data: {
@@ -74,15 +77,30 @@ function ModalReqOwner({ setActiveTab }) {
 
       const res = await reqRoomOwnerServices.createReqBoardHouse(dataCreate);
       if (res.err === 0) {
+        toast.update(toastId, {
+          render: res.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
         formik.resetForm();
         setImgs([]);
-        toast.dismiss();
-        toast.success(res.message);
       } else {
-        toast.error(res.message);
+        toast.update(toastId, {
+          render: res.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        toast.dismiss();
+        toast.clearWaitingQueue();
+      }, 2000);
     }
   };
 
@@ -255,7 +273,11 @@ function ModalReqOwner({ setActiveTab }) {
           <button type="reset" className="btn btn-default transparent">
             Reset
           </button>
-          <button type="submit" className="btn btn-primary transparent">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary transparent"
+          >
             Request
           </button>
         </div>

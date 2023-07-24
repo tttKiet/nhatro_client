@@ -4,17 +4,16 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks";
-import { ToastContext } from "../../untils/context";
-import { useContext } from "react";
 // scss
 import styles from "./RegisterForm.module.scss";
 import classNames from "classNames/bind";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
 function RegisterForm({ _id }) {
   const navigation = useNavigate();
-  const toast = useContext(ToastContext);
+  const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [, type] = useAuth();
   const validate = (values) => {
@@ -73,43 +72,82 @@ function RegisterForm({ _id }) {
   });
 
   async function handleSubmit(values) {
-    let res;
+    let toastId = null;
+
     if (_id) {
-      toast
-        .promise(userServices.updateUser(_id, values), {
-          loading: "Update...",
-          success: <b>Update successfully!</b>,
-          error: <b>Could not update.</b>,
-        })
-        .then(() => {
-          if (res.err === 0) {
-            if (type == "root") {
-              return navigation("/root/user/accounts");
-            } else {
-              setTimeout(() => {
-                navigation("/login");
-              }, 2000);
-            }
+      toastId = toast.loading("Updating...");
+      try {
+        setLoading(true);
+        const res = await userServices.updateUser(_id, values);
+        if (res.err === 0) {
+          toast.update(toastId, {
+            render: res.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+          if (type == "root") {
+            return navigation("/root/user/accounts");
+          } else {
+            setTimeout(() => {
+              navigation("/login");
+            }, 2000);
           }
-        });
+        } else {
+          toast.update(toastId, {
+            render: res.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          });
+        }
+      } catch (err) {
+        const serr = `${err?.message || "Error! Please try again..."}`;
+        console.log(serr);
+      } finally {
+        setTimeout(() => {
+          toast.dismiss(toastId);
+          toast.clearWaitingQueue();
+          setLoading(false);
+        }, 2000);
+      }
     } else {
-      toast
-        .promise(userServices.createUser(values), {
-          loading: "Register...",
-          success: <b>Register successfully!</b>,
-          error: <b>Could not register.</b>,
-        })
-        .then((res) => {
-          if (res.err === 0) {
-            if (type == "root") {
-              return navigation("/root/user/accounts");
-            } else {
-              setTimeout(() => {
-                navigation("/login");
-              }, 2000);
-            }
+      toastId = toast.loading("Registering...");
+      try {
+        setLoading(true);
+        const res = await userServices.createUser(values);
+        if (res.err === 0) {
+          toast.update(toastId, {
+            render: res.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+          if (type == "root") {
+            return navigation("/root/user/accounts");
+          } else {
+            setTimeout(() => {
+              navigation("/login");
+            }, 2000);
           }
-        });
+        } else {
+          toast.update(toastId, {
+            render: res.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          });
+        }
+      } catch (err) {
+        const serr = `${err?.message || "Error! Please try again..."}`;
+        console.log(serr);
+      } finally {
+        setTimeout(() => {
+          toast.dismiss(toastId);
+          toast.clearWaitingQueue();
+          setLoading(false);
+        }, 2000);
+      }
     }
   }
 
@@ -324,6 +362,7 @@ function RegisterForm({ _id }) {
           </button>
 
           <button
+            disabled={loading}
             className={cx("btn", "col-sm-2 col-12", "btn-primary")}
             type="submit"
           >
