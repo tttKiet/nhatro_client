@@ -49,12 +49,12 @@ function RequestFromAccount() {
       toast.loading("Waiting...");
       const res = await reqRoomOwnerServices.accpectReq(reqId);
       if (res.err === 0) {
-        toast.dismiss();
         toast.success("Accecpted successfully");
         getAllReqs();
       } else {
         toast.error("Error");
       }
+      toast.dismiss();
     } catch (err) {
       console.log(err);
     }
@@ -178,7 +178,7 @@ function RequestFromAccount() {
                   d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                 />
               </svg>
-              {info.row.original.dataBoardHouse.name}
+              {info?.row?.original?.dataBoardHouse?.name || ""}
             </p>
             <p className="fs-m m-0">
               <svg
@@ -201,15 +201,15 @@ function RequestFromAccount() {
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                 />
               </svg>
-              {info.row.original.dataBoardHouse.address}
+              {info?.row?.original?.dataBoardHouse?.address}
             </p>
             <p className="fs-m m-0">
               <IoWaterOutline className="fs-l me-2" />
-              {info.row.original.dataBoardHouse.waterPrice} VND
+              {info?.row?.original?.dataBoardHouse?.waterPrice} VND
             </p>
             <p className="fs-m m-0">
               <GiElectric className="fs-l me-2" />
-              {info.row.original.dataBoardHouse.electricPrice} VND
+              {info?.row?.original?.dataBoardHouse?.electricPrice} VND
             </p>
           </div>
         ),
@@ -318,16 +318,16 @@ function RequestFromAccount() {
         id: req._id,
         Number: index,
         "Information user":
-          req.userId.fullName + req.userId.email + req.userId.phone,
-        userName: req.userId.fullName,
-        userEmail: req.userId.email,
-        userPhone: req.userId.phone,
-        "Information board house": req.boardHouseId.name,
+          req?.userId?.fullName + req?.userId?.email + req?.userId?.phone,
+        userName: req?.userId?.fullName,
+        userEmail: req?.userId?.email,
+        userPhone: req?.userId?.phone,
+        "Information board house": req?.boardHouseId?.name,
         dataBoardHouse: req.boardHouseId,
-        UserName: req.userId.fullName,
-        Description: req.description,
-        Status: req.status,
-        Images: req.boardHouseId.images,
+        UserName: req?.userId?.fullName,
+        Description: req?.description,
+        Status: req?.status,
+        Images: req?.boardHouseId?.images,
       }));
       setData(transformedData);
     }

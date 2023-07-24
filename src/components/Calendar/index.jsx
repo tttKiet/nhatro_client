@@ -7,17 +7,20 @@ import styles from "./CalendarDate.module.scss";
 
 const cx = classNames.bind(styles);
 
-function CalendarDate({ selectionRange, onChange }) {
+function CalendarDate({ selectionRange, onChange, monthsShown = 1 }) {
   return (
     <div className={cx("wrapper")}>
       <div className={cx("date")}>
         <DateRange
+          className="fs-s"
           rangeColors={["#262626"]}
           ranges={[selectionRange]}
-          direction="vertical"
+          direction="horizontal"
           showDateDisplay={false}
           minDate={new Date()}
           onChange={onChange}
+          months={monthsShown}
+          fixedHeight={true}
         />
       </div>
     </div>

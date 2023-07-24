@@ -36,7 +36,6 @@ function SearchMotel() {
 
   const handleChangeDate = (event) => {
     setSelectionRange({ ...event.selection });
-    console.log(event.selection);
     setTextDate(
       `From ${moment(event.selection.startDate).calendar()} to ${moment(
         event.selection.endDate

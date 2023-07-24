@@ -1,8 +1,29 @@
 .wrapper {
+  .p3 {
+    padding: 2rem 0;
+  }
+
+  hr {
+    margin: 2rem 0;
+  }
+  --d-e-vybb: radial-gradient(
+    circle at center,
+    #ff385c 0%,
+    #e61e4d 27.5%,
+    #e31c5f 40%,
+    #d70466 57.5%,
+    #bd1e59 75%,
+    #bd1e59 100%
+  );
   .boardhouse_name {
     margin-top: 32px;
     font-size: 26px;
     font-weight: 500;
+  }
+
+  .feedback {
+    display: flex;
+    align-items: center;
   }
 
   .images {
@@ -13,8 +34,9 @@
 
     .image_wrapper {
       .onepic {
-        height: calc(400px + 0.5rem) !important;
+        height: calc(300px + 0.5rem) !important;
       }
+
       img {
         width: 100%;
         // height: 100%;
@@ -27,15 +49,223 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid #ddd;
+      border: 1px solid #fdfdfd;
       background-color: #fff;
       gap: 6px;
-      padding: 2px 10px;
-      border-radius: 0.6rem;
+      padding: 4px 10px;
+      border-radius: 0.4rem;
       font-size: 16px;
       position: absolute;
       bottom: 22px;
       right: 22px;
     }
+  }
+
+  .infomation {
+    .title {
+      font-size: 20px;
+      color: #000;
+      font-weight: 400;
+      margin-bottom: 0;
+      // margin-left: 6px;
+    }
+
+    .desc {
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: #333;
+      margin-top: 6px;
+
+      &.ctact {
+        background: rgb(2, 0, 36);
+        background: linear-gradient(
+          90deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(33, 63, 79, 0.8492647058823529) 73%,
+          rgba(14, 151, 182, 0.70640756302521) 100%,
+          rgba(10, 168, 203, 1) 100%,
+          rgba(0, 212, 255, 1) 100%
+        );
+        border-radius: 0.4rem;
+        position: relative;
+        color: #fff;
+        font-size: 14px;
+        padding: 10px 16px;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+
+        .copy {
+          padding: 20px;
+          cursor: pointer;
+          position: absolute;
+          transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
+
+          right: 4px;
+          opacity: 0;
+          transform: translateY(calc(100% + 20px));
+        }
+
+        &:hover {
+          .copy {
+            opacity: 1;
+            position: absolute;
+            transform: translateY(0);
+          }
+        }
+      }
+    }
+
+    .title_item {
+      margin-bottom: 0;
+      font-size: 16px;
+      color: #000;
+      opacity: 0.7;
+      margin-left: 8px;
+    }
+
+    .all-room {
+      font-size: 18px;
+      color: #d6610e;
+    }
+
+    .info-room-text {
+      border-radius: 0.4rem;
+      border: 1px solid #ddd;
+      .room_gr {
+        margin: 6px 0;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .title {
+          flex-shrink: 0;
+
+          margin-bottom: 0;
+          font-size: 16px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .infor-room {
+      .images {
+        .img {
+          height: 260px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+
+    .rooms {
+      display: flex;
+      gap: 12px;
+
+      .room {
+        cursor: pointer;
+        padding: 4px 22px;
+        background-color: rgb(42, 42, 255);
+        border-radius: 0.4rem;
+        color: #fff;
+        flex-wrap: wrap;
+
+        &.disabled {
+          background-color: rgba(36, 36, 183, 0.867);
+          cursor: auto;
+        }
+
+        &.active {
+          background-color: rgba(232, 12, 45, 0.867);
+          cursor: auto;
+        }
+      }
+    }
+
+    .date {
+      // overflow: hidden;
+      border-radius: 0.4rem;
+    }
+  }
+
+  .send {
+    height: 100%;
+    position: relative;
+    .box {
+      border: 1px solid rgb(221, 221, 221);
+      border-radius: 12px;
+      padding: 24px;
+      height: 300px;
+      position: sticky;
+      top: 140px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
+
+      .gr {
+        .title {
+          font-size: 18px;
+          color: #000;
+          text-align: center;
+        }
+
+        .date-room {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ddd;
+          border-radius: 0.4rem;
+
+          .date-item {
+            width: 50%;
+            padding: 6px 12px;
+            padding-bottom: 10px;
+
+            + .date-item {
+              border-left: 1px solid #ddd;
+            }
+
+            .date-name {
+              font-size: 14px;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+
+      .submit {
+        padding: 12px 0;
+        .btn-send {
+          background-image: var(--d-e-vybb);
+          display: block;
+          background-size: 200% 200%;
+          width: 100%;
+          outline: none;
+          font-size: 16px;
+          padding: 8px;
+          border: none;
+          border-radius: 8px;
+          min-width: 200px;
+          opacity: 1;
+          color: #fff;
+          background-position: center;
+          transition: all 0.3s ease;
+
+          &:active {
+            transform: scale(0.96);
+            background-image: linear-gradient(#ff385c, #fe385c);
+          }
+        }
+      }
+    }
+  }
+
+  .footer {
+    height: 400px;
   }
 }

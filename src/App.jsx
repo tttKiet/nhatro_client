@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import router from "./router";
-import { toast, Toaster, ToastBar } from "react-hot-toast";
 import GlobalStyles from "./components/GlobalStyles";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProviderGetUserLogin from "./components/ProviderGetUserLogin";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,7 +14,6 @@ moment().format("MMM Do YY");
 import "animate.css";
 import { ToastContext } from "./untils/context";
 import { Suspense } from "react";
-import Snipper from "./components/Snipper";
 import PreSnipperLoader from "./components/PreSnipperLoader";
 
 const route = createBrowserRouter(
@@ -84,44 +84,17 @@ const route = createBrowserRouter(
 );
 
 function App() {
-  console.log("app");
   return (
     <>
       <GlobalStyles>
         <ToastContext.Provider value={toast}>
-          <Toaster>
-            {(t) => (
-              <ToastBar toast={t}>
-                {({ icon, message }) => (
-                  <>
-                    {icon}
-                    {message}
-                    {t.type !== "loading" && (
-                      <button
-                        className={"icon-x"}
-                        onClick={() => toast.dismiss(t.id)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-6 h-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    )}
-                  </>
-                )}
-              </ToastBar>
-            )}
-          </Toaster>
+          <ToastContainer
+            limit={1}
+            newestOnTop={true}
+            autoClose={3000}
+            theme="light"
+            position="top-center"
+          />
           <Tooltip style={{ zIndex: 1000 }} anchorSelect=".check" />
           <RouterProvider router={route} />
         </ToastContext.Provider>

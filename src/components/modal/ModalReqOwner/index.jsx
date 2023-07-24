@@ -14,6 +14,7 @@ const cx = classNames.bind(styles);
 
 // eslint-disable-next-line react/prop-types
 function ModalReqOwner({ setActiveTab }) {
+  const [loading, setLoading] = useState(false);
   const [, , user] = useAuth();
   const [imgs, setImgs] = useState([]);
   const [show, setShow] = useState(false);
@@ -61,8 +62,10 @@ function ModalReqOwner({ setActiveTab }) {
   };
 
   const handleSubmit = async (values) => {
+    let toastId = null;
     try {
-      toast.loading("Creating...");
+      setLoading(true);
+      toastId = toast.loading("Creating...");
       const dataCreate = {
         files: values.images,
         data: {
@@ -78,16 +81,33 @@ function ModalReqOwner({ setActiveTab }) {
 
       const res = await reqRoomOwnerServices.createReqBoardHouse(dataCreate);
       if (res.err === 0) {
+        toast.update(toastId, {
+          render: res.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
         formik.resetForm();
         setImgs([]);
         toast.dismiss();
         toast.success(res.message);
         setActiveTab("information");
       } else {
-        toast.error(res.message);
+        toast.update(toastId, {
+          render: res.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        toast.dismiss();
+        toast.clearWaitingQueue();
+      }, 2000);
     }
   };
 
@@ -246,7 +266,7 @@ function ModalReqOwner({ setActiveTab }) {
           <button type="reset" className={cx("btn-create")}>
             Reset <MdOutlineRestartAlt className="ms-1"></MdOutlineRestartAlt>
           </button>
-          <button type="submit" className={cx("btn-create")}>
+          <button type="submit" disabled={loading} className={cx("btn-create")}>
             Request <BsSend className="ms-1"></BsSend>
           </button>
         </div>
