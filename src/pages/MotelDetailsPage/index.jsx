@@ -1,29 +1,38 @@
-import styles from "./MotelDetailsPage.module.scss";
-import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
-import { Fragment, useCallback, useContext, useEffect } from "react";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { Fragment, useCallback, useEffect, useRef } from "react";
 import { HiAtSymbol, HiOutlineMail } from "react-icons/hi";
 import { MdOutlineContactless, MdOutlineContentCopy } from "react-icons/md";
+
 import { FiPhone } from "react-icons/fi";
 
-import { CiLineHeight, CiLocationOn, CiMemoPad } from "react-icons/ci";
+import {
+  CiLineHeight,
+  CiLocationOn,
+  CiMemoPad,
+  CiDollar,
+} from "react-icons/ci";
 import { AiFillStar } from "react-icons/ai";
-import CalendarDate from "../../components/Calendar";
 import { useState } from "react";
 import Footer from "../../components/Footer";
 import moment from "moment";
 import ModalRentRoom from "../../components/modal/ModalRentRoom";
 import boardHouseServices from "../../services/boardHouseServices";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
-import { Slide, Zoom, Flip, Bounce } from "react-toastify";
-
+import { toast, Slide } from "react-toastify";
+import { Calendar, DateRange } from "react-date-range";
+import styles from "./MotelDetailsPage.module.scss";
+import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
   const [textDate, setTextDate] = useState("");
+  const [currChooseRoom, setCurrChooseRoom] = useState(1);
   const [boardHouseInfo, setBoardHouseInfo] = useState({});
   const [showModalRent, setShowModalRent] = useState(false);
+  const chooseDateRef = useRef(null);
+  const chooseRoomRef = useRef(null);
 
   const { id } = useParams();
   const toggleShowModalRent = () => {
@@ -50,13 +59,22 @@ function MotelDetailsPage() {
       navigator.clipboard.writeText(text);
     }
 
-    toast.dismiss();
+    // toast.dismiss();
     toast.clearWaitingQueue();
     toast.success(`Copied ${text}`, {
       position: "bottom-right",
-      autoClose: 1300,
+      autoClose: 1100,
       transition: Slide,
       pauseOnFocusLoss: false,
+      newestOnTop: false,
+    });
+  };
+
+  const windowScrollToElement = (element) => {
+    element?.current?.scrollIntoView({
+      block: "start",
+      behavior: "smooth",
+      top: -20,
     });
   };
 
@@ -182,6 +200,46 @@ function MotelDetailsPage() {
                     </div>
                   </div>
                 </div>
+
+                <div className="col-12">
+                  <div className="d-flex justify-content-start align-items-center ">
+                    <h4 className={cx("title")}>ELECTRIC</h4>
+                  </div>
+                  <div className={cx("desc")}>
+                    <span>
+                      Tenants have to pay
+                      <span className={cx("hl")}>
+                        {boardHouseInfo?.electricPrice}
+                      </span>
+                      per kilo of electricity and get unlimited use.
+                    </span>
+                  </div>
+                </div>
+                <div className="col-12 py-4">
+                  <div className="d-flex justify-content-start align-items-center ">
+                    <h4 className={cx("title")}>WATER</h4>
+                  </div>
+                  <div className={cx("desc")}>
+                    <span>
+                      Tenants have to pay
+                      <span className={cx("hl")}>
+                        {boardHouseInfo?.waterPrice}vnd
+                      </span>
+                      per block of water
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-12 ">
+                  <div className="d-flex justify-content-start align-items-center ">
+                    <h4 className={cx("title")}>MIN RENT PRICE</h4>
+                  </div>
+                  <div className={cx("desc")}>
+                    <span>
+                      <span className={cx("hl")}>1.800.000vnd </span>/ room
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <hr />
@@ -193,9 +251,9 @@ function MotelDetailsPage() {
                   <h4 className={cx("title")}>DESCRIPTION ABOUT BOARDHOUSE</h4>
                 </div>
                 <div className={cx("desc")}>
-                  Nằm ở vị trí hoàn hảo ngay trung tâm Green Point 's, 713
+                  Nằm ở vị trí hoàn hảo ngay trung tâm Green Point s, 713
                   Cascades là một căn hộ sang trọng và phong cách ở tầng 7 với
-                  tầm nhìn đáng yêu tận hưởng khung cảnh xa xôi của Devil' s
+                  tầm nhìn đáng yêu tận hưởng khung cảnh xa xôi của Devil s
                   Peak. Nó đi kèm với ban công, nhà bếp đầy đủ, TV 60 inch,
                   giường cỡ Queen thoải mái với ga trải giường xa hoa. Căn hộ
                   cũng tận hưởng sự tiện lợi của một bãi đỗ xe ngầm lớn, chuyên
@@ -237,56 +295,51 @@ function MotelDetailsPage() {
                 </div>
               </div>
 
-              <hr />
+              <hr ref={chooseRoomRef} />
 
               <div className={cx("p3", "pt-0")}>
+                <div className={cx("scrollview")} ref={chooseRoomRef}></div>
                 <h4 className={cx("all-room", "mt-4 mb-3")}>All rooms here</h4>
                 <div className={cx("rooms")}>
-                  <div className={cx("room", "disabled")}>
-                    <div className={cx("r")}>1</div>
-                  </div>
-                  <div className={cx("room")}>
-                    <div className={cx("r")}>2</div>
-                  </div>
-                  <div className={cx("room", "active")}>
-                    <div className={cx("r")}>3</div>
-                  </div>
-                  <div className={cx("room")}>
-                    <div className={cx("r")}>4</div>
-                  </div>
-                  <div className={cx("room")}>
-                    <div className={cx("r")}>5</div>
-                  </div>
-                  <div className={cx("room")}>
-                    <div className={cx("r")}>6</div>
-                  </div>
+                  {boardHouseInfo?.rooms?.map((room) => (
+                    <div
+                      key={room?._id}
+                      className={cx("room")}
+                      onClick={() => setCurrChooseRoom(room?.number)}
+                    >
+                      <div
+                        className={cx("wrap-r", {
+                          active: currChooseRoom === room?.number,
+                        })}
+                      >
+                        <div className={cx("r")}>room {room?.number}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className={cx("info-room-text", "mt-3", "p-4")}>
                   <div>
-                    <div className={cx("room_gr")}>
-                      <h3 className={cx("title")}>Room number:</h3>
-                      <b>3</b>
-                    </div>
-
                     <div className="row">
                       <div className="col-4">
                         <div className={cx("room_gr")}>
-                          <h3 className={cx("title")}>Price on month:</h3>
-                          <b>3M</b>
-                        </div>
-                      </div>
-                      <div className="col-4">
-                        <div className={cx("room_gr")}>
-                          <h3 className={cx("title")}>Price electric:</h3>
-                          <b>3M</b>
+                          <h3 className={cx("title")}>Room number:</h3>
+                          <b>
+                            {
+                              boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                                ?.number
+                            }
+                          </b>
                         </div>
                       </div>
 
                       <div className="col-4">
                         <div className={cx("room_gr")}>
-                          <h3 className={cx("title")}>Price water:</h3>
-                          <b>3M</b>
+                          <h3 className={cx("title")}>Price on month:</h3>
+                          <b>
+                            {boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
+                            M
+                          </b>
                         </div>
                       </div>
                     </div>
@@ -296,13 +349,7 @@ function MotelDetailsPage() {
                         Description for this room:
                       </h3>
                       <p>
-                        Nằm ở vị trí hoàn hảo ngay trung tâm Green Point 's, 713
-                        Cascades là một căn hộ sang trọng và phong cách ở tầng 7
-                        với tầm nhìn đáng yêu tận hưởng khung cảnh xa xôi của
-                        Devil' s Peak. Nó đi kèm với ban công, nhà bếp đầy đủ,
-                        TV 60 inch, giường cỡ Queen thoải mái với ga trải giường
-                        xa hoa. Căn hộ cũng tận hưởng sự tiện lợi của một bãi đỗ
-                        xe ngầm lớn, chuyên dụng, an toàn.
+                        {boardHouseInfo?.rooms?.[currChooseRoom]?.description}
                       </p>
                     </div>
 
@@ -340,41 +387,53 @@ function MotelDetailsPage() {
                     <div className={cx("infor-room")}>
                       <div className={cx("images")}>
                         <div className="row g-2">
-                          <div className="col-6">
-                            <div className={cx("img")}>
-                              <Image src="https://res.cloudinary.com/djvlxywoe/image/upload/v1683341438/nienluan_image-post/butlifkoztvuczdkharz.jpg"></Image>
+                          {boardHouseInfo.rooms?.[
+                            currChooseRoom - 1
+                          ].images.map((img, index) => (
+                            <div key={index} className="col-6">
+                              <div className={cx("img")}>
+                                <Image src={img}></Image>
+                              </div>
                             </div>
-                          </div>
-                          <div className="col-6">
-                            <div className={cx("img")}>
-                              <Image src="https://res.cloudinary.com/djvlxywoe/image/upload/v1683341438/nienluan_image-post/butlifkoztvuczdkharz.jpg"></Image>
-                            </div>
-                          </div>
-                          <div className="col-6">
-                            <div className={cx("img")}>
-                              <Image src="https://res.cloudinary.com/djvlxywoe/image/upload/v1683341438/nienluan_image-post/butlifkoztvuczdkharz.jpg"></Image>
-                            </div>
-                          </div>
-                          <div className="col-6">
-                            <div className={cx("img")}>
-                              <Image src="https://res.cloudinary.com/djvlxywoe/image/upload/v1683341438/nienluan_image-post/butlifkoztvuczdkharz.jpg"></Image>
-                            </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                  <hr />
+                  <div
+                    className={cx("scrollview", "nohr")}
+                    ref={chooseDateRef}
+                  ></div>
 
-              <div className="">
-                <h4 className={cx("title")}>CHECK IN DATE </h4>
-                <div className={cx("date", "my-4")}>
-                  <CalendarDate
-                    monthsShown={2}
-                    selectionRange={selectionRange}
-                    onChange={handleChangeDate}
-                  />
+                  <div className={cx("room_gr")}>
+                    <h4 className={cx("title")}>Check in date </h4>
+                  </div>
+                  <div className={cx("date", "my-0")}>
+                    <div className="row">
+                      <div className="col-5">
+                        <div className={cx("desc")}>
+                          <span>
+                            Start moving in on the
+                            <span className={cx("hl")}>22/4/2022</span>.
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-7">
+                        <div className="d-flex justify-content-end">
+                          <Calendar
+                            className="fs-s"
+                            color="#262626"
+                            minDate={new Date()}
+                            showDateDisplay={false}
+                            date={new Date()}
+                            fixedHeight={true}
+                            direction="horizontal"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -384,17 +443,32 @@ function MotelDetailsPage() {
             <div className={cx("send")}>
               <div className={cx("box")}>
                 <div className={cx("gr")}>
-                  <h4 className={cx("title", "mb-4")}>Add receive date</h4>
+                  <h4 className={cx("title", "mb-4")}>Renting an apartment</h4>
                   <div className={cx("feedback")}>
-                    <AiFillStar />
+                    <AiFillStar size={18} />
                     <b className="ps-1">4,84</b>
                     <span className="px-2">|</span>
                     <span>140 Evaluate</span>
                   </div>
                 </div>
 
+                <div className="row">
+                  <div
+                    className={cx("gr", "my-2 pb-1")}
+                    onClick={() => windowScrollToElement(chooseRoomRef)}
+                  >
+                    Room number:
+                    <span className={cx("room-bill")}>
+                      <b>{currChooseRoom}</b>
+                    </span>
+                  </div>
+                </div>
+
                 <div className={cx("gr", "my-2")}>
-                  <div className={cx("date-room")}>
+                  <div
+                    className={cx("date-room")}
+                    onClick={() => windowScrollToElement(chooseDateRef)}
+                  >
                     <div className={cx("date-item")}>
                       <div className={cx("date-name")}>From</div>
                       <div className={cx("date-value")}>
@@ -414,15 +488,26 @@ function MotelDetailsPage() {
                   </div>
                 </div>
 
-                <div className={cx("gr", "my-2")}>
-                  Room number: <b>3</b>
+                <div className="row">
+                  <div
+                    className={cx("gr", "my-2 pb-1")}
+                    onClick={() => windowScrollToElement(chooseRoomRef)}
+                  >
+                    <div className="d-flex align-items-center">
+                      <CiDollar size={22} />
+                      <b>
+                        {boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
+                      </b>
+                    </div>
+                  </div>
                 </div>
+
                 <div className={cx("submit")}>
                   <button
                     className={cx("btn-send")}
                     onClick={toggleShowModalRent}
                   >
-                    Register
+                    Continues
                   </button>
                 </div>
               </div>

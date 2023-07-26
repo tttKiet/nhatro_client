@@ -17,7 +17,7 @@ import postServices from "../../services/postServices";
 import { favouritePostServices } from "../../services";
 const cx = classNames.bind(styles);
 
-function More({ postId, details, postInfo, setPosts }) {
+function More({ postId, postInfo, setPosts }) {
   const toast = useContext(ToastContext);
   const [, , user] = useAuth();
   const [show, setShow] = useState(false);
@@ -30,16 +30,19 @@ function More({ postId, details, postInfo, setPosts }) {
     setOpenModalEdit(true);
   };
 
-  const handleDeletePost = (offToastId) => {
-    toast.dismiss(offToastId);
-    toast
-      .promise(postServices.deletePost(postId), {
-        loading: "Deleting...",
-        success: <span>Deleted!</span>,
-        error: <span>Could not delete.</span>,
-      })
-      .then((res) => {
+  const handleDeletePost = ({ closeToast, toastProps }) => {
+    toastProps.deleteToast();
+    console.log(toastProps);
+    const toastId = toast.loading("Deleting...");
+    setTimeout(() => {
+      postServices.deletePost(postId).then((res) => {
         if (res.status === 200) {
+          toast.update(toastId, {
+            type: toast.TYPE.SUCCESS,
+            isLoading: false,
+            render: "Deleted",
+            autoClose: 2000,
+          });
           setPosts((prev) => {
             let index;
             for (let i = 0; i < prev.length; i++) {
@@ -54,17 +57,19 @@ function More({ postId, details, postInfo, setPosts }) {
           });
         }
       });
+    }, 0);
   };
 
   const handleClickDelete = () => {
+    // show model verify
     toast.success(
-      (t) => (
+      ({ closeToast, toastProps }) => (
         <div className="d-flex justify-content-center align-items-center">
           <p className="m-0">
             Are you sure to <b>delete</b>?
           </p>
           <AiOutlineCheckCircle
-            onClick={() => handleDeletePost(t.id)}
+            onClick={() => handleDeletePost({ closeToast, toastProps })}
             style={{
               color: "#0075f5",
               fontSize: "20px",
@@ -85,7 +90,7 @@ function More({ postId, details, postInfo, setPosts }) {
             />
           </div>
         ),
-        duration: 6000,
+        autoClose: 6000,
       }
     );
   };

@@ -42,20 +42,50 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
 
     if (postInfo) {
       if (!changed)
-        return toast("You don't chnge this post!", {
+        return toast("You don't change this post!", {
           icon: "💔",
         });
       data.postId = postInfo?.postId;
-      toast
-        .promise(postServices.editPost({ _id: userCur._id, ...data }), {
-          loading: "Updating...",
-          success: <span>Updated is successfully!</span>,
-          error: <span>Erorr update this post!</span>,
-        })
+      setLoad(true);
+      const toastId = toast.loading("Updating...");
+      postServices
+        .editPost({ _id: userCur._id, ...data })
         .then((res) => {
           if (res.status === 200) {
+            setLoad(false);
             mergePostsNew(res?.data?.postDoc);
+            toast.update(toastId, {
+              type: "success",
+              isLoading: false,
+              render: res?.data?.message || "Erorr",
+              autoClose: 2000,
+            });
+          } else {
+            setLoad(false);
+            toast.update(toastId, {
+              type: "error",
+              isLoading: false,
+              autoClose: 2000,
+              render: res?.data?.message || "Erorr",
+            });
           }
+        })
+        .catch((err) => {
+          toast.update(toastId, {
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+            render: err?.message || "Erorr",
+          });
+        })
+        .finally(() => {
+          // toast.dismiss();
+          toast.clearWaitingQueue();
+          setContent("");
+          setHashTag("#notag");
+          setFiles([]);
+          setFilesUrl([]);
+          handleClose();
         });
     } else {
       window.scrollTo({
@@ -66,12 +96,12 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
         postServices.createPost({ _id: userCur._id, ...data }),
         "up_post"
       ).then(mergePostsNew);
+      setContent("");
+      setHashTag("#notag");
+      setFiles([]);
+      setFilesUrl([]);
+      handleClose();
     }
-    setContent("");
-    setHashTag("#notag");
-    setFiles([]);
-    setFilesUrl([]);
-    handleClose();
   };
   const handleInput = () => {
     if (refInput && refInput.current) {
@@ -274,6 +304,8 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
           >
             Cancel
           </Button>
+
+          {console.log(load)}
           <Button
             type="submit"
             className={cx("up")}
