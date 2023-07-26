@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
-import classNames from "classNames/bind";
-import styles from "./ModalCustom.module.scss";
-const cx = classNames.bind(styles);
+// import classNames from "classNames/bind";
+// import styles from "./ModalCustom.module.scss";
+// const cx = classNames.bind(styles);
 
 function ModalCustom({
   show,
@@ -16,12 +16,12 @@ function ModalCustom({
   isUpdate,
   img,
 }) {
-  function handleCloseModal() {
-    if (updateData) {
-      updateData();
-    }
-    onHide();
-  }
+  // function handleCloseModal() {
+  //   if (updateData) {
+  //     updateData();
+  //   }
+  //   onHide();
+  // }
 
   return (
     <Modal

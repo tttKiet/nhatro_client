@@ -4,16 +4,24 @@ import { HiOutlineEye, HiStar } from "react-icons/hi";
 import Image from "react-bootstrap/Image";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ModalAllReview from "./UsefulModal/ModalReviews";
 import { FiMessageSquare } from "react-icons/fi";
 import ModalCreateReview from "./UsefulModal/ModalCreateReview";
+import { feedbackOfBoardHouseServices } from "../../services";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../hooks";
+import { AiOutlineEdit } from "react-icons/ai";
 
 const cx = classNames.bind(styles);
 
 function FeedbackOfBoardHouse() {
   const [show, setShow] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
+  const { id } = useParams();
+  const [, , user] = useAuth();
+  const [existReview, setExistReview] = useState(false);
+  const [review, setReview] = useState(null);
 
   // on/off modal view all reviews
   const handleClose = () => setShow(false);
@@ -22,6 +30,27 @@ function FeedbackOfBoardHouse() {
   // on/off modal create review
   const handleCloseCreate = () => setShowCreate(false);
   const handleShowCreate = () => setShowCreate(true);
+
+  const checkAlreadyFeedback = useCallback(async () => {
+    try {
+      const res = await feedbackOfBoardHouseServices.checkAlreadyFeedback(
+        user._id,
+        id
+      );
+      if (res.isFeedback) {
+        setExistReview(true);
+        setReview(res.data);
+      } else {
+        setExistReview(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id, user]);
+
+  useEffect(() => {
+    checkAlreadyFeedback();
+  }, [checkAlreadyFeedback]);
 
   return (
     <div className={cx("wrap")}>
@@ -166,7 +195,15 @@ function FeedbackOfBoardHouse() {
             className={cx("btn-view-all", "me-4")}
             onClick={handleShowCreate}
           >
-            Create review <FiMessageSquare className="fs-l"></FiMessageSquare>
+            {existReview === true ? (
+              <p className="m-0">
+                Edit review <AiOutlineEdit className="fs-l" />
+              </p>
+            ) : (
+              <p className="m-0">
+                Create review <FiMessageSquare className="fs-l" />
+              </p>
+            )}
           </button>
           <button className={cx("btn-view-all")} onClick={handleShow}>
             All reviews <HiOutlineEye className="fs-l"></HiOutlineEye>
@@ -181,6 +218,9 @@ function FeedbackOfBoardHouse() {
       <ModalCreateReview
         show={showCreate}
         onHide={handleCloseCreate}
+        setExistReview={setExistReview}
+        setReview={setReview}
+        review={review}
       ></ModalCreateReview>
     </div>
   );

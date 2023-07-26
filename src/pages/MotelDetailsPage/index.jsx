@@ -136,8 +136,6 @@ function MotelDetailsPage() {
           </div>
         </div>
 
-        <FeedbackOfBoardHouse></FeedbackOfBoardHouse>
-
         <div className={cx("row g-5", "py-4")}>
           <div className="col-lg-8">
             <div className={cx("infomation")}>
@@ -433,7 +431,7 @@ function MotelDetailsPage() {
           </div>
         </div>
         <div className={cx("footer")}>
-          <h4 className={cx("title")}>FEED BACK </h4>
+          <FeedbackOfBoardHouse></FeedbackOfBoardHouse>
         </div>
       </div>
 
