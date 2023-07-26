@@ -89,7 +89,7 @@ function App() {
       <GlobalStyles>
         <ToastContext.Provider value={toast}>
           <ToastContainer
-            limit={1}
+            limit={2}
             newestOnTop={true}
             autoClose={3000}
             theme="light"

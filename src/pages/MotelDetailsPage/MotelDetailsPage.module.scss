@@ -76,6 +76,18 @@
       color: #333;
       margin-top: 6px;
 
+      .hl {
+        margin: 0 6px;
+        padding: 0 4px;
+
+        display: inline-flex;
+        justify-content: center;
+        color: #ff0707;
+        border-radius: 0.4rem;
+        border: 1px solid #bd1e59;
+        font-weight: 500;
+      }
+
       &.ctact {
         background: rgb(2, 0, 36);
         background: linear-gradient(
@@ -171,12 +183,29 @@
       gap: 12px;
 
       .room {
-        cursor: pointer;
-        padding: 4px 22px;
-        background-color: rgb(42, 42, 255);
-        border-radius: 0.4rem;
-        color: #fff;
-        flex-wrap: wrap;
+        position: relative;
+        .wrap-r {
+          cursor: pointer;
+          padding: 4px 6px;
+          border-radius: 0.4rem;
+          color: #fff;
+          flex-wrap: wrap;
+          position: relative;
+          border: 1px solid #ddd;
+          z-index: 0;
+
+          &.active {
+            border: 1px solid rgb(255 190 42 / 89%);
+          }
+
+          .r {
+            background-color: rgb(255 190 42 / 89%);
+            border-radius: 0.4rem;
+            border: 1px solid #d4af0647;
+            padding: 4px 18px;
+            position: relative;
+          }
+        }
 
         &.disabled {
           background-color: rgba(36, 36, 183, 0.867);
@@ -191,7 +220,7 @@
     }
 
     .date {
-      // overflow: hidden;
+      overflow: hidden;
       border-radius: 0.4rem;
     }
   }
@@ -201,9 +230,10 @@
     position: relative;
     .box {
       border: 1px solid rgb(221, 221, 221);
+      background-color: #f5f5f5;
       border-radius: 12px;
       padding: 24px;
-      height: 300px;
+      min-height: 300px;
       position: sticky;
       top: 140px;
       box-shadow: rgba(0, 0, 0, 0.12) 0px 6px 16px;
@@ -263,9 +293,31 @@
         }
       }
     }
+
+    .room-bill {
+      margin-left: 6px;
+      padding: 2px 12px;
+      border-radius: 0.4rem;
+      display: inline-flex;
+      font-size: 14px;
+      color: #f5f5f5;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #c20745;
+      background-color: #e6316d;
+    }
   }
 
   .footer {
     padding-bottom: 30px;
+  }
+}
+
+.scrollview {
+  position: relative;
+  top: -84px;
+
+  &.nohr {
+    top: calc(-68px - 1rem);
   }
 }
