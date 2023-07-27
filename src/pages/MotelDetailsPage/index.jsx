@@ -27,7 +27,6 @@ import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
-  const [textDate, setTextDate] = useState("");
   const [currChooseRoom, setCurrChooseRoom] = useState(1);
   const [boardHouseInfo, setBoardHouseInfo] = useState({});
   const [showModalRent, setShowModalRent] = useState(false);
@@ -37,21 +36,6 @@ function MotelDetailsPage() {
   const { id } = useParams();
   const toggleShowModalRent = () => {
     setShowModalRent((s) => !s);
-  };
-
-  const [selectionRange, setSelectionRange] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-
-  const handleChangeDate = (event) => {
-    setSelectionRange({ ...event.selection });
-    setTextDate(
-      `From ${moment(event.selection.startDate).calendar()} to ${moment(
-        event.selection.endDate
-      ).calendar()}`
-    );
   };
 
   const handleClickCopy = (text) => {
@@ -99,7 +83,17 @@ function MotelDetailsPage() {
 
   return (
     <div className={cx("wrapper")}>
-      <ModalRentRoom show={showModalRent} toggleShow={toggleShowModalRent} />
+      <ModalRentRoom
+        boardHouseName={boardHouseInfo?.name}
+        roomNumber={boardHouseInfo?.rooms?.[currChooseRoom - 1]?.number}
+        startDate={new Date()}
+        roomPrice={boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
+        address={boardHouseInfo?.address}
+        owner={boardHouseInfo?.userId}
+        show={showModalRent}
+        toggleShow={toggleShowModalRent}
+        roomId={boardHouseInfo?.rooms?.[currChooseRoom - 1]?._id}
+      />
       <div className="container">
         <div className={cx("boardhouse_name")}>
           <span className="pe-2">
@@ -472,17 +466,13 @@ function MotelDetailsPage() {
                     <div className={cx("date-item")}>
                       <div className={cx("date-name")}>From</div>
                       <div className={cx("date-value")}>
-                        {selectionRange.startDate
-                          ? moment(selectionRange.startDate).calendar()
-                          : "Add date"}
+                        {moment().calendar()}
                       </div>
                     </div>
                     <div className={cx("date-item")}>
                       <div className={cx("date-name")}>To</div>
                       <div className={cx("date-value")}>
-                        {selectionRange.endDate
-                          ? moment(selectionRange.endDate).calendar()
-                          : "Add date"}
+                        {moment().calendar()}
                       </div>
                     </div>
                   </div>
