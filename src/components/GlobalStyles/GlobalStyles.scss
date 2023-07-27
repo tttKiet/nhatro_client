@@ -352,14 +352,21 @@ h2 {
 }
 
 // arrow btn of react carousel
-.carousel .control-prev.control-arrow:before {
-  border-right: 8px solid rgb(63, 63, 63) !important;
-}
+// .carousel .control-prev.control-arrow:before {
+//   background-color: black;
 
-.carousel.carousel-slider .control-arrow:hover {
-  background-color: transparent !important;
-}
+// }
 
-.carousel .control-next.control-arrow:before {
-  border-left: 8px solid rgb(63, 63, 63) !important;
-}
+// .carousel.carousel-slider .control-arrow:hover {
+//   background-color: transparent !important;
+// }
+
+// .carousel .control-next.control-arrow:before {
+//   background-color: black;
+// }
+
+// .carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before{
+
+//   width: 30px;
+//   height: 30px;
+// }

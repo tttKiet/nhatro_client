@@ -8,11 +8,14 @@ import { Image } from "react-bootstrap";
 // scss
 import styles from "./TableReqOwnUser.module.scss";
 import classNames from "classNames/bind";
+import ModalFullScreen from "../../Post/ModalFullScreen";
 const cx = classNames.bind(styles);
 
 function TableReqOwnUser({ activeTab }) {
   const [, , user] = useAuth();
   const [reqs, setReqs] = useState([]);
+  const [showFullImg, setShowFullImg] = useState(false);
+  const [imgToView, setImgToView] = useState([]);
   const getReqOwner = async () => {
     try {
       const res = await userServices.getAllReqOwner(user?._id);
@@ -24,14 +27,26 @@ function TableReqOwnUser({ activeTab }) {
     }
   };
 
+  function handleViewFullImg(index, images) {
+    const imgsClone = [...images];
+    [imgsClone[0], imgsClone[index]] = [imgsClone[index], imgsClone[0]];
+    setImgToView(imgsClone);
+    setShowFullImg(true);
+  }
+
   useEffect(() => {
     getReqOwner();
   }, [activeTab]);
 
   return (
-    <div className={cx("wrap")}>
+    <div className={cx("wrap", "container")}>
+      <ModalFullScreen
+        imgToView={imgToView}
+        show={showFullImg}
+        onHide={() => setShowFullImg(false)}
+      ></ModalFullScreen>
       {reqs?.length > 0 ? (
-        <table className="table table-borderless">
+        <table className="table table-borderless table-responsive">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -69,7 +84,16 @@ function TableReqOwnUser({ activeTab }) {
                       >
                         {req?.boardHouseId?.images.length > 0 &&
                           req?.boardHouseId?.images.map((image, index) => (
-                            <div key={index} className={cx("upload_img-slide")}>
+                            <div
+                              key={index}
+                              className={cx("upload_img-slide")}
+                              onClick={() =>
+                                handleViewFullImg(
+                                  index,
+                                  req.boardHouseId.images
+                                )
+                              }
+                            >
                               <Image src={image} />
                             </div>
                           ))}
@@ -82,7 +106,7 @@ function TableReqOwnUser({ activeTab }) {
                   <td>
                     <div>
                       {req?.status == 0 ? (
-                        <span className={cx("wait")}>Waitting ...</span>
+                        <span className={cx("wait")}>Pending...</span>
                       ) : (
                         <span className={cx("ok")}>OK!</span>
                       )}

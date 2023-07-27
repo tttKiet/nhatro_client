@@ -1,6 +1,7 @@
 .wrap {
   font-size: 20px;
   padding: 0 20px 20px 20px;
+  
 
   form {
     border-radius: 1rem;
@@ -369,5 +370,25 @@
     text-decoration: none;
     margin-top: 14px;
     font-size: 16px;
+  }
+}
+
+.btn-create {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  background-color: #3AA6B9;
+  color: white;
+  font-size: 16px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &:hover{
+    opacity: 0.8;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  form{
+    padding: 20px 0px !important;
   }
 }
