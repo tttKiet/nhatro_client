@@ -7,6 +7,8 @@ import TableReqOwnUser from "../tables/TableReqOwnUser";
 // scss
 import styles from "./ReqUpOwner.module.scss";
 import classNames from "classNames/bind";
+import { VscAdd } from "react-icons/vsc";
+import { MdAdd } from "react-icons/md";
 const cx = classNames.bind(styles);
 
 function ReqUpOwner() {
@@ -38,26 +40,12 @@ function ReqUpOwner() {
         </Tab>
         <Tab eventKey="information" title="information">
           <button
-            className="have_icon btn btn-primary"
+            className={cx("btn-create")}
             onClick={() => setActiveTab("model")}
           >
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-            </div>
-            Create request
+            <p className="m-0">
+              Create request <MdAdd></MdAdd>
+            </p>
           </button>
           <TableReqOwnUser activeTab={activeTab} />
         </Tab>

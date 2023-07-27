@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
-import classNames from "classNames/bind";
-import styles from "./ModalCustom.module.scss";
-const cx = classNames.bind(styles);
+// import classNames from "classNames/bind";
+// import styles from "./ModalCustom.module.scss";
+// const cx = classNames.bind(styles);
 
 function ModalCustom({
   show,
@@ -16,12 +16,12 @@ function ModalCustom({
   isUpdate,
   img,
 }) {
-  function handleCloseModal() {
-    if (updateData) {
-      updateData();
-    }
-    onHide();
-  }
+  // function handleCloseModal() {
+  //   if (updateData) {
+  //     updateData();
+  //   }
+  //   onHide();
+  // }
 
   return (
     <Modal
@@ -31,10 +31,15 @@ function ModalCustom({
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header>
-        <Modal.Title className="fs-l" id="contained-modal-title-vcenter">
+      <Modal.Header closeButton>
+        <p className="fs-l m-0" style={{ fontWeight: "600" }}>
           {action}: {data?._id}
-        </Modal.Title>
+        </p>
+
+        {/* <Modal.Title
+          className="fs-l"
+          id="contained-modal-title-vcenter"
+        ></Modal.Title> */}
       </Modal.Header>
       <Component
         src={img}
@@ -46,11 +51,11 @@ function ModalCustom({
         dataExisted={dataExisted}
         isUpdate={isUpdate}
       ></Component>
-      <Modal.Footer>
+      {/* <Modal.Footer>
         <button className={cx("icon-close")} onClick={handleCloseModal}>
           Close
         </button>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   );
 }

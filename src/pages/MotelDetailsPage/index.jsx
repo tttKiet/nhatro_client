@@ -24,6 +24,7 @@ import { toast, Slide } from "react-toastify";
 import { Calendar, DateRange } from "react-date-range";
 import styles from "./MotelDetailsPage.module.scss";
 import classNames from "classNames/bind";
+import FeedbackOfBoardHouse from "../../components/FeedbackOfBoardHouse";
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
@@ -515,7 +516,7 @@ function MotelDetailsPage() {
           </div>
         </div>
         <div className={cx("footer")}>
-          <h4 className={cx("title")}>FEED BACK </h4>
+          <FeedbackOfBoardHouse></FeedbackOfBoardHouse>
         </div>
       </div>
 

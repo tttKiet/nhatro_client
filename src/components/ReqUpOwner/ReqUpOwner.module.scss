@@ -1,4 +1,18 @@
 .wrap {
+
+  .btn-create {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 10px;
+    background-color: #3AA6B9;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    &:hover{
+      opacity: 0.8;
+    }
+  }
+
   .back {
     cursor: pointer;
     position: absolute;

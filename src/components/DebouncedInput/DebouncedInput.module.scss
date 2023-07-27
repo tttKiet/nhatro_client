@@ -30,3 +30,12 @@
     }
   }
 }
+
+
+@media screen and (max-width: 510px) {
+  .wrap{
+    input{
+      min-width: 250px
+    }
+  }
+}
