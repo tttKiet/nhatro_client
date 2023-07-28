@@ -36,16 +36,17 @@ function ModalFullScreen({ show, onHide, imgToView }) {
               interval={3000}
               // autoPlay={true}
             >
-              {imgToView.map((image, index) => (
-                <div key={index}>
-                  <Image
-                    key={index}
-                    src={image}
-                    className={cx("img")}
-                    alt="your-motel"
-                  />
-                </div>
-              ))}
+              {imgToView &&
+                imgToView?.map((image, index) => (
+                  <div key={index}>
+                    <Image
+                      key={index}
+                      src={image}
+                      className={cx("img")}
+                      alt="your-motel"
+                    />
+                  </div>
+                ))}
             </Carousel>
           </div>
         </Modal.Body>

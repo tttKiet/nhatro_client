@@ -25,6 +25,7 @@ import { Calendar, DateRange } from "react-date-range";
 import styles from "./MotelDetailsPage.module.scss";
 import classNames from "classNames/bind";
 import FeedbackOfBoardHouse from "../../components/FeedbackOfBoardHouse";
+import ModalFullScreen from "../../components/Post/ModalFullScreen";
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
@@ -32,6 +33,7 @@ function MotelDetailsPage() {
   const [currChooseRoom, setCurrChooseRoom] = useState(1);
   const [boardHouseInfo, setBoardHouseInfo] = useState({});
   const [showModalRent, setShowModalRent] = useState(false);
+  const [showFullImg, setShowFullImg] = useState(false);
   const chooseDateRef = useRef(null);
   const chooseRoomRef = useRef(null);
 
@@ -101,6 +103,14 @@ function MotelDetailsPage() {
   return (
     <div className={cx("wrapper")}>
       <ModalRentRoom show={showModalRent} toggleShow={toggleShowModalRent} />
+      {console.log("board house info", boardHouseInfo)}
+      {/* Modal show all img */}
+      <ModalFullScreen
+        imgToView={boardHouseInfo.images ? boardHouseInfo.images : []}
+        show={showFullImg}
+        onHide={() => setShowFullImg(false)}
+      ></ModalFullScreen>
+
       <div className="container">
         <div className={cx("boardhouse_name")}>
           <span className="pe-2">
@@ -146,7 +156,10 @@ function MotelDetailsPage() {
                   }
                 })}
             </div>
-            <div className={cx("btn-all-image")}>
+            <div
+              className={cx("btn-all-image")}
+              onClick={() => setShowFullImg(true)}
+            >
               <CiLineHeight />
 
               <span>Show all image</span>

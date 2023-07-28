@@ -7,6 +7,7 @@ const roomServices = {
     formData.append("number", data.number);
     formData.append("size", data.size);
     formData.append("price", data.price);
+    formData.append("options", data.options);
 
     for (let i = 0; i < files.length; i++) {
       formData.append("images", files[i]);
@@ -25,7 +26,10 @@ const roomServices = {
     }
   },
   async getAllRoomsByAdminId(adminId) {
-    const res = await axios.get(`/api/v1/board-house/room?adminId=${adminId}`);
+    console.log("abc");
+    const res = await axios.get(
+      `/api/v1/board-house/all-rooms?adminId=${adminId}`
+    );
     return res.data;
   },
 
@@ -44,6 +48,7 @@ const roomServices = {
     formData.append("number", dataRoom.number);
     formData.append("size", dataRoom.size);
     formData.append("price", dataRoom.price);
+    formData.append("options", dataRoom.options);
 
     // img to delete
     const imgToDelete = dataRoom.images

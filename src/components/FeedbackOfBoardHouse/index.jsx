@@ -4,14 +4,16 @@ import { HiOutlineEye, HiStar } from "react-icons/hi";
 import Image from "react-bootstrap/Image";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import ModalAllReview from "./UsefulModal/ModalReviews";
 import { FiMessageSquare } from "react-icons/fi";
 import ModalCreateReview from "./UsefulModal/ModalCreateReview";
 import { feedbackOfBoardHouseServices } from "../../services";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit, AiTwotoneStar } from "react-icons/ai";
+import moment from "moment";
+import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +24,8 @@ function FeedbackOfBoardHouse() {
   const [, , user] = useAuth();
   const [existReview, setExistReview] = useState(false);
   const [review, setReview] = useState(null);
+  const [allReviews, setAllReviews] = useState(null);
+  const [rating, setRating] = useState(null);
 
   // on/off modal view all reviews
   const handleClose = () => setShow(false);
@@ -48,47 +52,85 @@ function FeedbackOfBoardHouse() {
     }
   }, [id, user]);
 
+  const getAllFeedback = useCallback(async () => {
+    try {
+      const res = await feedbackOfBoardHouseServices.getAllFeedback(id);
+      if (res.err === 0 && res.data.length > 0) {
+        setAllReviews(res.data);
+        setRating(res.rating);
+      } else {
+        setAllReviews(null);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id]);
+
+  function StarDisplay(star) {
+    const numberOfStars = parseInt(star);
+    const stars = [];
+    for (let i = 0; i < numberOfStars; i++) {
+      stars.push(<AiTwotoneStar key={i} className={cx("star")} />);
+    }
+
+    return <Fragment>{stars}</Fragment>;
+  }
+
   useEffect(() => {
     checkAlreadyFeedback();
-  }, [checkAlreadyFeedback]);
+    getAllFeedback();
+  }, [checkAlreadyFeedback, getAllFeedback]);
 
   return (
     <div className={cx("wrap")}>
-      <div className={cx("wrap-feedback", "container")}>
-        <hr className="mx-3 pb-3"></hr>
+      <div className={cx("wrap-feedback", "container shadow-sm")}>
+        {/* <hr className="mx-3 pb-3"></hr> */}
         <span className={cx("line")}></span>
         <p className={cx("overview-rating")}>
-          <HiStar className="me-1"></HiStar>4,88 · 34 reviews
+          <HiStar className="me-1"></HiStar>
+          {allReviews && rating ? rating : "5"} ·{" "}
+          {allReviews && allReviews.length > 0 ? allReviews.length : "0"}{" "}
+          reviews
         </p>
 
         <div className={cx("all-feedback", "row")}>
-          <div className={cx("item", "col-sm-6")}>
-            <div className={cx("user")}>
-              <div className={cx("avatar")}>
-                <Image
-                  className={cx("img-avatar")}
-                  src="https://i.pinimg.com/736x/7d/b7/d3/7db7d395dbb6d0466b2eebc49ef16146.jpg"
-                ></Image>
+          {allReviews &&
+            allReviews.slice(0, 4).map((feedback) => (
+              <div className={cx("item", "col-sm-6")} key={feedback._id}>
+                <div className={cx("user")}>
+                  <div className={cx("avatar")}>
+                    <Link to={`/user/${feedback?.user?._id}`}>
+                      <Image
+                        id="user-information"
+                        className={cx("img-avatar")}
+                        src={feedback.user?.avatar}
+                      ></Image>
+                    </Link>
+                    <Tooltip
+                      anchorSelect="#user-information"
+                      content="Click to see profile"
+                    />
+                  </div>
+                  <div className={cx("information")}>
+                    <p className="m-0 fw-medium">{feedback.user?.fullName}</p>
+                    <p className={cx("text-title")}>
+                      {moment(feedback.createdAt).startOf("minutes").fromNow()}
+                    </p>
+                  </div>
+                </div>
+
+                <div className={cx("content")}>
+                  <div className={cx("title")}>
+                    <p className={cx("text-title")}>{feedback?.title}</p>
+                    <div className={cx("wrap-star-feedback")}>
+                      {StarDisplay(feedback?.star)}
+                    </div>
+                  </div>
+
+                  <p className={cx("text-over")}>{feedback?.message}</p>
+                </div>
               </div>
-              <div className={cx("information")}>
-                <p className="m-0 fw-medium">LTV</p>
-                <p className="m-0 fw-light">21/12/2023</p>
-              </div>
-            </div>
-            <div className={cx("content")}>
-              <p className={cx("text-over")}>
-                Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ bị hỏng
-                ngay cả khi chủ nhà biết về điều này, Không vệ sinh trước khi
-                đến. Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ bị
-                hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh trước
-                khi đến. Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ
-                bị hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh
-                trước khi đến. Căn hộ rộng rãi, thật không may, rất nhiều trong
-                căn hộ bị hỏng ngay cả khi chủ nhà biết về điều này, Không vệ
-                sinh trước khi đến
-              </p>
-            </div>
-          </div>
+            ))}
 
           {/* responsive */}
           <Carousel
@@ -104,89 +146,45 @@ function FeedbackOfBoardHouse() {
             showIndicators={true}
             swipeable={true}
           >
-            <div className={cx("item")}>
-              <div className={cx("user")}>
-                <div className={cx("avatar")}>
-                  <Image
-                    className={cx("img-avatar")}
-                    src="https://i.pinimg.com/736x/7d/b7/d3/7db7d395dbb6d0466b2eebc49ef16146.jpg"
-                  ></Image>
-                </div>
-                <div className={cx("information")}>
-                  <p className="m-0 fw-medium">LTV</p>
-                  <p className="m-0 fw-light">21/12/2023</p>
-                </div>
-              </div>
-              <div className={cx("content")}>
-                <p className={cx("text-over")}>
-                  Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ bị
-                  hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh trước
-                  khi đến. Căn hộ rộng rãi, thật không may, rất nhiều trong căn
-                  hộ bị hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh
-                  trước khi đến. Căn hộ rộng rãi, thật không may, rất nhiều
-                  trong căn hộ bị hỏng ngay cả khi chủ nhà biết về điều này,
-                  Không vệ sinh trước khi đến. Căn hộ rộng rãi, thật không may,
-                  rất nhiều trong căn hộ bị hỏng ngay cả khi chủ nhà biết về
-                  điều này, Không vệ sinh trước khi đến
-                </p>
-              </div>
-            </div>
+            {allReviews &&
+              allReviews.slice(0, 4).map((feedback) => (
+                <div className={cx("item", "col-sm-6")} key={feedback._id}>
+                  <div className={cx("user")}>
+                    <div className={cx("avatar")}>
+                      <Link to={`/user/${feedback?.user?._id}`}>
+                        <Image
+                          id="user-information"
+                          className={cx("img-avatar")}
+                          src={feedback.user?.avatar}
+                        ></Image>
+                      </Link>
+                      <Tooltip
+                        anchorSelect="#user-information"
+                        content="Click to see profile"
+                      />
+                    </div>
+                    <div className={cx("information")}>
+                      <p className="m-0 fw-medium">{feedback.user?.fullName}</p>
+                      <p className={cx("text-title")}>
+                        {moment(feedback.createdAt)
+                          .startOf("minutes")
+                          .fromNow()}
+                      </p>
+                    </div>
+                  </div>
 
-            <div className={cx("item")}>
-              <div className={cx("user")}>
-                <div className={cx("avatar")}>
-                  <Image
-                    className={cx("img-avatar")}
-                    src="https://i.pinimg.com/736x/7d/b7/d3/7db7d395dbb6d0466b2eebc49ef16146.jpg"
-                  ></Image>
-                </div>
-                <div className={cx("information")}>
-                  <p className="m-0 fw-medium">LTV</p>
-                  <p className="m-0 fw-light">21/12/2023</p>
-                </div>
-              </div>
-              <div className={cx("content")}>
-                <p className={cx("text-over")}>
-                  Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ bị
-                  hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh trước
-                  khi đến. Căn hộ rộng rãi, thật không may, rất nhiều trong căn
-                  hộ bị hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh
-                  trước khi đến. Căn hộ rộng rãi, thật không may, rất nhiều
-                  trong căn hộ bị hỏng ngay cả khi chủ nhà biết về điều này,
-                  Không vệ sinh trước khi đến. Căn hộ rộng rãi, thật không may,
-                  rất nhiều trong căn hộ bị hỏng ngay cả khi chủ nhà biết về
-                  điều này, Không vệ sinh trước khi đến
-                </p>
-              </div>
-            </div>
+                  <div className={cx("content")}>
+                    <div className={cx("title")}>
+                      <p className={cx("text-title")}>{feedback?.title}</p>
+                      <div className={cx("wrap-star-feedback")}>
+                        {StarDisplay(feedback?.star)}
+                      </div>
+                    </div>
 
-            <div className={cx("item")}>
-              <div className={cx("user")}>
-                <div className={cx("avatar")}>
-                  <Image
-                    className={cx("img-avatar")}
-                    src="https://i.pinimg.com/736x/7d/b7/d3/7db7d395dbb6d0466b2eebc49ef16146.jpg"
-                  ></Image>
+                    <p className={cx("text-over")}>{feedback?.message}</p>
+                  </div>
                 </div>
-                <div className={cx("information")}>
-                  <p className="m-0 fw-medium">LTV</p>
-                  <p className="m-0 fw-light">21/12/2023</p>
-                </div>
-              </div>
-              <div className={cx("content")}>
-                <p className={cx("text-over")}>
-                  Căn hộ rộng rãi, thật không may, rất nhiều trong căn hộ bị
-                  hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh trước
-                  khi đến. Căn hộ rộng rãi, thật không may, rất nhiều trong căn
-                  hộ bị hỏng ngay cả khi chủ nhà biết về điều này, Không vệ sinh
-                  trước khi đến. Căn hộ rộng rãi, thật không may, rất nhiều
-                  trong căn hộ bị hỏng ngay cả khi chủ nhà biết về điều này,
-                  Không vệ sinh trước khi đến. Căn hộ rộng rãi, thật không may,
-                  rất nhiều trong căn hộ bị hỏng ngay cả khi chủ nhà biết về
-                  điều này, Không vệ sinh trước khi đến
-                </p>
-              </div>
-            </div>
+              ))}
           </Carousel>
         </div>
 
@@ -205,14 +203,23 @@ function FeedbackOfBoardHouse() {
               </p>
             )}
           </button>
-          <button className={cx("btn-view-all")} onClick={handleShow}>
-            All reviews <HiOutlineEye className="fs-l"></HiOutlineEye>
-          </button>
+          {existReview && (
+            <button className={cx("btn-view-all")} onClick={handleShow}>
+              View {allReviews?.length} reviews{" "}
+              <HiOutlineEye className="fs-l"></HiOutlineEye>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Modal view all reviews */}
-      <ModalAllReview show={show} onHide={handleClose}></ModalAllReview>
+      <ModalAllReview
+        show={show}
+        onHide={handleClose}
+        allReviews={allReviews}
+        StarDisplay={StarDisplay}
+        rating={rating}
+      ></ModalAllReview>
 
       {/* Modal create review */}
       <ModalCreateReview
@@ -221,6 +228,7 @@ function FeedbackOfBoardHouse() {
         setExistReview={setExistReview}
         setReview={setReview}
         review={review}
+        getAllFeedback={getAllFeedback}
       ></ModalCreateReview>
     </div>
   );

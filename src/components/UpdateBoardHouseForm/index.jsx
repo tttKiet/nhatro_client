@@ -279,6 +279,7 @@ function UpdateBoardHouseForm({
           dataExisted={dataExisted}
           isUpdate={true}
           imgToDelete={imgToDelete}
+          forBoardHouse={true}
         ></UploadImage>
       </div>
     </div>

@@ -19,6 +19,29 @@ function ModalReqOwner({ setActiveTab }) {
   const [imgs, setImgs] = useState([]);
   const [show, setShow] = useState(false);
   const toast = useContext(ToastContext);
+  const [optionsInput, setOptionsInput] = useState("");
+
+  let ref;
+
+  const handleClickBtnEnter = () => {
+    ref.focus();
+    if (optionsInput) {
+      formik.setValues({
+        ...formik.values,
+        options: [...formik.values.options, optionsInput],
+      });
+    }
+
+    setOptionsInput("");
+  };
+
+  const handleCLickXPerson = (index) => {
+    formik.values.options.splice(index, 1);
+    formik.setValues({
+      ...formik.values,
+      options: [...formik.values.options],
+    });
+  };
 
   const validate = (values) => {
     const errors = {};
@@ -52,6 +75,10 @@ function ModalReqOwner({ setActiveTab }) {
       errors.description = "Required";
     }
 
+    if (values.options.length === 0) {
+      errors.options = "Required";
+    }
+
     if (values.images.length === 0) {
       errors.images = "Required";
     } else if (values.images.length > 8) {
@@ -75,11 +102,13 @@ function ModalReqOwner({ setActiveTab }) {
           electric: values.electric,
           water: values.water,
           description: values.description,
+          options: values.options,
           userId: user._id,
         },
       };
 
       const res = await reqRoomOwnerServices.createReqBoardHouse(dataCreate);
+
       if (res.err === 0) {
         toast.update(toastId, {
           render: res.message,
@@ -120,6 +149,7 @@ function ModalReqOwner({ setActiveTab }) {
       water: "",
       description: "",
       images: [],
+      options: [],
     },
     onSubmit: handleSubmit,
     validate,
@@ -228,6 +258,78 @@ function ModalReqOwner({ setActiveTab }) {
             </div>
           </div>
 
+          <div className={cx("options")}>
+            <div className={cx("gr", "col-12")}>
+              <label htmlFor="options">
+                Options <span>*</span>
+              </label>
+              <div className={cx("gr_input")}>
+                <input
+                  value={optionsInput}
+                  onChange={(e) => setOptionsInput(e.target.value)}
+                  ref={(e) => (ref = e)}
+                  id="options"
+                  name="options"
+                  type="text"
+                  placeholder="Example: parking lots, refrigerator, air conditioner,..."
+                  onKeyDown={(e) => {
+                    if (e.code === "Enter" && optionsInput.trim() !== "") {
+                      handleClickBtnEnter();
+                    } else if (optionsInput.trim() === "") {
+                      setOptionsInput("");
+                    }
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (optionsInput.trim() !== "") handleClickBtnEnter();
+                    else {
+                      setOptionsInput("");
+                    }
+                  }}
+                  className={cx("enter")}
+                >
+                  Enter
+                </button>
+              </div>
+
+              {formik.values.options.length > 0 ? (
+                <ul className={cx("list-options")}>
+                  {formik.values.options.map((option, index) => (
+                    <li key={index}>
+                      {option}
+                      <svg
+                        onClick={() => handleCLickXPerson(index)}
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                ""
+              )}
+
+              {formik.errors.options && formik.touched.options && (
+                <span className={cx("err", "text-danger fs-m")}>
+                  {formik.errors.options}
+                </span>
+              )}
+            </div>
+          </div>
+
           <div className={cx("gr", "col-12")}>
             <label htmlFor="description">Description</label>
             <div className={cx("gr_input")}>
@@ -263,7 +365,11 @@ function ModalReqOwner({ setActiveTab }) {
           >
             Back <BsSkipBackward className="ms-1"></BsSkipBackward>
           </button>
-          <button type="reset" className={cx("btn-create")}>
+          <button
+            type="reset"
+            className={cx("btn-create")}
+            onClick={() => formik.resetForm()}
+          >
             Reset <MdOutlineRestartAlt className="ms-1"></MdOutlineRestartAlt>
           </button>
           <button type="submit" disabled={loading} className={cx("btn-create")}>

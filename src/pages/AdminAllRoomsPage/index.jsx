@@ -1,7 +1,7 @@
 import styles from "./AdminAllRoomsPage.module.scss";
 import classNames from "classNames/bind";
 import { createColumnHelper } from "@tanstack/react-table";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../hooks";
 import roomServices from "../../services/roomServices";
 import boardHouseServices from "../../services/boardHouseServices";
@@ -9,7 +9,7 @@ import TableSort from "../../components/TableSort";
 import ModalCustom from "../../components/ModalCustom";
 import RoomForm from "../../components/RoomForm";
 import InfoToDelete from "../../components/InfoToDelete";
-import { ToastContext } from "../../untils/context";
+
 import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
@@ -25,10 +25,10 @@ function AdminAllRoomsPage() {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [dataRoomToEdit, setDataRoomToEdit] = useState([]);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
-  const toast = useContext(ToastContext);
 
-  async function handleGetBoardHouseById(adminId) {
-    const res = await boardHouseServices.getBoardHouseById(adminId);
+  const handleGetBoardHouseById = useCallback(async () => {
+    const res = await boardHouseServices.getBoardHouseById(adminData._id);
+
     if (res.err === 0) {
       setBoardHouse(
         res.data.map((boardHouse) => ({
@@ -37,22 +37,19 @@ function AdminAllRoomsPage() {
         }))
       );
     }
-  }
+  }, [adminData._id]);
 
-  async function handleGetRoom(adminID) {
-    if (adminData.type === "admin") {
-      const res = await roomServices.getAllRoomsByAdminId(adminID);
-      if (res.err === 0) {
-        // console.log("res ddata", res.data);
-        setDataRoom(res.data);
-      }
+  const handleGetRoom = useCallback(async () => {
+    const res = await roomServices.getAllRoomsByAdminId(adminData._id);
+
+    if (res.err === 0) {
+      setDataRoom(res.data);
     }
-  }
+  }, [adminData._id]);
 
   const handleUpdateData = async () => {
     const res = await roomServices.getAllRoomsByAdminId(adminData._id);
     if (res.err === 0) {
-      // console.log("res ddata", res.data);
       setDataRoom(res.data);
     }
   };
@@ -68,19 +65,20 @@ function AdminAllRoomsPage() {
     // console.log("filterDataRoom", filterDataRoom);
     setRooms(
       filterDataRoom[0].rooms?.map((room) => ({
-        _id: room._id,
-        Number: room.number,
-        Size: room.size,
-        "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-        Price: room.price,
-        Description: room.description,
+        _id: room?._id,
+        Number: room?.number,
+        Size: room?.size,
+        "Has Layout": `${!room?.isLayout ? "No" : "Yes"}`,
+        Price: room?.price,
+        Description: room?.description,
         Status: "Loading...",
-        Images: room.images,
+        Images: room?.images,
         boardHouseId: e.target.value,
-        originalImage: room.images,
+        originalImage: room?.images,
+        options: room?.options?.split(","),
       }))
     );
-    toast.success("Changed Board House");
+
     setIsChanged(e.target.value);
   }
 
@@ -181,8 +179,8 @@ function AdminAllRoomsPage() {
   );
 
   useEffect(() => {
-    handleGetBoardHouseById(adminData._id);
-    handleGetRoom(adminData._id);
+    handleGetBoardHouseById();
+    handleGetRoom();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -193,16 +191,17 @@ function AdminAllRoomsPage() {
       );
       setRooms(
         filterDataRoom[0]?.rooms.map((room) => ({
-          _id: room._id,
-          Number: room.number,
-          Size: room.size,
-          "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-          Price: room.price,
-          Description: room.description,
+          _id: room?._id,
+          Number: room?.number,
+          Size: room?.size,
+          "Has Layout": `${!room?.isLayout ? "No" : "Yes"}`,
+          Price: room?.price,
+          Description: room?.description,
           Status: "Loading...",
-          Images: room.images,
+          Images: room?.images,
           boardHouseId: boardHouse[0]?.boardHouseId,
-          originalImage: room.images,
+          originalImage: room?.images,
+          options: room?.options?.split(","),
         }))
       );
       setIsChanged(boardHouse[0]?.boardHouseId);
@@ -212,16 +211,17 @@ function AdminAllRoomsPage() {
       );
       setRooms(
         filterDataRoom[0]?.rooms.map((room) => ({
-          _id: room._id,
-          Number: room.number,
-          Size: room.size,
-          "Has Layout": `${!room.isLayout ? "No" : "Yes"}`,
-          Price: room.price,
-          Description: room.description,
+          _id: room?._id,
+          Number: room?.number,
+          Size: room?.size,
+          "Has Layout": `${!room?.isLayout ? "No" : "Yes"}`,
+          Price: room?.price,
+          Description: room?.description,
           Status: "Loading...",
-          Images: room.images,
+          Images: room?.images,
           boardHouseId: isChanged,
-          originalImage: room.images,
+          originalImage: room?.images,
+          options: room?.options?.split(","),
         }))
       );
     }
