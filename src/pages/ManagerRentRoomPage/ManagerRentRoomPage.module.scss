@@ -1,0 +1,23 @@
+.wrapper {
+  .title {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .gr {
+    .title {
+      padding: 10px;
+      text-align: center;
+      font-size: 16px;
+      color: #fff;
+      border-radius: 0.4rem;
+      background: linear-gradient(
+        45deg,
+        rgb(21 83 198),
+        rgb(44 37 179 / 86%),
+        rgb(24 76 182),
+        rgb(43 68 168)
+      );
+    }
+  }
+}

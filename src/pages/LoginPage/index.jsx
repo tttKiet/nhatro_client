@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import styles from "./LoginPage.module.scss";
-import classNames from "classNames/bind";
 import { useState } from "react";
 import userServices from "../../services/userServices";
 import Snipper from "../../components/Snipper";
@@ -14,6 +12,8 @@ import {
 } from "firebase/auth";
 import firebaseAuth from "../../untils/firebaseConfig";
 
+import styles from "./LoginPage.module.scss";
+import classNames from "classNames/bind";
 const cx = classNames.bind(styles);
 
 function LoginPage() {

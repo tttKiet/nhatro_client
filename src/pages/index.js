@@ -4,7 +4,6 @@ export { default as RootHomePage } from "./RootHomePage";
 // All pase on website
 export { default as HomePage } from "./HomePage";
 export { default as AboutPage } from "./AboutPage";
-
 export { default as PostPage } from "./PostPage";
 export { default as PostDetailsPage } from "./PostDetailsPage";
 export { default as LoginPage } from "./LoginPage";
@@ -13,6 +12,8 @@ export { default as ContactPage } from "./ContactPage";
 export { default as RegisterPage } from "./RegisterPage";
 export { default as MotelPage } from "./MotelPage";
 export { default as MotelDetailsPage } from "./MotelDetailsPage";
+export { default as ManagerMyMotelPage } from "./ManagerMyMotelPage";
+export { default as ManagerRentRoomPage } from "./ManagerRentRoomPage";
 
 // Root pages
 export { default as RootAccount } from "./RootAccount";

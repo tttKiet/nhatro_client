@@ -36,14 +36,21 @@ const ErrorPage = lazy(() => import("../pages/ErrorPage"));
 const UserProfilePage = lazy(() => import("../pages/UserProfilePage"));
 const MyPostPage = lazy(() => import("../pages/MyPostPage"));
 const PostDetailsPage = lazy(() => import("../pages/PostDetailsPage"));
+const ManagerMyMotelPage = lazy(() => import("../pages/ManagerMyMotelPage"));
 
 const MyFavouritePostPage = lazy(() => import("../pages/MyFavouritePostPage"));
 const AnotherProfilePage = lazy(() => import("../pages/AnotherProfilePage"));
 const MotelPage = lazy(() => import("../pages/MotelPage"));
 const AdminHomePage = lazy(() => import("../pages/AdminHomePage"));
 const MotelDetailsPage = lazy(() => import("../pages/MotelDetailsPage"));
+const ManagerRentRoomPage = lazy(() => import("../pages/ManagerRentRoomPage"));
 
-import { DefaultLayout, RootLayout, AdminLayout } from "../components/Layouts";
+import {
+  DefaultLayout,
+  RootLayout,
+  AdminLayout,
+  ManagerRoomLayout,
+} from "../components/Layouts";
 
 const router = [
   {
@@ -133,7 +140,18 @@ const router = [
     layout: "None",
     element: MyPostPage,
   },
-
+  {
+    path: "/user/manager-my-room",
+    isProtected: true,
+    layout: ManagerRoomLayout,
+    element: ManagerMyMotelPage,
+  },
+  {
+    path: "/user/rent-room",
+    isProtected: true,
+    layout: ManagerRoomLayout,
+    element: ManagerRentRoomPage,
+  },
   {
     path: "/user/my-favourite-post",
     isProtected: true,
