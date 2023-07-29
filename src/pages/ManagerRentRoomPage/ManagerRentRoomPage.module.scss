@@ -20,4 +20,65 @@
       );
     }
   }
+
+  .actions,
+  .status {
+    padding: 2px 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.4rem;
+    background-color: rgb(148, 10, 63);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+    transition: all 0.2s linear;
+
+    &.rented {
+      background-color: rgb(78 68 240);
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .actions {
+    outline: none;
+    border: none;
+    background-color: rgb(255 40 40);
+
+    &.eye {
+      float: right;
+      padding: 4px 6px;
+      background-color: transparent;
+      color: #0000008c;
+      border: 1px solid #bababa;
+      border-radius: 0.4rem;
+
+      &:hover {
+        color: #000000f1;
+        border: 1px solid #5f5f5f;
+      }
+    }
+  }
+}
+
+.wrap-toast {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .btn-action {
+    font-size: 24px !important;
+    margin: 0 4px;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
 }

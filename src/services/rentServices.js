@@ -8,5 +8,10 @@ const rentServices = {
     });
     return res;
   },
+
+  async getRent({ userId }) {
+    const res = await axios.get(`/api/v1/room/all-rent?userId=${userId}`);
+    return res;
+  },
 };
 export default rentServices;
