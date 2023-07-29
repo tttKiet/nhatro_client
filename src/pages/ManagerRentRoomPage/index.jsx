@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TableSort from "../../components/TableSort";
 import styles from "./ManagerRentRoomPage.module.scss";
 import { useAuth } from "../../hooks";
@@ -27,15 +27,27 @@ function ManagerRentRoomPage() {
   }
 
   async function handleCancelRent(_idRent) {
-    const tetss = new Promise((resolve) => setTimeout(resolve, 2000));
     const toastId = toast.loading("is canceling...");
-    tetss.then(() =>
+    try {
+      const res = await rentServices.deleteRent({ _id: _idRent });
+      if (res.status === 200 && res?.data?.err === 0) {
+        toast.update(toastId, {
+          isLoading: false,
+          render: "Cancelled!",
+          autoClose: 2000,
+          pauseOnHover: false,
+        });
+        getRents();
+      }
+    } catch (err) {
+      console.log(err);
       toast.update(toastId, {
         isLoading: false,
-        render: "Cancelled!",
+        render: `${err?.response?.data?.message || "Error. Please try again!"}`,
         autoClose: 2000,
-      })
-    );
+        pauseOnHover: false,
+      });
+    }
   }
 
   function handleCLickCancel(_idRent) {
@@ -133,23 +145,30 @@ function ManagerRentRoomPage() {
     [columnHelper]
   );
 
+  const getRents = useCallback(
+    function getRents() {
+      rentServices.getRent({ userId: user._id }).then((res) => {
+        if (res.status === 200 && res.data?.err === 0) {
+          setData(() => {
+            const data = res.data.data;
+            return data.map((d, i) => ({
+              _id: d._id,
+              Number: i + 1,
+              Name: d?.room?.boardHouseId?.name,
+              Room: d?.room?.number,
+              Phone: d?.room?.boardHouseId?.phone,
+              Status: d?.status,
+            }));
+          });
+        }
+      });
+    },
+    [user._id]
+  );
+
   useEffect(() => {
-    rentServices.getRent({ userId: user._id }).then((res) => {
-      if (res.status === 200 && res.data?.err === 0) {
-        setData(() => {
-          const data = res.data.data;
-          return data.map((d, i) => ({
-            _id: d._id,
-            Number: i + 1,
-            Name: d?.room?.boardHouseId?.name,
-            Room: d?.room?.number,
-            Phone: d?.room?.boardHouseId?.phone,
-            Status: d?.status,
-          }));
-        });
-      }
-    });
-  }, [user._id]);
+    getRents();
+  }, [getRents]);
 
   return (
     <>
@@ -158,8 +177,13 @@ function ManagerRentRoomPage() {
         <div className={cx("gr")}>
           {console.log(data)}
           <h5 className={cx("title")}>Request to rent your room</h5>
-
-          <TableSort columns={columns} data={data} />
+          {data.length > 0 ? (
+            <TableSort columns={columns} data={data} />
+          ) : (
+            <div className={cx("no-data", "text-center p-3")}>
+              You dont have any requests to rent a room
+            </div>
+          )}
         </div>
       </div>
     </>
