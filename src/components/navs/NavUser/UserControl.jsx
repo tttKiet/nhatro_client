@@ -2,6 +2,7 @@ import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
 import styles from "./NavUser.module.scss";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { LuHotel } from "react-icons/lu";
 import MenuItem from "./MenuItem";
 import { useAuth } from "../../../hooks";
 import Swal from "sweetalert2";
@@ -108,6 +109,12 @@ function UserControl() {
                 />
               </svg>
             }
+          />
+
+          <MenuItem
+            to={"/user/manager-my-room"}
+            title="Manager Room"
+            svg={<LuHotel size={24} />}
           />
 
           <MenuItem
