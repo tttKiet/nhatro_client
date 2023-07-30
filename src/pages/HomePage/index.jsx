@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks";
 import { RootLayout, DefaultLayout } from "../../components/Layouts";
 import styles from "./HomePage.module.scss";
 import classNames from "classNames/bind";
+
 const cx = classNames.bind(styles);
 
 function HomePage() {
