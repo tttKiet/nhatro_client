@@ -44,6 +44,9 @@ const MotelPage = lazy(() => import("../pages/MotelPage"));
 const AdminHomePage = lazy(() => import("../pages/AdminHomePage"));
 const MotelDetailsPage = lazy(() => import("../pages/MotelDetailsPage"));
 const ManagerRentRoomPage = lazy(() => import("../pages/ManagerRentRoomPage"));
+const AdminAllRequestsPage = lazy(() =>
+  import("../pages/AdminAllRequestsPage")
+);
 
 import {
   DefaultLayout,
@@ -191,6 +194,12 @@ const router = [
     isProtected: true,
     layout: AdminLayout,
     element: AdminAllRoomsPage,
+  },
+  {
+    path: "/admin/:id/all-requests",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminAllRequestsPage,
   },
   // Error page
   {

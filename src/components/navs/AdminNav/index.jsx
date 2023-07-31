@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAuth } from "../../../hooks";
 import { TbSwitchHorizontal } from "react-icons/tb";
+import { AiOutlinePullRequest } from "react-icons/ai";
 
 const cx = classNames.bind(styles);
 function AdminNav() {
@@ -78,6 +79,14 @@ function AdminNav() {
             />
           </svg>
           Dash Board
+        </Link>
+
+        <Link
+          className={cx("link", { active: url.includes("/all-requests") })}
+          to={`/admin/${dataAdmin._id}/all-requests`}
+        >
+          <AiOutlinePullRequest className="fs-xl" />
+          Request from user
         </Link>
 
         <Link

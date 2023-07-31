@@ -259,16 +259,7 @@ function MotelDetailsPage() {
                   </div>
                   <h4 className={cx("title")}>DESCRIPTION ABOUT BOARDHOUSE</h4>
                 </div>
-                <div className={cx("desc")}>
-                  Nằm ở vị trí hoàn hảo ngay trung tâm Green Point s, 713
-                  Cascades là một căn hộ sang trọng và phong cách ở tầng 7 với
-                  tầm nhìn đáng yêu tận hưởng khung cảnh xa xôi của Devil s
-                  Peak. Nó đi kèm với ban công, nhà bếp đầy đủ, TV 60 inch,
-                  giường cỡ Queen thoải mái với ga trải giường xa hoa. Căn hộ
-                  cũng tận hưởng sự tiện lợi của một bãi đỗ xe ngầm lớn, chuyên
-                  dụng, an toàn. (fake)
-                  {boardHouseInfo?.description}
-                </div>
+                <div className={cx("desc")}>{boardHouseInfo?.description}</div>
               </div>
               <hr />
 
