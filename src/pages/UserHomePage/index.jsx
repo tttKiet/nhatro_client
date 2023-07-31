@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Banner from "../../components/Banner";
 import { Image } from "react-bootstrap";
 import GroupTextVertical from "../../components/GroupTextVertical";
@@ -12,9 +12,13 @@ import Footer from "../../components/Footer";
 import styles from "./UserHomePage.module.scss";
 import classNames from "classNames/bind";
 import FeedbackOfCustomer from "../../components/FeedbackOfCustomer";
+import { useSearchParams } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function UserHomePage() {
+  let [search] = useSearchParams();
+  const feedbackRef = useRef(null);
+
   const bodyTitleContent1 = useMemo(
     () => [
       {
@@ -76,6 +80,16 @@ function UserHomePage() {
     []
   );
 
+  useEffect(() => {
+    const comp = search.get("comp");
+    comp &&
+      feedbackRef?.current &&
+      feedbackRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+  });
+
   return (
     <div className={cx("wrap")}>
       <div>
@@ -124,9 +138,12 @@ function UserHomePage() {
               />
             </div>
           </div>
-          <Contact></Contact>
+          <div ref={feedbackRef}>
+            <Contact></Contact>
+          </div>
 
           {/* Feedbacks of customer */}
+
           <FeedbackOfCustomer></FeedbackOfCustomer>
         </div>
       </div>

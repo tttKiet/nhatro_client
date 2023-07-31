@@ -30,13 +30,15 @@ function ModalRentRoom({
     rentServices
       .createRent({ userId: user._id, roomId: roomId, startDate })
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           toast.success("Success!!");
           toggleShow();
         }
       })
       .catch((err) => {
-        toast.error(err?.message || "Erorr");
+        console.log(err);
+        toast.error(err?.response?.data?.message || err?.message || "Erorr");
       })
       .finally(() => {
         setLoadding(false);
