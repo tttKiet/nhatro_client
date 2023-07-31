@@ -124,7 +124,7 @@ function AdminNav() {
 
         <button className={cx("link", "btn")} onClick={handleSwitchUserPage}>
           <TbSwitchHorizontal className="fs-l"></TbSwitchHorizontal>
-          Switch to user page
+          Switch user page
         </button>
 
         <button className={cx("link", "btn")} onClick={handleLogout}>

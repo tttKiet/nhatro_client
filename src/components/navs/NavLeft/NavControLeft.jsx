@@ -46,9 +46,9 @@ function NavControlLeft({ setActive, active, onHide }) {
   return (
     <div className={cx("nav-control")}>
       <div className={cx("hi")}>
-        <Link to={"/"}>
+        <Link onClick={() => navigate(-1)}>
           <TiArrowBack />
-          Back to home
+          Back
         </Link>
         <h4>Thanks you so used our services!</h4>
       </div>
@@ -84,12 +84,7 @@ function NavControlLeft({ setActive, active, onHide }) {
             Request to be the board house owner
           </Link>
         </li>
-        <li>
-          <Link onClick={onHide ? () => onHide() : ""}>
-            <BsHouse />
-            My rooms
-          </Link>
-        </li>
+
         <li>
           <Link
             className={cx({ active: active === "my-feedback" })}
@@ -98,18 +93,6 @@ function NavControlLeft({ setActive, active, onHide }) {
           >
             <BsFileEarmark />
             My feedbacks
-          </Link>
-        </li>
-        <li>
-          <Link onClick={onHide ? () => onHide() : ""}>
-            <FaMoneyBillWave />
-            Bill on month
-          </Link>
-        </li>
-        <li>
-          <Link onClick={onHide ? () => onHide() : ""}>
-            <TbBrandBooking />
-            Motel rent
           </Link>
         </li>
       </ul>

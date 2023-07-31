@@ -20,37 +20,37 @@ function AdminLayout({ children }) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  async function handleGetBoardHouse(adminId) {
-    const response = await boardHouseServices.getBoardHouseById(adminId);
-    if (response.err == 0) {
-      setBoardHouse(response.data);
-    } else {
-      console.log(response);
-    }
-  }
+  // async function handleGetBoardHouse(adminId) {
+  //   const response = await boardHouseServices.getBoardHouseById(adminId);
+  //   if (response.err == 0) {
+  //     setBoardHouse(response.data);
+  //   } else {
+  //     console.log(response);
+  //   }
+  // }
 
-  useEffect(() => {
-    handleGetBoardHouse(dataAdmin._id);
-  }, [dataAdmin._id]);
+  // useEffect(() => {
+  //   handleGetBoardHouse(dataAdmin._id);
+  // }, [dataAdmin._id]);
 
   if (dataAdmin.type !== "admin") {
     return <ErrorPage></ErrorPage>;
   }
 
-  let shouldRenderUpdateBoardHouse = false;
+  // let shouldRenderUpdateBoardHouse = false;
 
-  if (boardHouse && boardHouse.length > 0) {
-    shouldRenderUpdateBoardHouse = boardHouse.some((item) => item.name === "");
-  }
+  // if (boardHouse && boardHouse.length > 0) {
+  //   shouldRenderUpdateBoardHouse = boardHouse.some((item) => item.name === "");
+  // }
 
-  if (shouldRenderUpdateBoardHouse) {
-    return boardHouse.map((item) => {
-      if (item.name === "") {
-        return <CheckUpdateBoardHouse key={item._id} id={item._id} />;
-      }
-      return null;
-    });
-  }
+  // if (shouldRenderUpdateBoardHouse) {
+  //   return boardHouse.map((item) => {
+  //     if (item.name === "") {
+  //       return <CheckUpdateBoardHouse key={item._id} id={item._id} />;
+  //     }
+  //     return null;
+  //   });
+  // }
 
   return (
     <div className={cx("wrap")}>

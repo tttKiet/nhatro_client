@@ -1,13 +1,12 @@
 import styles from "./RequestFromAccount.module.scss";
 import classNames from "classNames/bind";
 import useAuth from "../../hooks/useAuth";
-import { useEffect, useMemo, useState, useContext } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { reqRoomOwnerServices } from "../../services";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableSort from "../TableSort";
-import { IoWaterOutline, IoCheckmarkSharp, IoClose } from "react-icons/io5";
+import { IoWaterOutline } from "react-icons/io5";
 import { GiElectric } from "react-icons/gi";
-import { ToastContext } from "../../untils/context";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Image from "react-bootstrap/Image";
@@ -16,7 +15,9 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
-import { BsFillCheckSquareFill } from "react-icons/bs";
+import { BsCheckCircle, BsLayers } from "react-icons/bs";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 function RequestFromAccount() {
@@ -24,14 +25,11 @@ function RequestFromAccount() {
   const [allReqs, setAllReqs] = useState([]);
   const [data, setData] = useState([]);
   const columnHelper = createColumnHelper();
-  const toast = useContext(ToastContext);
+
   const [modalShow, setModalShow] = useState(false);
   const [imgsToView, setImgToView] = useState([]);
   const [dataFilter, setDataFilter] = useState([]);
-
-  // function convertToFormattedNumber(number) {
-  //   return number.toLocaleString("en-US");
-  // }
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllReqs = async () => {
     try {
@@ -44,35 +42,93 @@ function RequestFromAccount() {
     }
   };
 
-  async function handleAccecptReq(reqId) {
-    try {
-      toast.loading("Waiting...");
-      const res = await reqRoomOwnerServices.accpectReq(reqId);
-      if (res.err === 0) {
-        toast.success("Accecpted successfully");
-        getAllReqs();
-      } else {
-        toast.error("Error");
+  function confirmBeforeDelete(reqId, boardHouseId, imgToDelete) {
+    toast.error(
+      <div className={cx("wrap-toast")}>
+        <p className="m-0">
+          Are you sure to <b>reject</b>?
+        </p>
+        <div className="">
+          <AiOutlineCheckCircle
+            style={{ color: "#FE0000" }}
+            className={cx("btn-action-toast")}
+            onClick={() => handleRejectReq(reqId, boardHouseId, imgToDelete)}
+          ></AiOutlineCheckCircle>
+          <AiOutlineCloseCircle
+            style={{ color: "#0079FF" }}
+            className={cx("btn-action-toast")}
+            onClick={() => {
+              toast.dismiss();
+              toast.clearWaitingQueue();
+            }}
+          ></AiOutlineCloseCircle>
+        </div>
+      </div>,
+      {
+        closeButton: false,
       }
-      toast.dismiss();
-    } catch (err) {
-      console.log(err);
+    );
+
+    async function handleRejectReq(reqId, boardHouseId, imgToDelete) {
+      let toastId = null;
+      toastId = toast.loading("Deleting...");
+      setIsLoading(true);
+      try {
+        const res = await reqRoomOwnerServices.rejectReq(
+          reqId,
+          boardHouseId,
+          imgToDelete
+        );
+        if (res.err === 0) {
+          getAllReqs();
+          toast.update(toastId, {
+            render: res.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+          });
+          setIsLoading(false);
+        } else {
+          toast.update(toastId, {
+            render: res.message,
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          });
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
-  async function handleRejectReq(reqId, boardHouseId) {
+  async function handleAccecptReq(reqId) {
+    let toastId = null;
+    toastId = toast.loading("Loading...");
+    setIsLoading(true);
     try {
-      toast.loading("Waiting...");
-      const res = await reqRoomOwnerServices.rejectReq(reqId, boardHouseId);
+      const res = await reqRoomOwnerServices.accpectReq(reqId);
       if (res.err === 0) {
-        toast.dismiss();
-        toast.success("Rejected successfully");
         getAllReqs();
+        toast.update(toastId, {
+          render: res.message,
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        setIsLoading(false);
       } else {
-        toast.error("Error");
+        toast.update(toastId, {
+          render: res.message,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -89,7 +145,6 @@ function RequestFromAccount() {
     } else {
       setDataFilter([]);
     }
-    toast.success("Changed status");
   }
 
   const columns = useMemo(
@@ -215,21 +270,22 @@ function RequestFromAccount() {
         ),
       }),
 
-      columnHelper.accessor("Description", {
-        cell: (info) => info.getValue(),
+      columnHelper.accessor("Options", {
+        cell: (info) => (
+          <div>
+            {info?.row?.original?.options &&
+              info?.row?.original?.options.map((options, index) => (
+                <p className="fs-m m-0" key={index}>
+                  <BsLayers className="fs-xl me-2"></BsLayers>
+                  {options}
+                </p>
+              ))}
+          </div>
+        ),
       }),
 
-      columnHelper.accessor("Status", {
-        cell: (info) =>
-          info.getValue() == 0 ? (
-            <span className="badge p-2 rounded-pill text-bg-primary ">
-              Not accept
-            </span>
-          ) : (
-            <span className="badge p-2 rounded-pill text-bg-success">
-              Accepted
-            </span>
-          ),
+      columnHelper.accessor("Description", {
+        cell: (info) => info.getValue(),
       }),
 
       columnHelper.accessor("Images", {
@@ -273,32 +329,34 @@ function RequestFromAccount() {
         // eslint-disable-next-line no-unused-vars
         cell: (info) =>
           info.cell.row.original.Status === "1" ? (
-            <span className="badge text-bg-primary rounded rounded-pill fs-l p-2">
-              Accepted <BsFillCheckSquareFill />
+            <span className="badge text-bg-success rounded rounded-pill fs-l p-2">
+              Accepted <BsCheckCircle className="fs-m ms-1" />
             </span>
           ) : (
-            // <button className="btn btn-success btn-sm fs-m w-25">
-            //   Accepted <BsFillCheckSquareFill />
-            // </button>
             <div className="d-flex flex-column row-gap-2">
               <button
+                disabled={isLoading}
                 type="button"
-                className="btn btn-outline-primary btn-sm fs-m w-25 p-1 "
+                className={cx("btn-action", "shadow-sm")}
+                style={{ backgroundColor: "#0079FF" }}
                 onClick={() => handleAccecptReq(info.cell.row.original.id)}
               >
-                Accept <IoCheckmarkSharp></IoCheckmarkSharp>
+                Accept
               </button>
               <button
+                disabled={isLoading}
                 type="button"
-                className="btn btn-outline-danger btn-sm fs-m w-25 p-1 "
+                className={cx("btn-action", "shadow-sm")}
+                style={{ backgroundColor: "#F24C3D" }}
                 onClick={() =>
-                  handleRejectReq(
+                  confirmBeforeDelete(
                     info.cell.row.original.id,
-                    info.cell.row.original.dataBoardHouse._id
+                    info.cell.row.original.dataBoardHouse._id,
+                    info.cell.row.original.Images
                   )
                 }
               >
-                Reject <IoClose></IoClose>
+                Reject
               </button>
             </div>
           ),
@@ -314,6 +372,22 @@ function RequestFromAccount() {
 
   useEffect(() => {
     if (allReqs.length > 0) {
+      // const transformedData = allReqs.map((req, index) => ({
+      //   id: req._id,
+      //   Number: index,
+      //   "Information user":
+      //     req?.userId?.fullName + req?.userId?.email + req?.userId?.phone,
+      //   userName: req?.userId?.fullName,
+      //   userEmail: req?.userId?.email,
+      //   userPhone: req?.userId?.phone,
+      //   "Information board house": req?.boardHouseId?.name,
+      //   dataBoardHouse: req.boardHouseId,
+      //   UserName: req?.userId?.fullName,
+      //   Description: req?.description,
+      //   Status: req?.status,
+      //   Images: req?.boardHouseId?.images,
+      // }));
+
       const transformedData = allReqs.map((req, index) => ({
         id: req._id,
         Number: index,
@@ -328,14 +402,16 @@ function RequestFromAccount() {
         Description: req?.description,
         Status: req?.status,
         Images: req?.boardHouseId?.images,
+        // options: req?.boardHouseId?.options[0]?.split(","),
       }));
+      setDataFilter(transformedData.filter((item) => item.Status === "0"));
       setData(transformedData);
     }
   }, [allReqs]);
 
   return (
     <div className={cx("wrap")}>
-      {console.log("Filtered data:", dataFilter)}
+      {console.log("data", data)}
       <div className="row mt-3 ms-1 ">
         <div
           style={{ width: "250px" }}
@@ -346,12 +422,11 @@ function RequestFromAccount() {
           <select
             className="form-select"
             aria-label="Default select example"
-            defaultValue={"all"}
             onChange={handleSelectChanges}
           >
-            <option value="all">All</option>
-            <option value="accept">Accept</option>
             <option value="notAccept">Not accept</option>
+            <option value="accept">Accepted</option>
+            <option value="all">All</option>
           </select>
         </div>
       </div>
@@ -414,7 +489,7 @@ function MyVerticallyCenteredModal(props) {
 }
 
 MyVerticallyCenteredModal.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   onHide: PropTypes.func,
 };
 

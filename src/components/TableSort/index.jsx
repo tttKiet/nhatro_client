@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -136,7 +136,7 @@ function TableSort({ columns, data }) {
           <tbody>
             {table.getRowModel().rows.map((row) => {
               return (
-                <>
+                <Fragment key={row.id}>
                   <tr key={row.id}>
                     {row.getVisibleCells().map((cell) => {
                       return (
@@ -149,7 +149,7 @@ function TableSort({ columns, data }) {
                       );
                     })}
                   </tr>
-                </>
+                </Fragment>
               );
             })}
           </tbody>

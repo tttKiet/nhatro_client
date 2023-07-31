@@ -20,6 +20,7 @@ function ModalCreateReview({
   setExistReview,
   review,
   setReview,
+  getAllFeedback,
 }) {
   const [, , user] = useAuth();
   const [loading, setLoading] = useState(false);
@@ -41,8 +42,8 @@ function ModalCreateReview({
       errors.message = "Please enter message";
     } else if (values.message.length <= 10) {
       errors.message = "Message must more than be 10 characters";
-    } else if (values.message.length > 400) {
-      errors.message = "Message must less than be 400 characters";
+    } else if (values.message.length > 1000) {
+      errors.message = "Message must less than be 1000 characters";
     }
 
     if (!values.star) {
@@ -67,7 +68,7 @@ function ModalCreateReview({
 
   async function handleSubmit(values) {
     let toastId = null;
-    toastId = toast.loading("Updating...");
+    toastId = toast.loading("Loading...");
     setLoading(true);
     try {
       let res = null;
@@ -86,6 +87,7 @@ function ModalCreateReview({
       }
 
       if (res.err === 0) {
+        getAllFeedback();
         toast.update(toastId, {
           render: res.message,
           type: "success",
@@ -154,6 +156,7 @@ function ModalCreateReview({
           review._id
         );
         if (res.err === 0) {
+          getAllFeedback();
           setLoading(false);
           setExistReview(false);
           setReview(null);
@@ -347,6 +350,7 @@ ModalCreateReview.propTypes = {
   setExistReview: PropTypes.func,
   review: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   setReview: PropTypes.func,
+  getAllFeedback: PropTypes.func,
 };
 
 export default ModalCreateReview;

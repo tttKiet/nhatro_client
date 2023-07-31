@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 import styles from "./UploadImage.module.scss";
 import classNames from "classNames/bind";
 import PropTypes from "prop-types";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
-function UploadImage({ formik, imgToDelete, isUpdate, dataExisted }) {
+function UploadImage({
+  formik,
+  imgToDelete,
+  isUpdate,
+  dataExisted,
+  forBoardHouse,
+}) {
   const [files, setFiles] = useState([]);
   const [filesUrl, setFilesUrl] = useState([]);
 
@@ -18,13 +24,21 @@ function UploadImage({ formik, imgToDelete, isUpdate, dataExisted }) {
     }
 
     if (isUpdate) {
-      if (filesTarget.length + files.length > 4) {
-        return toast.error("Please select less than 4 image!");
+      if (filesTarget.length + files.length > (forBoardHouse ? 8 : 4)) {
+        // return toast.error("Please select less than 4 image!");
+        return toast.error(
+          `Please select less than ${forBoardHouse ? "8" : "4"} images!`
+        );
       }
     }
 
-    if (filesTarget.length > 4 || files.length + filesTarget.length > 4) {
-      return toast.error("Please select less than 4 image!");
+    if (
+      filesTarget.length > (forBoardHouse ? 8 : 4) ||
+      files.length + filesTarget.length > (forBoardHouse ? 8 : 4)
+    ) {
+      return toast.error(
+        `Please select less than ${forBoardHouse ? "8" : "4"} images!`
+      );
     }
     const fileUrl = Array.from(filesTarget).map((file) =>
       URL.createObjectURL(file)
@@ -103,6 +117,14 @@ function UploadImage({ formik, imgToDelete, isUpdate, dataExisted }) {
 UploadImage.propTypes = {
   formik: PropTypes.object,
   onDisableClose: PropTypes.func,
+  imgToDelete: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
+    PropTypes.string,
+  ]),
+  isUpdate: PropTypes.bool,
+  dataExisted: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  forBoardHouse: PropTypes.bool,
 };
 
 export default UploadImage;

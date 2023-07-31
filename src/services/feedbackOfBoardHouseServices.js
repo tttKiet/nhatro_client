@@ -47,16 +47,15 @@ const feedbackOfBoardHouseServices = {
     }
   },
 
-  // async getAllFeedback(_id) {
-  //   const res = await axios.get(`/api/v1/user/${_id}/all-feedbacks`);
-  //   return res.data;
-  // },
-
-  // async deleteFeedback(userId, fbId) {
-  //   const res = await axios.delete(
-  //     `/api/v1/user/${userId}/delete-feedback?fbId=${fbId}`
-  //   );
-  //   return res.data;
-  // },
+  async getAllFeedback(boardHouseId) {
+    try {
+      const res = await axios.get(
+        `/api/v1/boardhouse/${boardHouseId}/all-feedbacks`
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 export default feedbackOfBoardHouseServices;
