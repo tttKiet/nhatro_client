@@ -440,6 +440,31 @@
   }
 }
 
+.select{
+  font-size: 15px;
+  display: flex;
+  gap: 20px;
+
+  .d_slect{
+    min-width: 200px;
+  }
+  // justify-content: space-around;
+}
+
+@media screen and (max-width: 765px) {
+  .select{
+    display: block;
+
+    .d_slect{
+      margin-bottom: 10px;
+
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 500px) {
   form{
     padding: 20px 0px !important;

@@ -1,5 +1,5 @@
 import { useAuth } from "../../../hooks";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ToastContext } from "../../../untils/context";
 import { useFormik } from "formik";
 import { reqRoomOwnerServices } from "../../../services";
@@ -9,6 +9,8 @@ import classNames from "classNames/bind";
 import SettingImage from "./SettingImage";
 import { BsSend, BsSkipBackward } from "react-icons/bs";
 import { MdOutlineRestartAlt } from "react-icons/md";
+import axios from "axios";
+import Select from "react-select";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +22,13 @@ function ModalReqOwner({ setActiveTab }) {
   const [show, setShow] = useState(false);
   const toast = useContext(ToastContext);
   const [optionsInput, setOptionsInput] = useState("");
+  const [options, setOptions] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [optionsDistrict, setOptionsDistrict] = useState([]);
+  const [optionsWard, setOptionsWard] = useState([]);
+  // const [isRequired, setIsRequired] = useState(false);
 
   let ref;
 
@@ -75,6 +84,10 @@ function ModalReqOwner({ setActiveTab }) {
       errors.description = "Required";
     }
 
+    if (Object.keys(values.addressFilter).length < 3) {
+      errors.addressFilter = "Required";
+    }
+
     if (values.options.length === 0) {
       errors.options = "Required";
     }
@@ -104,6 +117,7 @@ function ModalReqOwner({ setActiveTab }) {
           description: values.description,
           options: values.options,
           userId: user._id,
+          addressFilter: values.addressFilter,
         },
       };
 
@@ -150,10 +164,85 @@ function ModalReqOwner({ setActiveTab }) {
       description: "",
       images: [],
       options: [],
+      addressFilter: {},
     },
     onSubmit: handleSubmit,
     validate,
   });
+
+  const handleCombineAddress = (e) => {
+    const data = {
+      province: selectedProvince,
+      district: selectedDistrict,
+      ward: e,
+    };
+
+    formik.setFieldValue("addressFilter", data);
+
+    // setTextLocation(
+    //   `${e?.label ? `${e?.label}, ` : ""}
+    //     ${selectedDistrict?.label ? `${selectedDistrict?.label}, ` : ""}
+    //     ${selectedProvince?.label ? `${selectedProvince?.label}` : ""}
+    //   `
+    // );
+  };
+
+  const handleChangeDistrict = (e) => {
+    setSelectedDistrict(e);
+    formik.setFieldValue("addressFilter", e);
+
+    axios
+      .get(`https://provinces.open-api.vn/api/d/${e.value}?depth=2`)
+      .then((res) => {
+        const data = res?.data.wards.map((d) => ({
+          label: d.name,
+          value: d.code,
+        }));
+        setOptionsWard(data);
+      })
+      .catch((error) => {
+        toast.error("Error fetching data...Please or F5 reload page!");
+        console.error("Error fetching data:", error);
+      });
+    setSelectedWard(null);
+  };
+
+  const handleChangeProvince = (e) => {
+    setSelectedProvince(e);
+    formik.setFieldValue("addressFilter", e);
+
+    axios
+      .get(`https://provinces.open-api.vn/api/p/${e.value}?depth=2`)
+      .then((res) => {
+        const data = res?.data.districts.map((d) => ({
+          label: d.name,
+          value: d.code,
+        }));
+        setOptionsDistrict(data);
+      })
+      .catch((error) => {
+        toast.error("Error fetching data. Please try again or F5 reload page!");
+        console.error("Error fetching data:", error);
+      });
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+  };
+
+  useEffect(() => {
+    axios
+      .get("https://provinces.open-api.vn/api/p/")
+      .then((res) => {
+        const data = res?.data.map((p) => ({
+          label: p.name,
+          value: p.code,
+        }));
+        setOptions(data);
+      })
+      .catch((error) => {
+        toast.error("Error fetching data...Please or F5 reload page!");
+        console.error("Error fetching data:", error);
+      });
+  }, [toast]);
 
   return (
     <div className={cx("wrap")}>
@@ -161,7 +250,7 @@ function ModalReqOwner({ setActiveTab }) {
         <div className="row ">
           <div className={cx("gr", "col-md-6 col-12")}>
             <label htmlFor="name">
-              Broad House Name <span>*</span>
+              Board House Name <span>*</span>
             </label>
             <div className={cx("gr_input")}>
               <input
@@ -177,35 +266,17 @@ function ModalReqOwner({ setActiveTab }) {
               )}
             </div>
           </div>
-          <div className={cx("gr", "col-sm-6 col-12")}>
-            <label htmlFor="address">
-              Address <span>*</span>
-            </label>
-            <div className={cx("gr_input")}>
-              <input
-                id="address"
-                name="address"
-                type="text"
-                placeholder="Enter name.."
-                value={formik.values.address}
-                onChange={formik.handleChange}
-              />
 
-              {formik.errors.address && formik.touched.address && (
-                <span className={cx("err")}>{formik.errors.address}</span>
-              )}
-            </div>
-          </div>
-          <div className={cx("gr", "col-sm-6 col-12")}>
+          <div className={cx("gr", "col-md-6 col-12")}>
             <label htmlFor="phone">
-              Broad House Phone <span>*</span>
+              Board House Phone <span>*</span>
             </label>
             <div className={cx("gr_input")}>
               <input
                 id="phone"
                 name="phone"
                 type="text"
-                placeholder="Enter your broad house phone.."
+                placeholder="Enter your Board house phone.."
                 value={formik.values.phone}
                 onChange={formik.handleChange}
               />
@@ -215,10 +286,71 @@ function ModalReqOwner({ setActiveTab }) {
             </div>
           </div>
 
+          <div className={cx("gr", " col-12")}>
+            <label htmlFor="phone">
+              Select address <span>*</span>
+            </label>
+            <div className={cx("gr_input")}>
+              <div className={cx("select")}>
+                {/* <p className="m-0 text-white fst-italic fs-m">Province:</p> */}
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedProvince}
+                  onChange={handleChangeProvince}
+                  placeholder="Choose province"
+                  options={options}
+                />
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedDistrict}
+                  onChange={handleChangeDistrict}
+                  placeholder="Choose district"
+                  options={optionsDistrict}
+                />
+                <Select
+                  className={cx("d_slect")}
+                  value={selectedWard}
+                  onChange={(e) => {
+                    setSelectedWard(e);
+                    handleCombineAddress(e);
+                  }}
+                  placeholder="Choose ward"
+                  options={optionsWard}
+                />
+
+                {formik.errors.addressFilter &&
+                  formik.touched.addressFilter && (
+                    <span className={cx("err")}>
+                      {formik.errors.addressFilter}
+                    </span>
+                  )}
+              </div>
+            </div>
+          </div>
+
+          <div className={cx("gr", "col-md-6 col-12")}>
+            <label htmlFor="address">
+              Detail Address <span>*</span>
+            </label>
+            <div className={cx("gr_input")}>
+              <input
+                id="address"
+                name="address"
+                type="text"
+                placeholder="Enter your Board house address.."
+                value={formik.values.address}
+                onChange={formik.handleChange}
+              />
+              {formik.errors.address && formik.touched.address && (
+                <span className={cx("err")}>{formik.errors.address}</span>
+              )}
+            </div>
+          </div>
+
           <div className="col-md-6 col-12">
-            <label className={cx("title_1")}>PRICE</label>
+            {/* <label className={cx("title_1")}>PRICE</label> */}
             <div className="row">
-              <div className={cx("gr", "col-md-6 col-12")}>
+              <div className={cx("gr", " col-6")}>
                 <label htmlFor="electric">
                   Electric <span>*</span>
                 </label>
@@ -237,7 +369,7 @@ function ModalReqOwner({ setActiveTab }) {
                 </div>
               </div>
 
-              <div className={cx("gr", "col-md-6 col-12")}>
+              <div className={cx("gr", " col-6")}>
                 <label htmlFor="water">
                   Water <span>*</span>
                 </label>

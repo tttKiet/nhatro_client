@@ -75,7 +75,7 @@ function AdminAllRoomsPage() {
         Images: room?.images,
         boardHouseId: e.target.value,
         originalImage: room?.images,
-        options: room?.options?.split(","),
+        options: room?.options,
       }))
     );
 
@@ -201,7 +201,7 @@ function AdminAllRoomsPage() {
           Images: room?.images,
           boardHouseId: boardHouse[0]?.boardHouseId,
           originalImage: room?.images,
-          options: room?.options?.split(","),
+          options: room?.options,
         }))
       );
       setIsChanged(boardHouse[0]?.boardHouseId);
@@ -221,7 +221,7 @@ function AdminAllRoomsPage() {
           Images: room?.images,
           boardHouseId: isChanged,
           originalImage: room?.images,
-          options: room?.options?.split(","),
+          options: room?.options,
         }))
       );
     }

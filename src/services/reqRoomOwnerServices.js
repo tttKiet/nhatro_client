@@ -10,6 +10,7 @@ const reqRoomOwnerServices = {
     formData.append("electric", data.electric);
     formData.append("water", data.water);
     formData.append("options", data.options);
+    formData.append("addressFilter", JSON.stringify(data.addressFilter));
 
     for (let i = 0; i < files.length; i++) {
       formData.append("images", files[i]);

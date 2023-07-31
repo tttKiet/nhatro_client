@@ -402,7 +402,7 @@ function RequestFromAccount() {
         Description: req?.description,
         Status: req?.status,
         Images: req?.boardHouseId?.images,
-        options: req?.boardHouseId?.options[0]?.split(","),
+        // options: req?.boardHouseId?.options[0]?.split(","),
       }));
       setDataFilter(transformedData.filter((item) => item.Status === "0"));
       setData(transformedData);

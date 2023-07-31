@@ -42,6 +42,10 @@ function RoomForm({
       errors.isLayout = "Required";
     }
 
+    if (values.options.length === 0) {
+      errors.options = "Required";
+    }
+
     if (!values.price) {
       errors.price = "Required";
     } else if (values.price <= 0) {

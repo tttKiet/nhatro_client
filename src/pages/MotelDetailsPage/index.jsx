@@ -86,6 +86,7 @@ function MotelDetailsPage() {
 
   return (
     <div className={cx("wrapper")}>
+      {console.log("board house info", boardHouseInfo)}
       <ModalRentRoom
         boardHouseName={boardHouseInfo?.name}
         roomNumber={boardHouseInfo?.rooms?.[currChooseRoom - 1]?.number}
@@ -276,30 +277,15 @@ function MotelDetailsPage() {
                   <h4 className={cx("title")}>ABOUT HERE</h4>
                 </div>
                 <div className={cx("row g-2 my-2")}>
-                  <div className={cx("col-6")}>
-                    <div className="d-flex justify-content-start align-items-center">
-                      <CiMemoPad size={24} />
-                      <h5 className={cx("title_item")}>Has layout</h5>
-                    </div>
-                  </div>
-                  <div className={cx("col-6")}>
-                    <div className="d-flex justify-content-start align-items-center">
-                      <CiMemoPad size={24} />
-                      <h5 className={cx("title_item")}>Has layout</h5>
-                    </div>
-                  </div>
-                  <div className={cx("col-6")}>
-                    <div className="d-flex justify-content-start align-items-center">
-                      <CiMemoPad size={24} />
-                      <h5 className={cx("title_item")}>Has layout</h5>
-                    </div>
-                  </div>
-                  <div className={cx("col-6")}>
-                    <div className="d-flex justify-content-start align-items-center">
-                      <CiMemoPad size={24} />
-                      <h5 className={cx("title_item")}>Has layout</h5>
-                    </div>
-                  </div>
+                  {boardHouseInfo.options &&
+                    boardHouseInfo?.options.map((option, index) => (
+                      <div className={cx("col-6")} key={index}>
+                        <div className="d-flex justify-content-start align-items-center">
+                          <CiMemoPad size={24} />
+                          <h5 className={cx("title_item")}>{option}</h5>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
 
@@ -357,7 +343,13 @@ function MotelDetailsPage() {
                         Description for this room:
                       </h3>
                       <p>
-                        {boardHouseInfo?.rooms?.[currChooseRoom]?.description}
+                        {
+                          boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                            ?.description
+                        }
+                        {console.log(
+                          boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                        )}
                       </p>
                     </div>
 
@@ -366,30 +358,17 @@ function MotelDetailsPage() {
                         <h4 className={cx("title")}>About this room</h4>
                       </div>
                       <div className={cx("row g-2 ")}>
-                        <div className={cx("col-6")}>
-                          <div className="d-flex justify-content-start align-items-center">
-                            <CiMemoPad size={24} />
-                            <h5 className={cx("title_item")}>Has layout</h5>
-                          </div>
-                        </div>
-                        <div className={cx("col-6")}>
-                          <div className="d-flex justify-content-start align-items-center">
-                            <CiMemoPad size={24} />
-                            <h5 className={cx("title_item")}>Has layout</h5>
-                          </div>
-                        </div>
-                        <div className={cx("col-6")}>
-                          <div className="d-flex justify-content-start align-items-center">
-                            <CiMemoPad size={24} />
-                            <h5 className={cx("title_item")}>Has layout</h5>
-                          </div>
-                        </div>
-                        <div className={cx("col-6")}>
-                          <div className="d-flex justify-content-start align-items-center">
-                            <CiMemoPad size={24} />
-                            <h5 className={cx("title_item")}>Has layout</h5>
-                          </div>
-                        </div>
+                        {boardHouseInfo?.rooms?.[currChooseRoom - 1] &&
+                          boardHouseInfo?.rooms?.[
+                            currChooseRoom - 1
+                          ].options.map((option, index) => (
+                            <div className={cx("col-6")} key={index}>
+                              <div className="d-flex justify-content-start align-items-center">
+                                <CiMemoPad size={24} />
+                                <h5 className={cx("title_item")}>{option}</h5>
+                              </div>
+                            </div>
+                          ))}
                       </div>
                     </div>
                     <div className={cx("infor-room")}>
