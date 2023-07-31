@@ -1,2 +1,33 @@
 .wrapper {
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .room {
+    border: 1px solid #ddd;
+    border-radius: 0.4rem;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s linear;
+    .number {
+      font-size: 13px;
+      margin-bottom: 0;
+    }
+
+    .info {
+      .item {
+        font-size: 16px;
+
+        &.price {
+          color: blue;
+        }
+      }
+    }
+
+    &:hover {
+      border: 1px solid #8b8b8b;
+    }
+  }
 }

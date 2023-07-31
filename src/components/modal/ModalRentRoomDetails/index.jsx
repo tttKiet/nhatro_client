@@ -50,7 +50,8 @@ function ModalRentRoomDetails({ show, toggleShow, ...props }) {
                             rent: props?.status == 1,
                           })}
                         >
-                          {props?.status == 1 ? "Rent" : "REQUESTING..."}
+                          {console.log(props)}
+                          {props?.status == 1 ? "RENT" : "REQUESTING..."}
                         </span>
                       </div>
                     </div>
