@@ -4,58 +4,43 @@ import styles from "./AdminLayout.module.scss";
 import classNames from "classNames/bind";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks";
-import { boardHouseServices } from "../../../services/";
-import CheckUpdateBoardHouse from "../../CheckUpdateBoardHouse";
 import ErrorPage from "../../../pages/ErrorPage";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { HiMenu } from "react-icons/hi";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { useLocation } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function AdminLayout({ children }) {
   const [, , dataAdmin] = useAuth();
-  const [boardHouse, setBoardHouse] = useState([]);
+  const location = useLocation();
+  const url = location.pathname;
+  const [prevUrl, setPrevUrl] = useState("/admin");
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // async function handleGetBoardHouse(adminId) {
-  //   const response = await boardHouseServices.getBoardHouseById(adminId);
-  //   if (response.err == 0) {
-  //     setBoardHouse(response.data);
-  //   } else {
-  //     console.log(response);
-  //   }
-  // }
+  const handleCloseNavBar = () => {
+    if (prevUrl != url) {
+      setPrevUrl(url);
+      setShow(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   handleGetBoardHouse(dataAdmin._id);
-  // }, [dataAdmin._id]);
+  useEffect(() => {
+    handleCloseNavBar();
+  }, [url]);
 
   if (dataAdmin.type !== "admin") {
     return <ErrorPage></ErrorPage>;
   }
 
-  // let shouldRenderUpdateBoardHouse = false;
-
-  // if (boardHouse && boardHouse.length > 0) {
-  //   shouldRenderUpdateBoardHouse = boardHouse.some((item) => item.name === "");
-  // }
-
-  // if (shouldRenderUpdateBoardHouse) {
-  //   return boardHouse.map((item) => {
-  //     if (item.name === "") {
-  //       return <CheckUpdateBoardHouse key={item._id} id={item._id} />;
-  //     }
-  //     return null;
-  //   });
-  // }
-
   return (
     <div className={cx("wrap")}>
       <div className={cx("nav")}>
-        <AdminNav />
+        <AdminNav handleClose={() => setShow(false)} />
       </div>
 
       {/* responsive */}

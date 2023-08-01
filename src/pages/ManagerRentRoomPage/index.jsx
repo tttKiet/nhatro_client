@@ -25,10 +25,6 @@ function ManagerRentRoomPage() {
   const [showModal, setShowModal] = useState(false);
 
   function toggleShowModal(info) {
-    console.log(
-      "----------------------------------------------------------------",
-      info
-    );
     info?.row?.original && setDetailsOb(info.row.original);
     setShowModal((s) => !s);
   }
@@ -171,6 +167,7 @@ function ManagerRentRoomPage() {
             <div>
               <button
                 className={cx("actions", "eye")}
+
                 onClick={() => toggleShowModal(info)}
               >
                 <AiOutlineEye size={16} />

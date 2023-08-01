@@ -14,6 +14,33 @@ const rentServices = {
     return res;
   },
 
+  async getRentsFromBoardHouseId(boardHouseId, status) {
+    try {
+      const res = await axios.get(
+        `/api/v1/board-house/all-rent/${boardHouseId}?status=${status}`
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async acceptReqRent(reqId) {
+    try {
+      const res = await axios.patch(`/api/v1/rent/${reqId}/accept`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async rejectReqRent(reqId) {
+    try {
+      const res = await axios.patch(`/api/v1/rent/${reqId}/reject`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
   async getRentRoomUser({ userId }) {
     const res = await axios.get(`/api/v1/user/${userId}/room/rent`);
     return res;
