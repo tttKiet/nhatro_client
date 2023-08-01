@@ -41,6 +41,9 @@ const rentServices = {
     } catch (error) {
       console.log(error);
     }
+  async getRentRoomUser({ userId }) {
+    const res = await axios.get(`/api/v1/user/${userId}/room/rent`);
+    return res;
   },
 
   async deleteRent({ _id }) {

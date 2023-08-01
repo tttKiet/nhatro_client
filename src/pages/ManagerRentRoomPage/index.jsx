@@ -167,7 +167,8 @@ function ManagerRentRoomPage() {
             <div>
               <button
                 className={cx("actions", "eye")}
-                onClick={toggleShowModal}
+
+                onClick={() => toggleShowModal(info)}
               >
                 <AiOutlineEye size={16} />
               </button>
