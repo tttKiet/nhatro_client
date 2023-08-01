@@ -8,7 +8,6 @@ import TableSort from "../../components/TableSort";
 import moment from "moment";
 import { BsCheckCircle } from "react-icons/bs";
 import { toast } from "react-toastify";
-import { Button } from "react-bootstrap";
 
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
@@ -51,6 +50,7 @@ function AdminAllRequestsPage() {
     );
 
     async function handleRejectRentReq(reqId) {
+      btnref.current.disabled = true;
       let toastId = null;
       toastId = toast.loading("Loading...");
       setIsLoading(true);
@@ -76,6 +76,8 @@ function AdminAllRequestsPage() {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        btnref.current.disabled = false;
       }
     }
   }
@@ -154,7 +156,7 @@ function AdminAllRequestsPage() {
               </button>
 
               <button
-                disabled={isLoading}
+                ref={btnref}
                 className={cx("btn-action", "shadow-sm")}
                 style={{ backgroundColor: "#F24C3D" }}
                 onClick={() => confirmBeforeDelete(info?.row?.original?._id)}
@@ -173,7 +175,7 @@ function AdminAllRequestsPage() {
     []
   );
 
-  const getAllRoomsByAdminId = useCallback(async () => {
+  const getAllBoardHouseByAdminId = useCallback(async () => {
     try {
       const res = await boardHouseServices.getBoardHouseById(admin._id);
       if (res.err === 0) {
@@ -189,9 +191,10 @@ function AdminAllRequestsPage() {
   const getAllRentsByBoardHouseId = useCallback(async () => {
     try {
       const res = await rentServices.getRentsFromBoardHouseId(
-        selectRef.current.value
+        selectRef.current.value,
+        0
       );
-      console.log(res);
+
       if (res.err === 0) {
         setAllRentReq(
           res.data.length > 0 &&
@@ -217,8 +220,8 @@ function AdminAllRequestsPage() {
   }, []);
 
   useEffect(() => {
-    getAllRoomsByAdminId();
-  }, [getAllRoomsByAdminId]);
+    getAllBoardHouseByAdminId();
+  }, [getAllBoardHouseByAdminId]);
 
   useEffect(() => {
     if (allBoardHouse.length > 0) {

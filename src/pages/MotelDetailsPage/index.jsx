@@ -19,7 +19,7 @@ import Footer from "../../components/Footer";
 import moment from "moment";
 import ModalRentRoom from "../../components/modal/ModalRentRoom";
 import boardHouseServices from "../../services/boardHouseServices";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { toast, Slide } from "react-toastify";
 import { Calendar, DateRange } from "react-date-range";
 import styles from "./MotelDetailsPage.module.scss";
@@ -33,8 +33,11 @@ function MotelDetailsPage() {
   const [boardHouseInfo, setBoardHouseInfo] = useState({});
   const [showModalRent, setShowModalRent] = useState(false);
   const [showFullImg, setShowFullImg] = useState(false);
+  const [showFullImgRoom, setShowFullImgRoom] = useState(false);
   const chooseDateRef = useRef(null);
   const chooseRoomRef = useRef(null);
+
+  let [search] = useSearchParams();
 
   const { id } = useParams();
   const toggleShowModalRent = () => {
@@ -81,12 +84,18 @@ function MotelDetailsPage() {
   }, [id]);
 
   useEffect(() => {
+    const comp = search.get("comp");
+    console.log("comp: " + comp);
+    comp && chooseRoomRef?.current && windowScrollToElement(chooseRoomRef);
+  });
+
+  useEffect(() => {
     getBoardHouseInfo();
   }, [getBoardHouseInfo]);
 
   return (
     <div className={cx("wrapper")}>
-      {console.log("board house info", boardHouseInfo)}
+      {/* {console.log("board house info", boardHouseInfo)} */}
       <ModalRentRoom
         boardHouseName={boardHouseInfo?.name}
         roomNumber={boardHouseInfo?.rooms?.[currChooseRoom - 1]?.number}
@@ -98,12 +107,23 @@ function MotelDetailsPage() {
         toggleShow={toggleShowModalRent}
         roomId={boardHouseInfo?.rooms?.[currChooseRoom - 1]?._id}
       />
-      {console.log("board house info", boardHouseInfo)}
-      {/* Modal show all img */}
+
+      {/* Modal show all img of board house*/}
       <ModalFullScreen
         imgToView={boardHouseInfo.images ? boardHouseInfo.images : []}
         show={showFullImg}
         onHide={() => setShowFullImg(false)}
+      ></ModalFullScreen>
+
+      {/* Modal show all img of  rooms*/}
+      <ModalFullScreen
+        imgToView={
+          boardHouseInfo?.rooms?.[currChooseRoom - 1]
+            ? boardHouseInfo?.rooms?.[currChooseRoom - 1].images
+            : []
+        }
+        show={showFullImgRoom}
+        onHide={() => setShowFullImgRoom(false)}
       ></ModalFullScreen>
 
       <div className="container">
@@ -152,7 +172,7 @@ function MotelDetailsPage() {
                 })}
             </div>
             <div
-              className={cx("btn-all-image")}
+              className={cx("btn-all-image", "shadow border")}
               onClick={() => setShowFullImg(true)}
             >
               <CiLineHeight />
@@ -220,7 +240,7 @@ function MotelDetailsPage() {
                       <span className={cx("hl")}>
                         {boardHouseInfo?.electricPrice}
                       </span>
-                      per kilo of electricity and get unlimited use.
+                      VND per kilo of electricity and get unlimited use.
                     </span>
                   </div>
                 </div>
@@ -232,9 +252,9 @@ function MotelDetailsPage() {
                     <span>
                       Tenants have to pay
                       <span className={cx("hl")}>
-                        {boardHouseInfo?.waterPrice}vnd
+                        {boardHouseInfo?.waterPrice}
                       </span>
-                      per block of water
+                      VND per block of water
                     </span>
                   </div>
                 </div>
@@ -323,7 +343,7 @@ function MotelDetailsPage() {
                           <h3 className={cx("title")}>Price on month:</h3>
                           <b>
                             {boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
-                            M
+                            VND
                           </b>
                         </div>
                       </div>
@@ -338,9 +358,6 @@ function MotelDetailsPage() {
                           boardHouseInfo?.rooms?.[currChooseRoom - 1]
                             ?.description
                         }
-                        {console.log(
-                          boardHouseInfo?.rooms?.[currChooseRoom - 1]
-                        )}
                       </p>
                     </div>
 
@@ -374,6 +391,15 @@ function MotelDetailsPage() {
                               </div>
                             </div>
                           ))}
+                        </div>
+
+                        <div
+                          className={cx("btn-all-image", "shadow border")}
+                          onClick={() => setShowFullImgRoom(true)}
+                        >
+                          <CiLineHeight />
+
+                          <span>Show all image</span>
                         </div>
                       </div>
                     </div>

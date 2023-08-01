@@ -14,10 +14,10 @@ const rentServices = {
     return res;
   },
 
-  async getRentsFromBoardHouseId(boardHouseId) {
+  async getRentsFromBoardHouseId(boardHouseId, status) {
     try {
       const res = await axios.get(
-        `/api/v1/board-house/all-rent/${boardHouseId}`
+        `/api/v1/board-house/all-rent/${boardHouseId}?status=${status}`
       );
       return res.data;
     } catch (error) {

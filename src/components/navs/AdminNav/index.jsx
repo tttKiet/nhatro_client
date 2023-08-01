@@ -11,7 +11,7 @@ import { TbSwitchHorizontal } from "react-icons/tb";
 import { AiOutlinePullRequest } from "react-icons/ai";
 
 const cx = classNames.bind(styles);
-function AdminNav() {
+function AdminNav({ handleClose }) {
   const location = useLocation();
   const url = location.pathname;
   const dispatch = useDispatch();

@@ -191,7 +191,6 @@ function ModalCreateReview({
         star: review.star,
       });
     } else {
-      console.log("rong");
       setIsUpdate(false);
     }
   }, [review, isUpdate]);
