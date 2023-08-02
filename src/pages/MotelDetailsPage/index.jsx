@@ -85,7 +85,6 @@ function MotelDetailsPage() {
 
   useEffect(() => {
     const comp = search.get("comp");
-    console.log("comp: " + comp);
     comp && chooseRoomRef?.current && windowScrollToElement(chooseRoomRef);
   });
 

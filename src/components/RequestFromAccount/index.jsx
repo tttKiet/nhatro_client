@@ -272,7 +272,7 @@ function RequestFromAccount() {
 
       columnHelper.accessor("Options", {
         cell: (info) => (
-          <div>
+          <div style={{ width: "100px" }}>
             {info?.row?.original?.options &&
               info?.row?.original?.options.map((options, index) => (
                 <p className="fs-m m-0" key={index}>
@@ -402,7 +402,7 @@ function RequestFromAccount() {
         Description: req?.description,
         Status: req?.status,
         Images: req?.boardHouseId?.images,
-        // options: req?.boardHouseId?.options[0]?.split(","),
+        options: req?.boardHouseId?.options,
       }));
       setDataFilter(transformedData.filter((item) => item.Status === "0"));
       setData(transformedData);
@@ -411,7 +411,7 @@ function RequestFromAccount() {
 
   return (
     <div className={cx("wrap")}>
-      {console.log("data", data)}
+      {console.log("data", allReqs)}
       <div className="row mt-3 ms-1 ">
         <div
           style={{ width: "250px" }}

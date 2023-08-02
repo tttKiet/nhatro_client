@@ -94,7 +94,7 @@ function UserHomePage() {
     <div className={cx("wrap")}>
       <div>
         <Banner />
-        <GroupTextVertical
+        {/* <GroupTextVertical
           title={
             <>
               Cancel anytime.
@@ -107,29 +107,32 @@ function UserHomePage() {
           However, you have the flexibility to cancel at any time to prevent
           this renewal if you do not plan to continue your subscription for
           the next payment period. See more FAQs for further information."
-        />
+        /> */}
 
-        <div className="container ">
-          <div className="row mt-5">
-            <div className="col-md-5 col-12">
+        <div className="container">
+          <div style={{ margin: "80px 0" }} className="row">
+            <div className="col-md-5 col-12 ">
               <TittleContentLv3
                 contentArray={bodyTitleContent1}
                 header="DESIGNER SEARCH"
                 title="Reliable Search"
               />
             </div>
-            <div className="col-md-7 col-12">
+            <div className="col-md-7 col-12 d-flex align-items-center justify-content-center">
               <Image className={cx("img")} src={imglv3_1} />
             </div>
           </div>
-          <div className="row mt-5">
-            <div className="col-md-7 col-12">
+          <div
+            style={{ margin: "80px 0" }}
+            className={cx("reverse-item", "row")}
+          >
+            <div className="col-md-7 col-12 d-flex align-items-center justify-content-center ">
               <Image
-                className={cx("img", "rounded", "bg-light", "shadow-sm")}
-                src={imglv3_2}
+                className={cx("img", "rounded", "bg-light", "shadow")}
+                src="https://cdn.pixabay.com/photo/2019/06/01/11/04/plant-4243898_1280.jpg"
               />
             </div>
-            <div className="col-md-5 col-12">
+            <div className="col-md-5 col-12 ">
               <TittleContentLv3
                 right
                 contentArray={bodyTitleContent2}

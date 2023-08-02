@@ -11,13 +11,13 @@ function Banner() {
         className={cx("carousel")}
         showThumbs={false}
         autoPlay={true}
-        interval={2500}
+        interval={4000}
         infiniteLoop={true}
         transitionTime={1000}
         showStatus={false}
         emulateTouch={true}
         showArrows={false}
-        showIndicators={false}
+        showIndicators={true}
         swipeable={false}
       >
         <BannerSlide

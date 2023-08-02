@@ -17,7 +17,8 @@
 
     .img {
       border-radius: 12px;
-      background-color: rgba(51, 51, 255, 0.855);
+      // background-color: rgba(51, 51, 255, 0.855);
+      background-color: #0079FF;
       height: 100%;
       min-height: 580px;
       padding: 24px;
@@ -26,7 +27,7 @@
       flex-direction: column;
 
       .content {
-        margin-top: 60px;
+        margin-top: 30px;
         font-size: 24px;
 
         .des-blur {
@@ -37,7 +38,7 @@
 
       .card-footer {
         border-radius: 8px;
-        background-color: rgb(0 0 0 / 10%);
+        
         flex: 1;
         display: flex;
         justify-content: center;
@@ -49,7 +50,8 @@
         }
 
         img {
-          width: 300px;
+          width: 200px;
+          
         }
       }
     }
@@ -76,7 +78,8 @@
           .highlight {
             display: block;
             margin-top: 12px;
-            color: rgb(90, 90, 255);
+            // color: rgb(90, 90, 255);
+            color: #0079FF;
           }
         }
 
@@ -90,12 +93,40 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            
+
+            button{
+              width: 100%;
+              border: none;
+              padding: 8px 0;
+              border-radius: 8px;
+              color: #fff;
+
+              &:hover{
+                opacity: 0.85;
+                transform: scale(1.05);
+              }
+            }
           }
 
           .social {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            
+
+            button{
+              width: 100%;
+              border: none;
+              padding: 8px 0;
+              border-radius: 8px;
+
+              &:hover{
+                opacity: 0.85;
+                transform: scale(1.05);
+              }
+
+            }
           }
         }
 
@@ -141,7 +172,19 @@
 @media screen and (min-width: 1200px) {
   .wrap {
     .contai {
-      max-width: 60vw;
+      max-width: 70vw;
+    }
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .form-login{
+    padding: 10px !important;
+
+    h3{
+      padding-left: 10px ;
+      padding-top: 15px ;
+      margin-bottom: 20px !important;
     }
   }
 }

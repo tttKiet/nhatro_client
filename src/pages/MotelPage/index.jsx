@@ -22,6 +22,7 @@ function MotelPage() {
 
   return (
     <div className={cx("wrap")}>
+      {console.log("board house", boaHouseData)}
       <SearchMotel />
       <div className="container">
         <div className={cx("sitebar")}>

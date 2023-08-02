@@ -187,6 +187,13 @@ function ModalReqOwner({ setActiveTab }) {
     // );
   };
 
+  const handleRestForm = () => {
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+    setSelectedProvince(null);
+    formik.resetForm();
+  };
+
   const handleChangeDistrict = (e) => {
     setSelectedDistrict(e);
     formik.setFieldValue("addressFilter", e);
@@ -500,7 +507,7 @@ function ModalReqOwner({ setActiveTab }) {
           <button
             type="reset"
             className={cx("btn-create")}
-            onClick={() => formik.resetForm()}
+            onClick={() => handleRestForm()}
           >
             Reset <MdOutlineRestartAlt className="ms-1"></MdOutlineRestartAlt>
           </button>

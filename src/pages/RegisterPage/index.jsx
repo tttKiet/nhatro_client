@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import styles from "./RegisterPage.module.scss";
 import classNames from "classNames/bind";
+import supermraket from "../../assets/gifs/supermarket.gif";
 
 import RegisterForm from "../../components/RegisterForm";
+import { Image } from "react-bootstrap";
 
 const cx = classNames.bind(styles);
 
@@ -10,58 +12,46 @@ function RegisterPage() {
   return (
     <div className={cx("wrap")}>
       <div className={cx("contai")}>
-        <div className="container h-100 p-3 ">
+        <div className=" container-xl h-100 p-3 ">
           <div className="row">
-            <div className={cx("col-12 col-md-12 col-lg-3")}>
+            <div className={cx("col-12 col-md-12 col-lg-4")}>
               <div className={cx("img")}>
                 <div className="title">
-                  <b>HOUSES</b>
+                  <b>FUTURE MOTEL</b>
                 </div>
                 <div className={cx("content")}>
                   <p className={cx("des")}>
-                    Cho thuê phòng dể dàng với website
-                    <span>&quot;Motel Future&quot;</span>
+                    Easily rent a room with the website
+                    <span>&quot;Future Motel&quot;</span>
                   </p>
                   <p className={cx("des-blur")}>
-                    Motel Future đã làm cho hàng triệu sinh viên có chổ ở trong
-                    suốt quá trình học tập hay đi làm. Thành công với chất lượng
-                    nhà ở, Motel Future sẽ là một thương hiệu website cho thuê
-                    nhà bật nhất the world.
+                    Future Motel has provided millions of students with
+                    accommodation throughout their study or work journey. With
+                    its successful housing quality, Future Motel is poised to
+                    become the world&quot;s leading brand for house rental
+                    websites.
                   </p>
                 </div>
 
                 <div className={cx("card-footer")}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59"
-                    />
-                  </svg>
+                  <Image src={supermraket} className="rounded-3 shadow"></Image>
                 </div>
               </div>
             </div>
-            <div className={cx("col-lg-9 col-12", "form-login")}>
+            <div className={cx("col-lg-8 col-12", "form-login")}>
               <div className="flex-1">
                 <h3>
-                  Chào mừng bạn đến với
+                  Welcome to
                   <span className={cx("highlight")}>
-                    &quot;Nhà trọ Online!&quot;
+                    &quot;Future Motel&quot;
                   </span>
                 </h3>
                 <RegisterForm _id="" />
 
                 <div className={cx("form-btn", "control-login")}>
-                  <span>Bạn đã có tài khoản? </span>
+                  <span>Do you have a account? </span>
                   <Link type="submit" to="/login" className="mx-2">
-                    Đăng nhập ngay.
+                    Login now
                   </Link>
                   <hr />
                 </div>

@@ -17,7 +17,8 @@
 
     .img {
       border-radius: 12px;
-      background-color: rgba(51, 51, 255, 0.855);
+      background-color: #0079FF;
+
       height: 100%;
       min-height: 580px;
       padding: 24px;
@@ -29,7 +30,7 @@
       }
 
       .content {
-        margin-top: 60px;
+        margin-top: 20px;
         font-size: 24px;
 
         .des-blur {
@@ -40,7 +41,7 @@
 
       .card-footer {
         border-radius: 8px;
-        background-color: rgb(0 0 0 / 10%);
+       
         flex: 1;
         display: flex;
         justify-content: center;
@@ -49,6 +50,11 @@
         svg {
           width: 30px;
           margin-right: 12px;
+        }
+
+        img{
+          width: 200px;
+    
         }
       }
     }
@@ -69,7 +75,16 @@
 @media screen and (max-width: 590px) {
   .wrap {
     .contai {
-      max-width: 400px;
+      max-width: 470px;
+    }
+  }
+
+  .form-login{
+    padding: 10px !important;
+
+    h3{
+      padding: 15px 0 0 10px;
+      margin-bottom: 0px;
     }
   }
 }

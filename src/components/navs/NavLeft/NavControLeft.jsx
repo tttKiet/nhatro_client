@@ -81,7 +81,7 @@ function NavControlLeft({ setActive, active, onHide }) {
             onClick={onHide ? () => onHide() : ""}
           >
             <MdOutlineAdminPanelSettings />
-            Request to be the board house owner
+            Request to create board house
           </Link>
         </li>
 
