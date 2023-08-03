@@ -181,8 +181,7 @@ function AdminAllRoomsPage() {
   useEffect(() => {
     handleGetBoardHouseById();
     handleGetRoom();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleGetBoardHouseById, handleGetRoom]);
 
   useEffect(() => {
     if (dataRoom?.length > 0 && isChanged?.length == 0) {
@@ -225,8 +224,7 @@ function AdminAllRoomsPage() {
         }))
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataRoom, boardHouse, isChanged]);
+  }, [boardHouse, dataRoom, isChanged]);
 
   return (
     <div className={cx("wrap")}>

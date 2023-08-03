@@ -49,6 +49,7 @@ const roomServices = {
     formData.append("size", dataRoom.size);
     formData.append("price", dataRoom.price);
     formData.append("options", dataRoom.options);
+    formData.append("boardHouseId", dataRoom.boardHouseId);
 
     // img to delete
     const imgToDelete = dataRoom.images

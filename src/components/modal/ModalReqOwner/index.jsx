@@ -132,8 +132,6 @@ function ModalReqOwner({ setActiveTab }) {
         });
         formik.resetForm();
         setImgs([]);
-        toast.dismiss();
-        toast.success(res.message);
         setActiveTab("information");
       } else {
         toast.update(toastId, {

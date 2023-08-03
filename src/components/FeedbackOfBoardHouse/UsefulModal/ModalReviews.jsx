@@ -12,7 +12,7 @@ import { useAuth } from "../../../hooks";
 
 const cx = classNames.bind(styles);
 
-function ModalAllReview({ show, onHide, allReviews, rating }) {
+function ModalAllReview({ show, onHide, allReviews, rating, existReview }) {
   const [isFilterMine, setIsFilterMine] = useState(false);
   const [modAllReview, setModAllReview] = useState([]);
   const selectRef = useRef(null);
@@ -98,7 +98,7 @@ function ModalAllReview({ show, onHide, allReviews, rating }) {
                   <option value="newest" className="fs-s">
                     Newest
                   </option>
-                  <option value="mine" className="fs-s">
+                  <option value="mine" className="fs-s" disabled={!existReview}>
                     My review
                   </option>
                 </select>
@@ -155,6 +155,7 @@ ModalAllReview.propTypes = {
   onHide: PropTypes.func,
   allReviews: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   rating: PropTypes.number,
+  canReview: PropTypes.bool,
 };
 
 export default ModalAllReview;

@@ -21,6 +21,7 @@ function Banner() {
         swipeable={false}
       >
         <BannerSlide
+          link={"/"}
           title={"quick room search"}
           contentButton={"Search here"}
           imgLink={
@@ -28,6 +29,7 @@ function Banner() {
           }
         />
         <BannerSlide
+          link={"/post"}
           title={"Posting is easy"}
           contentButton={"Post here"}
           imgLink={
@@ -35,6 +37,7 @@ function Banner() {
           }
         />
         <BannerSlide
+          link={"/motel"}
           title={"cheap accommodation"}
           contentButton={"rent here"}
           imgLink={
