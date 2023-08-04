@@ -5,7 +5,11 @@ import { BsFileEarmark, BsHouse, BsTrash } from "react-icons/bs";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { TbBrandBooking } from "react-icons/tb";
 import { TiArrowBack } from "react-icons/ti";
-import { MdLogout, MdOutlineAdminPanelSettings } from "react-icons/md";
+import {
+  MdLogout,
+  MdOutlineAdminPanelSettings,
+  MdOutlinePassword,
+} from "react-icons/md";
 
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -93,6 +97,17 @@ function NavControlLeft({ setActive, active, onHide }) {
           >
             <BsFileEarmark />
             My feedbacks
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            className={cx({ active: active === "change-password" })}
+            to={`/profile?tag=change-password`}
+            onClick={onHide ? () => onHide() : ""}
+          >
+            <MdOutlinePassword />
+            Change password
           </Link>
         </li>
       </ul>

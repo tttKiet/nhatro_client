@@ -88,3 +88,16 @@
     }
   }
 }
+
+@media screen and (max-width: 991px) {
+  .img{
+    // display: none !important;
+
+    min-height: 0 !important;
+    .card-footer{
+      display: none !important;
+    }
+
+    
+  }
+}

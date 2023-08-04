@@ -15,6 +15,7 @@ import supermraket from "../../assets/gifs/supermarket.gif";
 import styles from "./LoginPage.module.scss";
 import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
+import ModalMissPassword from "./ModalMissPassword";
 const cx = classNames.bind(styles);
 
 function LoginPage() {
@@ -22,6 +23,7 @@ function LoginPage() {
   const [resMessage, setResMessage] = useState("");
   const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
+  const [show, setShow] = useState(false);
 
   const validate = (values) => {
     const errors = {};
@@ -94,6 +96,10 @@ function LoginPage() {
 
   return (
     <div className={cx("wrap")}>
+      <ModalMissPassword
+        show={show}
+        onHide={() => setShow(false)}
+      ></ModalMissPassword>
       <div className={cx("contai")}>
         <div className="container h-100 p-3 ">
           <div className="row">
@@ -216,7 +222,13 @@ function LoginPage() {
                       </label>
                     </div>
 
-                    <a href="#"> Missing password?</a>
+                    <p
+                      className={cx("miss-password")}
+                      onClick={() => setShow(true)}
+                    >
+                      {" "}
+                      Missing password?
+                    </p>
                   </div>
 
                   <span className={cx("err")}>{}</span>

@@ -21,15 +21,14 @@ function RegisterPage() {
                 </div>
                 <div className={cx("content")}>
                   <p className={cx("des")}>
-                    Easily rent a room with the website
-                    <span>&quot;Future Motel&quot;</span>
+                    Create your account with
+                    <span> &quot;Future Motel&quot;</span>
                   </p>
                   <p className={cx("des-blur")}>
-                    Future Motel has provided millions of students with
-                    accommodation throughout their study or work journey. With
-                    its successful housing quality, Future Motel is poised to
-                    become the world&quot;s leading brand for house rental
-                    websites.
+                    Welcome to the future of hospitality booking! Our
+                    motel&apos;s website features a user-friendly and innovative
+                    register function designed to streamline your reservation
+                    process.
                   </p>
                 </div>
 

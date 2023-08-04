@@ -167,6 +167,17 @@
       }
     }
   }
+
+  .miss-password{
+    margin: 0;
+    font-style: italic;
+    cursor: pointer;
+    color: #0079FF;
+
+    &:hover{
+      color: #025bc1;
+    }
+  }
 }
 
 @media screen and (min-width: 1200px) {

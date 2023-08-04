@@ -93,6 +93,19 @@ const userServices = {
       console.log(error);
     }
   },
+
+  // change password
+  async changePassword(userId, oldPassword, newPassword) {
+    try {
+      const res = await axios.patch(
+        `/api/v1/user/change-password?_id=${userId}`,
+        { oldPassword, newPassword }
+      );
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default userServices;
