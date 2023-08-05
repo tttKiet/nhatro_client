@@ -15,7 +15,7 @@ import supermraket from "../../assets/gifs/supermarket.gif";
 import styles from "./LoginPage.module.scss";
 import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
-import ModalMissPassword from "./ModalMissPassword";
+import ModalMissPassword from "./MissPassword/ModalMissPassword";
 const cx = classNames.bind(styles);
 
 function LoginPage() {

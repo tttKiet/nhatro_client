@@ -20,6 +20,14 @@ function MotelPage() {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    // if (boaHouseData.length > 0) {
+    //   boaHouseData.map(async (bh) => {
+    //     setBoaHouseData({ ...boaHouseData, rating: "1" });
+    //   });
+    // }
+  }, [boaHouseData]);
+
   return (
     <div className={cx("wrap")}>
       {console.log("board house", boaHouseData)}

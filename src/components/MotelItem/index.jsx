@@ -21,7 +21,7 @@ function MotelItem({
 }) {
   return (
     <div className={cx("wrap", "col-xxl-3 col-lg-4 col-sm-6 col-12")}>
-      <div className={cx("contair")}>
+      <div className={cx("contair", "shadow-sm")}>
         <div className={cx("slides")}>
           <div className={cx("sildes_img")}>
             <Carousel
@@ -45,7 +45,10 @@ function MotelItem({
             </Carousel>
           </div>
         </div>
-        <Link to={`/motel/${_id}`} className={cx("info")}>
+        <Link
+          to={`/motel/${_id}`}
+          className={cx("info", " bg-white p-2 shadow-sm")}
+        >
           <div className={cx("name_star", "mb-2")}>
             <h4 className={cx("name")}>{boadrHouseName}</h4>
             <span className={cx("star")}>

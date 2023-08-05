@@ -106,6 +106,22 @@ const userServices = {
       console.log(error);
     }
   },
+
+  // send code miss password
+  async sendCodeMissPassword(email) {
+    const res = await axios.post(
+      `/api/v1/user/miss-password/send-code?email=${email}`
+    );
+    return res.data;
+  },
+
+  async verifyCodeAndChangePassword(code, email, newPassword) {
+    const res = await axios.post(
+      `/api/v1/user/miss-password/verify-code?email=${email}&code=${code}`,
+      { newPassword }
+    );
+    return res;
+  },
 };
 
 export default userServices;
