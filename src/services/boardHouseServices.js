@@ -49,6 +49,13 @@ const boardHouseServices = {
     const res = await axios.get(`/api/v1/board-house/${id}`);
     return res;
   },
+
+  async getRatingAndPrice(boardHouseId) {
+    const res = await axios.get(
+      `api/v1/board-house/${boardHouseId}/rating-price`
+    );
+    return res;
+  },
 };
 
 export default boardHouseServices;

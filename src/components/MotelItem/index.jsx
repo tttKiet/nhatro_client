@@ -3,7 +3,7 @@ import styles from "./MotelItem.module.scss";
 import { AiFillStar } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { CiLocationArrow1 } from "react-icons/ci";
-import { GiMoneyStack } from "react-icons/gi";
+import { MdAttachMoney, MdOutlineLocationOn } from "react-icons/md";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import classNames from "classNames/bind";
@@ -17,6 +17,9 @@ function MotelItem({
   phone,
   address,
   userId: owner,
+  maxPrice,
+  minPrice,
+  star,
   _id,
 }) {
   return (
@@ -52,23 +55,35 @@ function MotelItem({
           <div className={cx("name_star", "mb-2")}>
             <h4 className={cx("name")}>{boadrHouseName}</h4>
             <span className={cx("star")}>
-              <AiFillStar />
-              4.8
+              <AiFillStar className="fs-m" color="#ffbe2ae3" />
+              {star ? star : "5"}
             </span>
           </div>
           <div className={cx("owner", "mb-2")}>
             <h4 className={cx("author")}>Owner: {owner?.fullName}</h4>
           </div>
           <div className={cx("location", "mb-2")}>
-            <CiLocationArrow1 /> {address}
+            <MdOutlineLocationOn /> {address}
           </div>
           <div className={cx("price", "mb-2", "pt-1")}>
             <h4 className={cx("alone_price")}>
               <i>
-                <GiMoneyStack color="blue" />
-                VND/month:
+                <MdAttachMoney className="fs-l me-1 mb-1" color="#db5353" />
+                Price:
               </i>
-              <span className={cx("price_hl")}>1.8M</span>
+              {minPrice == maxPrice && minPrice !== null ? (
+                <span className={cx("price_hl")}>
+                  {Number(minPrice).toLocaleString() + " VND"}
+                </span>
+              ) : minPrice !== null ? (
+                <span className={cx("price_hl")}>
+                  {Number(minPrice).toLocaleString() + " VND"} -{" "}
+                  {Number(maxPrice).toLocaleString() + " VND"}
+                </span>
+              ) : (
+                <span className={cx("price_hl")}>Updating...</span>
+              )}
+              {/* {!minPrice && <span className={cx("price_hl")}>Updating...</span>} */}
             </h4>
           </div>
         </Link>

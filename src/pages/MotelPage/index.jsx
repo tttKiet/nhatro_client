@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 function MotelPage() {
   const [boaHouseData, setBoaHouseData] = useState([]);
+  const [newData, setNewData] = useState([]);
 
   useEffect(() => {
     boardHouseServices
@@ -15,26 +16,21 @@ function MotelPage() {
       .then((res) => {
         if (res?.status === 200 && res?.data?.err === 0) {
           setBoaHouseData(res.data.data);
+          const newDataWithRating = res.data.data.map((bh) => {
+            return { ...bh, rating: "5" };
+          });
+          setNewData(newDataWithRating);
         }
       })
       .catch((err) => console.log(err));
   }, []);
 
-  useEffect(() => {
-    // if (boaHouseData.length > 0) {
-    //   boaHouseData.map(async (bh) => {
-    //     setBoaHouseData({ ...boaHouseData, rating: "1" });
-    //   });
-    // }
-  }, [boaHouseData]);
-
   return (
     <div className={cx("wrap")}>
-      {console.log("board house", boaHouseData)}
       <SearchMotel />
       <div className="container">
         <div className={cx("sitebar")}>
-          <div className={cx("doc")}>+ 2000 motel</div>
+          <div className={cx("doc")}>+ {boaHouseData.length} motels</div>
           <button className={cx("filter")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
