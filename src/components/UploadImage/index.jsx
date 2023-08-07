@@ -3,6 +3,7 @@ import styles from "./UploadImage.module.scss";
 import classNames from "classNames/bind";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import imageCompression from "browser-image-compression";
 
 const cx = classNames.bind(styles);
 function UploadImage({
@@ -15,8 +16,41 @@ function UploadImage({
   const [files, setFiles] = useState([]);
   const [filesUrl, setFilesUrl] = useState([]);
 
-  const handleChangeInputFile = (e) => {
+  async function convertImg(file) {
+    const imageFile = file;
+    // console.log("originalFile instanceof Blob", imageFile instanceof Blob); // true
+    // console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+    const options = {
+      maxSizeMB: 20,
+      maxWidthOrHeight: 1000,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      var fileConvert = new File(
+        [compressedFile],
+        `avatar${Math.floor(Math.random() * 10000)}-${Math.floor(
+          Math.random() * 10000
+        )}.png`,
+        { type: compressedFile.type }
+      );
+      // console.log(
+      //   "compressedFile instanceof Blob",
+      //   compressedFile instanceof Blob
+      // ); // true
+      // console.log(
+      //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+      // ); // smaller than maxSizeMB
+      return fileConvert;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChangeInputFile = async (e) => {
     const filesTarget = e.target.files;
+
     for (let i = 0; i < filesTarget.length; i++) {
       if (!filesTarget[i].type.includes("image/")) {
         return toast.error("Please select only images!");
@@ -40,11 +74,18 @@ function UploadImage({
         `Please select less than ${forBoardHouse ? "8" : "4"} images!`
       );
     }
-    const fileUrl = Array.from(filesTarget).map((file) =>
+
+    const newFileArr = await Promise.all(
+      Array.from(filesTarget).map(async (file) => {
+        return await convertImg(file);
+      })
+    );
+
+    const fileUrl = Array.from(newFileArr).map((file) =>
       URL.createObjectURL(file)
     );
 
-    setFiles((prev) => [...prev, ...filesTarget]);
+    setFiles((prev) => [...prev, ...newFileArr]);
     setFilesUrl((prev) => [...prev, ...fileUrl]);
   };
 

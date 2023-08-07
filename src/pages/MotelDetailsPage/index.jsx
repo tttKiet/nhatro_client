@@ -181,7 +181,7 @@ function MotelDetailsPage() {
           </div>
         </div>
 
-        <div className={cx("row g-5", "py-4")}>
+        <div className={cx("row ", "py-4")}>
           <div className="col-lg-8">
             <div className={cx("infomation")}>
               <div className="row">

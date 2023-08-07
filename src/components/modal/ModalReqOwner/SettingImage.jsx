@@ -5,6 +5,8 @@ import { ToastContext } from "../../../untils/context";
 import { Carousel } from "react-responsive-carousel";
 import { Image } from "react-bootstrap";
 import { ReactSortable } from "react-sortablejs";
+import imageCompression from "browser-image-compression";
+
 // scss
 import styles from "./ModalReqOwner.module.scss";
 import classNames from "classNames/bind";
@@ -24,6 +26,29 @@ function SettingImage({ imgs, formik, setImgs, show, setShow }) {
     });
   };
 
+  async function convertImg(file) {
+    const imageFile = file;
+    const options = {
+      maxSizeMB: 20,
+      maxWidthOrHeight: 1000,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      var fileConvert = new File(
+        [compressedFile],
+        `avatar${Math.floor(Math.random() * 10000)}-${Math.floor(
+          Math.random() * 10000
+        )}.png`,
+        { type: compressedFile.type }
+      );
+
+      return fileConvert;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const uploadImage = async (event) => {
     const files = event.target.files;
     if (files.length > 8 || imgs.length + files.length > 8) {
@@ -31,7 +56,14 @@ function SettingImage({ imgs, formik, setImgs, show, setShow }) {
     }
     const imgData = [];
     const imgsArr = [];
-    for (let img of files) {
+
+    const fileCompress = await Promise.all(
+      Array.from(files).map(async (file) => {
+        return await convertImg(file);
+      })
+    );
+
+    for (let img of fileCompress) {
       const convert = URL.createObjectURL(img);
       imgData.push(convert);
       imgsArr.push(img);
