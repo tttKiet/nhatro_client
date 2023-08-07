@@ -5,6 +5,8 @@ import { ReactSortable } from "react-sortablejs";
 import { trackPromise } from "react-promise-tracker";
 import { HiX } from "react-icons/hi";
 import { MoonLoader } from "react-spinners";
+import imageCompression from "browser-image-compression";
+
 // scss
 import styles from "./FormUpPost.module.scss";
 import PropTypes from "prop-types";
@@ -134,7 +136,30 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
       });
   };
 
-  const handleChangeInputFile = (e) => {
+  async function convertImg(file) {
+    const imageFile = file;
+    const options = {
+      maxSizeMB: 20,
+      maxWidthOrHeight: 1000,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      var fileConvert = new File(
+        [compressedFile],
+        `avatar${Math.floor(Math.random() * 10000)}-${Math.floor(
+          Math.random() * 10000
+        )}.png`,
+        { type: compressedFile.type }
+      );
+
+      return fileConvert;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChangeInputFile = async (e) => {
     const filesTarget = e.target.files;
     for (let i = 0; i < filesTarget.length; i++) {
       if (!filesTarget[i].type.includes("image/")) {
@@ -145,10 +170,17 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
     if (filesTarget.length > 4 || files.length + filesTarget.length > 4) {
       return toast.error("Please select less than 4 image!");
     }
-    const fileUrl = Array.from(filesTarget).map((file) =>
+
+    const fileCompress = await Promise.all(
+      Array.from(filesTarget).map(async (file) => {
+        return await convertImg(file);
+      })
+    );
+
+    const fileUrl = Array.from(fileCompress).map((file) =>
       URL.createObjectURL(file)
     );
-    setFiles((prev) => [...prev, ...filesTarget]);
+    setFiles((prev) => [...prev, ...fileCompress]);
     setFilesUrl((prev) => [...prev, ...fileUrl]);
   };
 
@@ -241,7 +273,7 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
             onChange={handleSetContent}
             type="text"
             className={cx("input")}
-            placeholder="You are think ..."
+            placeholder="Type what are you think..."
             onInput={handleInput}
           />
         </div>
@@ -297,22 +329,18 @@ function FormUpPost({ handleClose, mergePostsNew, postInfo }) {
       <div className={cx("submit")}>
         <div className={cx("load ")}>{load && <MoonLoader size={18} />}</div>
         <div className="d-flex gap-2">
-          <Button
-            variant="secondary"
-            className={cx("cancel")}
-            onClick={handleClose}
-          >
+          <button className={cx("cancel", "shadow-sm")} onClick={handleClose}>
             Cancel
-          </Button>
+          </button>
 
           {console.log(load)}
-          <Button
+          <button
             type="submit"
-            className={cx("up")}
+            className={cx("up", "shadow-sm")}
             disabled={load || !changed}
           >
             {postInfo ? "Save change" : " Up here"}
-          </Button>
+          </button>
         </div>
       </div>
     </form>

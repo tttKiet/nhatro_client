@@ -16,7 +16,7 @@
       .custom-carousel {
         box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
           rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-        border-radius: 0.6rem;
+        border-radius: 0.6rem 0.6rem 0 0;
         overflow: hidden;
         li {
           z-index: 1 !important;
@@ -42,6 +42,7 @@
     .info {
       padding-top: 10px;
       color: #000;
+      border-radius: 0 0 0.6rem 0.6rem;
       .name_star {
         position: relative;
         .name {
@@ -58,10 +59,9 @@
           transform: translateY(-50%);
           display: flex;
           align-items: center;
-          svg {
-            font-size: 16px;
-            padding-right: 4px;
-            color: rgb(35, 91, 223);
+          
+          svg{
+            margin-right: 2px;
           }
         }
       }
@@ -76,15 +76,15 @@
       .location {
         font-size: 14px;
         color: #000;
-        opacity: 0.7;
+        
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
         -webkit-line-clamp: 2;
         svg {
-          font-size: 16px;
-          color: rgb(190 13 202);
+          font-size: 18px;
+          color: #db5353;
         }
       }
 

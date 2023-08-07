@@ -12,6 +12,7 @@ function ModalUp({ show, setShow, mergePostsNew, postInfo }) {
   return (
     <>
       <Modal
+        size="lg"
         centered
         show={show}
         onHide={handleClose}

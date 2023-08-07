@@ -11,16 +11,17 @@ function Banner() {
         className={cx("carousel")}
         showThumbs={false}
         autoPlay={true}
-        interval={2500}
+        interval={4000}
         infiniteLoop={true}
         transitionTime={1000}
         showStatus={false}
         emulateTouch={true}
         showArrows={false}
-        showIndicators={false}
+        showIndicators={true}
         swipeable={false}
       >
         <BannerSlide
+          link={"/"}
           title={"quick room search"}
           contentButton={"Search here"}
           imgLink={
@@ -28,6 +29,7 @@ function Banner() {
           }
         />
         <BannerSlide
+          link={"/post"}
           title={"Posting is easy"}
           contentButton={"Post here"}
           imgLink={
@@ -35,6 +37,7 @@ function Banner() {
           }
         />
         <BannerSlide
+          link={"/motel"}
           title={"cheap accommodation"}
           contentButton={"rent here"}
           imgLink={

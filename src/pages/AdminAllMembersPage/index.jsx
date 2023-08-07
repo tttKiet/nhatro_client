@@ -144,7 +144,7 @@ function AdminAllMembersPage() {
 
   return (
     <div className={cx("wrap")}>
-      <div className="container">
+      <div className="container-lg">
         <nav aria-label="breadcrumb ">
           <ol className="breadcrumb p-2 my-2">
             <li className="breadcrumb-item">

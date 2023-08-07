@@ -8,7 +8,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import ModalAllReview from "./UsefulModal/ModalReviews";
 import { FiMessageSquare } from "react-icons/fi";
 import ModalCreateReview from "./UsefulModal/ModalCreateReview";
-import { feedbackOfBoardHouseServices } from "../../services";
+import { feedbackOfBoardHouseServices, rentServices } from "../../services";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks";
 import { AiOutlineEdit, AiTwotoneStar } from "react-icons/ai";
@@ -26,6 +26,7 @@ function FeedbackOfBoardHouse() {
   const [review, setReview] = useState(null);
   const [allReviews, setAllReviews] = useState(null);
   const [rating, setRating] = useState(null);
+  const [canReview, setCanReview] = useState(false);
 
   // on/off modal view all reviews
   const handleClose = () => setShow(false);
@@ -52,6 +53,22 @@ function FeedbackOfBoardHouse() {
     }
   }, [id, user]);
 
+  const getRentOfUser = useCallback(async () => {
+    try {
+      const res = await rentServices.getRentRoomUser({ userId: user._id });
+      if (res.data.err === 0) {
+        for (let i = 0; i < res.data.data.length; i++) {
+          if (res.data.data[i].room.boardHouseId._id == id) {
+            setCanReview(true);
+            break;
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id, user._id]);
+
   const getAllFeedback = useCallback(async () => {
     try {
       const res = await feedbackOfBoardHouseServices.getAllFeedback(id);
@@ -77,9 +94,10 @@ function FeedbackOfBoardHouse() {
   }
 
   useEffect(() => {
+    getRentOfUser();
     checkAlreadyFeedback();
     getAllFeedback();
-  }, [checkAlreadyFeedback, getAllFeedback]);
+  }, [checkAlreadyFeedback, getAllFeedback, getRentOfUser]);
 
   return (
     <div className={cx("wrap")}>
@@ -192,28 +210,39 @@ function FeedbackOfBoardHouse() {
           <button
             className={cx("btn-view-all", "me-4")}
             onClick={handleShowCreate}
+            disabled={!canReview}
           >
             {existReview === true ? (
               <p className="m-0">
                 Edit review <AiOutlineEdit className="fs-l" />
               </p>
             ) : (
-              <p className="m-0">
-                Create review <FiMessageSquare className="fs-l" />
-              </p>
+              <>
+                <p className="m-0">
+                  Create review <FiMessageSquare className="fs-l" />
+                </p>
+              </>
             )}
           </button>
-          {existReview && (
+
+          {allReviews?.length > 0 && (
             <button className={cx("btn-view-all")} onClick={handleShow}>
               View {allReviews?.length} reviews{" "}
               <HiOutlineEye className="fs-l"></HiOutlineEye>
             </button>
+          )}
+
+          {!canReview && (
+            <p className="m-0 mt-3 fs-m fst-italic text-danger">
+              You must rent a room of this board house to able create review
+            </p>
           )}
         </div>
       </div>
 
       {/* Modal view all reviews */}
       <ModalAllReview
+        existReview={existReview}
         show={show}
         onHide={handleClose}
         allReviews={allReviews}

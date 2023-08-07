@@ -1,5 +1,6 @@
 .wrap{
     padding: 40px 0;
+
     .overview-rating{
         font-size: 22px;
         font-weight: 600;
@@ -12,6 +13,7 @@
         padding: 20px;
         border-radius: 10px;
         background-color: white;
+        
     }
 
     .carousel{
@@ -21,6 +23,7 @@
 
     .all-feedback{
         padding-top: 40px;
+       
     }
 
     .user{
@@ -84,10 +87,18 @@
         background-color: #FF8989;
         color: white;
         transition: all 0.2s ease-in;
+
         &:hover{
-            opacity: 0.8;
+            opacity: 0.9;
             transform: scale(1.1);
         }
+
+        &:disabled{
+            opacity: 0.6;
+            transform: scale(1);
+        }
+
+        
     }
 }
 
@@ -108,24 +119,34 @@
         background-color: white;
         box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px !important;
         border-radius: 8px;
-        border-left: 10px #FF8989;
+        border: 1px solid #dfdfdf;
+        
         position: relative;
+        
         
         padding-bottom: 10px;
         
 
         .item{
             display: block !important;
-
+            .user{
+                
+                padding: 8px;
+                padding-bottom: 0;
+                border-radius: 8px;
+            }
             .content{
                 text-align: center;
 
                 .text-over{
-                    text-align: left;
+                    text-align: center;
                     
                 }
+                .text-title{
+                    margin: 0;
+                }
             }
-            padding: 20px 20px  20px;
+            padding: 10px 10px 10px;
         }
 
         &::before{

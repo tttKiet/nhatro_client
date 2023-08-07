@@ -14,6 +14,7 @@ import styles from "./UserProfilePage.module.scss";
 import classNames from "classNames/bind";
 import AllFeedback from "../../components/AllFeedback";
 import { HiMenu } from "react-icons/hi";
+import ChangePassword from "../../components/ChangePassword";
 const cx = classNames.bind(styles);
 
 const tagName = [
@@ -21,6 +22,7 @@ const tagName = [
   "verify-email",
   "req-owner-broad-house",
   "my-feedback",
+  "change-password",
 ];
 
 function UserProfilePage() {
@@ -99,6 +101,10 @@ function UserProfilePage() {
                 </Tab>
                 <Tab eventKey="my-feedback" title="my-feedback">
                   <AllFeedback />
+                </Tab>
+
+                <Tab eventKey="change-password" title="change-password">
+                  <ChangePassword />
                 </Tab>
               </Tabs>
             </div>

@@ -16,10 +16,15 @@ function ReqUpOwner() {
   const [, , user] = useAuth();
   if (!user.emailVerified) {
     return (
-      <div className={cx("notifications")}>
-        <h4> You need to verify your email as to as continues!!</h4>
+      <div
+        className={cx("notifications", "bg-white p-2 rounded w-75 text-center")}
+      >
+        <h4 className="fs-l ">
+          {" "}
+          You need to verify your email as to as continues!!
+        </h4>
         <div className={cx("to_ver")}>
-          <Link to={`/profile/${user?._id}?tag=verify-email`}>
+          <Link to={`/profile?tag=verify-email`} className="">
             Verify email here
           </Link>
         </div>

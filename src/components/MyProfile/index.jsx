@@ -10,6 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import { AiFillCamera } from "react-icons/ai";
 import { ToastContext } from "../../untils/context";
 import ModalCustom from "../ModalCustom";
+import imageCompression from "browser-image-compression";
 
 const cx = classNames.bind(styles);
 
@@ -47,8 +48,39 @@ function MyProfile() {
     }
   }
 
-  const handleChangeInputFile = (e) => {
+  async function convertImg(event) {
+    const imageFile = event.target.files[0];
+    // console.log("originalFile instanceof Blob", imageFile instanceof Blob); // true
+    // console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+    const options = {
+      maxSizeMB: 20,
+      maxWidthOrHeight: 1200,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      // console.log(
+      //   "compressedFile instanceof Blob",
+      //   compressedFile instanceof Blob
+      // ); // true
+      // console.log(
+      //   `compressedFile size ${compressedFile.size / 1024 / 1024} MB`
+      // ); // smaller than maxSizeMB
+
+      // console.log("compress", compressedFile); // write your own logic
+      // console.log("bob from convert", URL.createObjectURL(compressedFile));
+      return compressedFile;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleChangeInputFile = async (e) => {
     const filesTarget = e.target.files;
+    const imgCompress = await convertImg(e);
+    // console.log("imgCompress", imgCompress);
+    // console.log("file goc", filesTarget[0]);
     for (let i = 0; i < filesTarget.length; i++) {
       if (!filesTarget[i].type.includes("image/")) {
         return toast.error("Please select only images!");
@@ -58,8 +90,17 @@ function MyProfile() {
     const fileUrl = Array.from(filesTarget).map((file) =>
       URL.createObjectURL(file)
     );
-
-    setFile(filesTarget[0]);
+    // console.log("fileUrl", fileUrl);
+    var fileConvert = new File(
+      [imgCompress],
+      `avatar${Math.floor(Math.random() * 10000)}-${Math.floor(
+        Math.random() * 10000
+      )}.png`,
+      { type: imgCompress.type }
+    );
+    // console.log("convert blob to files", fileConvert);
+    // setFile(filesTarget[0]);
+    setFile(fileConvert);
     setFileUrl(fileUrl);
     setShowModalAvatar(true);
     e.target.value = "";

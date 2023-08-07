@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 function MotelPage() {
   const [boaHouseData, setBoaHouseData] = useState([]);
+  const [newData, setNewData] = useState([]);
 
   useEffect(() => {
     boardHouseServices
@@ -15,6 +16,10 @@ function MotelPage() {
       .then((res) => {
         if (res?.status === 200 && res?.data?.err === 0) {
           setBoaHouseData(res.data.data);
+          const newDataWithRating = res.data.data.map((bh) => {
+            return { ...bh, rating: "5" };
+          });
+          setNewData(newDataWithRating);
         }
       })
       .catch((err) => console.log(err));
@@ -25,7 +30,7 @@ function MotelPage() {
       <SearchMotel />
       <div className="container">
         <div className={cx("sitebar")}>
-          <div className={cx("doc")}>+ 2000 motel</div>
+          <div className={cx("doc")}>+ {boaHouseData.length} motels</div>
           <button className={cx("filter")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"

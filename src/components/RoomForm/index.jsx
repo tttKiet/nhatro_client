@@ -2,6 +2,7 @@ import styles from "./RoomForm.module.scss";
 import classNames from "classNames/bind";
 import { useFormik } from "formik";
 
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import PropTypes from "prop-types";
 import { roomServices } from "../../services";
@@ -202,7 +203,7 @@ function RoomForm({
         options: dataExisted?.options,
       });
     }
-  }, []);
+  }, [dataExisted, isUpdate]);
 
   return (
     <div className={cx("wrap", "row p-3")}>
@@ -426,6 +427,7 @@ function RoomForm({
       </form>
 
       <div className="col-lg-7 d-flex flex-column justify-content-center align-items-center mt-4 ">
+        {/* {console.log("img", formik.values.images)} */}
         {formik.values.images?.length > 0 ? (
           <Carousel
             selectedItem={formik.values.images?.length - 1}
@@ -462,9 +464,6 @@ function RoomForm({
           </Carousel>
         ) : (
           ""
-          // <div className="alert alert-light shadow-sm">
-          //   Imgs were uploaded will show here!
-          // </div>
         )}
 
         {formik.values.images?.length < 2 && (

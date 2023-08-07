@@ -20,9 +20,9 @@ function Nav() {
       showConfirmButton: true,
       showDenyButton: false,
       showCancelButton: true,
-      cancelButtonText: "Hủy",
-      text: "Bạn có thật sự muốn đăng xuất?",
-      confirmButtonText: "Đăng xuất ngay",
+      cancelButtonText: "Cancel",
+      text: "See you soon!",
+      confirmButtonText: "Logout",
       reverseButtons: true,
       confirmButtonColor: "#d55",
     }).then(async (result) => {

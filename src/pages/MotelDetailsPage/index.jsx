@@ -85,7 +85,6 @@ function MotelDetailsPage() {
 
   useEffect(() => {
     const comp = search.get("comp");
-    console.log("comp: " + comp);
     comp && chooseRoomRef?.current && windowScrollToElement(chooseRoomRef);
   });
 
@@ -182,7 +181,7 @@ function MotelDetailsPage() {
           </div>
         </div>
 
-        <div className={cx("row g-5", "py-4")}>
+        <div className={cx("row ", "py-4")}>
           <div className="col-lg-8">
             <div className={cx("infomation")}>
               <div className="row">
@@ -302,144 +301,155 @@ function MotelDetailsPage() {
 
               <hr ref={chooseRoomRef} />
 
-              <div className={cx("p3", "pt-0")}>
-                <div className={cx("scrollview")} ref={chooseRoomRef}></div>
-                <h4 className={cx("all-room", "mt-4 mb-3")}>All rooms here</h4>
-                <div className={cx("rooms")}>
-                  {boardHouseInfo?.rooms?.map((room) => (
-                    <div
-                      key={room?._id}
-                      className={cx("room")}
-                      onClick={() => setCurrChooseRoom(room?.number)}
-                    >
+              {boardHouseInfo.rooms && boardHouseInfo.rooms.length > 0 ? (
+                <div className={cx("p3", "pt-0")}>
+                  <div className={cx("scrollview")} ref={chooseRoomRef}></div>
+                  <h4 className={cx("all-room", "mt-4 mb-3")}>
+                    All rooms here
+                  </h4>
+                  <div className={cx("rooms")}>
+                    {boardHouseInfo?.rooms?.map((room) => (
                       <div
-                        className={cx("wrap-r", {
-                          active: currChooseRoom === room?.number,
-                        })}
+                        key={room?._id}
+                        className={cx("room")}
+                        onClick={() => setCurrChooseRoom(room?.number)}
                       >
-                        <div className={cx("r")}>room {room?.number}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className={cx("info-room-text", "mt-3", "p-4")}>
-                  <div>
-                    <div className="row">
-                      <div className="col-4">
-                        <div className={cx("room_gr")}>
-                          <h3 className={cx("title")}>Room number:</h3>
-                          <b>
-                            {
-                              boardHouseInfo?.rooms?.[currChooseRoom - 1]
-                                ?.number
-                            }
-                          </b>
-                        </div>
-                      </div>
-
-                      <div className="col-4">
-                        <div className={cx("room_gr")}>
-                          <h3 className={cx("title")}>Price on month:</h3>
-                          <b>
-                            {boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
-                            VND
-                          </b>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={cx("room_gr", "d-block")}>
-                      <h3 className={cx("title")}>
-                        Description for this room:
-                      </h3>
-                      <p>
-                        {
-                          boardHouseInfo?.rooms?.[currChooseRoom - 1]
-                            ?.description
-                        }
-                      </p>
-                    </div>
-
-                    <div className={cx("")}>
-                      <div className={cx("room_gr")}>
-                        <h4 className={cx("title")}>About this room</h4>
-                      </div>
-                      <div className={cx("row g-2 ")}>
-                        {boardHouseInfo?.rooms?.[currChooseRoom - 1] &&
-                          boardHouseInfo?.rooms?.[
-                            currChooseRoom - 1
-                          ].options.map((option, index) => (
-                            <div className={cx("col-6")} key={index}>
-                              <div className="d-flex justify-content-start align-items-center">
-                                <CiMemoPad size={24} />
-                                <h5 className={cx("title_item")}>{option}</h5>
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                    <div className={cx("infor-room")}>
-                      <div className={cx("images")}>
-                        <div className="row g-2">
-                          {boardHouseInfo.rooms?.[
-                            currChooseRoom - 1
-                          ].images.map((img, index) => (
-                            <div key={index} className="col-6">
-                              <div className={cx("img")}>
-                                <Image src={img}></Image>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-
                         <div
-                          className={cx("btn-all-image", "shadow border")}
-                          onClick={() => setShowFullImgRoom(true)}
+                          className={cx("wrap-r", {
+                            active: currChooseRoom === room?.number,
+                          })}
                         >
-                          <CiLineHeight />
+                          <div className={cx("r")}>room {room?.number}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-                          <span>Show all image</span>
+                  <div className={cx("info-room-text", "mt-3", "p-4")}>
+                    <div>
+                      <div className="row">
+                        <div className="col-4">
+                          <div className={cx("room_gr")}>
+                            <h3 className={cx("title")}>Room number:</h3>
+                            <b>
+                              {
+                                boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                                  ?.number
+                              }
+                            </b>
+                          </div>
+                        </div>
+
+                        <div className="col-4">
+                          <div className={cx("room_gr")}>
+                            <h3 className={cx("title")}>Price on month:</h3>
+                            <b>
+                              {
+                                boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                                  ?.price
+                              }
+                              VND
+                            </b>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={cx("room_gr", "d-block")}>
+                        <h3 className={cx("title")}>
+                          Description for this room:
+                        </h3>
+                        <p>
+                          {
+                            boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                              ?.description
+                          }
+                        </p>
+                      </div>
+
+                      <div className={cx("")}>
+                        <div className={cx("room_gr")}>
+                          <h4 className={cx("title")}>About this room</h4>
+                        </div>
+                        <div className={cx("row g-2 ")}>
+                          {boardHouseInfo?.rooms?.[currChooseRoom - 1] &&
+                            boardHouseInfo?.rooms?.[
+                              currChooseRoom - 1
+                            ].options.map((option, index) => (
+                              <div className={cx("col-6")} key={index}>
+                                <div className="d-flex justify-content-start align-items-center">
+                                  <CiMemoPad size={24} />
+                                  <h5 className={cx("title_item")}>{option}</h5>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                      <div className={cx("infor-room")}>
+                        <div className={cx("images")}>
+                          <div className="row g-2">
+                            {boardHouseInfo.rooms?.[
+                              currChooseRoom - 1
+                            ].images.map((img, index) => (
+                              <div key={index} className="col-6">
+                                <div className={cx("img")}>
+                                  <Image src={img}></Image>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div
+                            className={cx("btn-all-image", "shadow border")}
+                            onClick={() => setShowFullImgRoom(true)}
+                          >
+                            <CiLineHeight />
+
+                            <span>Show all image</span>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <hr />
-                  <div
-                    className={cx("scrollview", "nohr")}
-                    ref={chooseDateRef}
-                  ></div>
+                    <hr />
+                    <div
+                      className={cx("scrollview", "nohr")}
+                      ref={chooseDateRef}
+                    ></div>
 
-                  <div className={cx("room_gr")}>
-                    <h4 className={cx("title")}>Check in date </h4>
-                  </div>
-                  <div className={cx("date", "my-0")}>
-                    <div className="row">
-                      <div className="col-5">
-                        <div className={cx("desc")}>
-                          <span>
-                            Start moving in on the
-                            <span className={cx("hl")}>22/4/2022</span>.
-                          </span>
+                    <div className={cx("room_gr")}>
+                      <h4 className={cx("title")}>Check in date </h4>
+                    </div>
+                    <div className={cx("date", "my-0")}>
+                      <div className="row">
+                        <div className="col-5">
+                          <div className={cx("desc")}>
+                            <span>
+                              Start moving in on the
+                              <span className={cx("hl")}>22/4/2022</span>.
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-7">
-                        <div className="d-flex justify-content-end">
-                          <Calendar
-                            className="fs-s"
-                            color="#262626"
-                            minDate={new Date()}
-                            showDateDisplay={false}
-                            date={new Date()}
-                            fixedHeight={true}
-                            direction="horizontal"
-                          />
+                        <div className="col-7">
+                          <div className="d-flex justify-content-end">
+                            <Calendar
+                              className="fs-s"
+                              color="#262626"
+                              minDate={new Date()}
+                              showDateDisplay={false}
+                              date={new Date()}
+                              fixedHeight={true}
+                              direction="horizontal"
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <p className="fs-l fst-italic text-center bg-white py-2 rounded-3 shadow-sm">
+                  The owner of this board house doesn&apos;t create any rooms
+                </p>
+              )}
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 .wrap {
-  padding: 20px;
+  padding: 10px;
 
   .form {
     margin-top: 30px;
@@ -7,6 +7,7 @@
 
     .form-group {
       margin-bottom: 22px;
+      width: 100%;
 
       .err {
         font-size: 14px;
@@ -19,7 +20,7 @@
         display: block;
         cursor: pointer;
         font-size: 16px;
-        color: blue;
+        color: #0079FF;
         margin-bottom: 4px;
       }
 
@@ -46,11 +47,11 @@
         outline: none;
         font-size: 14px;
         transition: all 0.2s linear;
-        min-width: 400px;
+        // min-width: 400px;
         width: 100%;
 
         &:placeholder-shown {
-          color: #092cf6;
+          color: #0079FF;
         }
 
         &::placeholder {
@@ -59,7 +60,7 @@
         }
 
         &:hover {
-          border-color: blue;
+          border-color: #0079FF;
         }
 
         &.errInput {
@@ -78,6 +79,20 @@
   font-size: 24px;
 }
 
+.btn-custom{
+  border: none;
+  padding: 6px 0;
+  background-color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 1px solid #e4e4e4;
+
+  &:hover{
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
 @media screen and (max-width: 590px) {
   .wrap {
     .form {
@@ -91,6 +106,16 @@
           }
         }
       }
+    }
+  }
+
+  .btn-wrap{
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-around;
+
+    button{
+      width: 28%;
     }
   }
 }

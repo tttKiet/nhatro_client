@@ -132,8 +132,6 @@ function ModalReqOwner({ setActiveTab }) {
         });
         formik.resetForm();
         setImgs([]);
-        toast.dismiss();
-        toast.success(res.message);
         setActiveTab("information");
       } else {
         toast.update(toastId, {
@@ -185,6 +183,13 @@ function ModalReqOwner({ setActiveTab }) {
     //     ${selectedProvince?.label ? `${selectedProvince?.label}` : ""}
     //   `
     // );
+  };
+
+  const handleRestForm = () => {
+    setSelectedDistrict(null);
+    setSelectedWard(null);
+    setSelectedProvince(null);
+    formik.resetForm();
   };
 
   const handleChangeDistrict = (e) => {
@@ -500,7 +505,7 @@ function ModalReqOwner({ setActiveTab }) {
           <button
             type="reset"
             className={cx("btn-create")}
-            onClick={() => formik.resetForm()}
+            onClick={() => handleRestForm()}
           >
             Reset <MdOutlineRestartAlt className="ms-1"></MdOutlineRestartAlt>
           </button>

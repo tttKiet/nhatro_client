@@ -77,7 +77,7 @@ function Contact() {
   return (
     <>
       <div className={cx("wrap", "rounded")}>
-        <div className="container ">
+        <div className=" ">
           <div
             className={cx("row-wrap", "row my-5 shadow")}
             style={{ borderRadius: "10px" }}

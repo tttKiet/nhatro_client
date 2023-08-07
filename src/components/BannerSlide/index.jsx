@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import styles from "./BannerSlide.module.scss";
 import classNames from "classNames/bind";
+import { Link } from "react-router-dom";
 const cx = classNames.bind(styles);
-function BannerSlide({ title, contentButton, imgLink, alt = "Image" }) {
+function BannerSlide({ title, contentButton, imgLink, alt = "Image", link }) {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef(null);
 
@@ -45,7 +47,9 @@ function BannerSlide({ title, contentButton, imgLink, alt = "Image" }) {
       <div className={cx("left-banner", "col-md-5 col-12 my-5")}>
         <h5>Future Motel</h5>
         <h2>{title}</h2>
-        <button>{contentButton}</button>
+        <Link to={link}>
+          <button className="rounded">{contentButton}</button>
+        </Link>
       </div>
       <div className={cx("right-banner", "col-md-7 col-12")}>
         <img src={imgLink} alt={alt} className="rounded-1" />

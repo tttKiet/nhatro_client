@@ -70,7 +70,7 @@ function UpdateBoardHouseForm({
     );
     if (res.err === 0) {
       toast.dismiss();
-      toast.success("Updated successfully");
+      toast.success(res.message);
       Swal.fire({
         title: "Updated successfully. Let's access in dashboard",
         text: "Go to your profile",
@@ -86,6 +86,9 @@ function UpdateBoardHouseForm({
           navigate(`/admin/profile/${adminData?._id}`);
         }
       });
+    } else {
+      toast.dismiss();
+      toast.error(res.message);
     }
   }
 
