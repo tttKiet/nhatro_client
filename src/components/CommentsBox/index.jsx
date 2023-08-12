@@ -5,7 +5,9 @@ import Comment from "../Comment";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { commentServices } from "../../services";
 import LoaderCmt from "../LoaderCmt";
+
 import { TbLoaderQuarter } from "react-icons/tb";
+import { RiLoader2Fill } from "react-icons/ri";
 import CommentInput from "../CommentInput";
 
 const cx = classNames.bind(styles);
@@ -74,12 +76,11 @@ function CommentsBox({
   const getCmts = useCallback(() => {
     setLoading(true);
     commentServices
-      .getComment(postId, Math.round(cmts.length / 3) + 1)
+      .getComment(postId, Math.round(cmts.length / 3))
       .then((res) => {
         if (res.status === 200 && res.data.err === 0) {
           setCmts((cmt) => {
             const newCmts = [...cmt];
-            console.log("newCmts", newCmts);
             res.data.data.forEach((c) => {
               if (!isDuplicate(newCmts, c)) {
                 newCmts.push(c);
@@ -185,14 +186,14 @@ function CommentsBox({
                 )} */}
 
                 {maxCountCmtParent > cmts.length && (
-                  <div className="d-flex my-3 ps-3">
+                  <div className=" my-3 ps-3 d-flex justify-content-center">
                     <div
                       className={cx("show_more_cmt")}
                       onClick={handleClickMore}
                     >
-                      view more
+                      Load more
                       <div className={cx("show_more_cmt-icon")}>
-                        <TbLoaderQuarter />
+                        <RiLoader2Fill />
                       </div>
                     </div>
                   </div>

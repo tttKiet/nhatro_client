@@ -24,6 +24,9 @@ const RootAccount = lazy(() => import("../pages/RootAccount"));
 const RootAddAccount = lazy(() => import("../pages/RootAddAccount"));
 const RootEditAccount = lazy(() => import("../pages/RootEditAccount"));
 const AdminProfilePage = lazy(() => import("../pages/AdminProfilePage"));
+const AdminManagerBillPage = lazy(() =>
+  import("../pages/AdminManagerBillPage")
+);
 const RegisterPage = lazy(() => import("../pages/RegisterPage"));
 const RootViewAccountPermissions = lazy(() =>
   import("../pages/RootViewAccountPermissions")
@@ -188,6 +191,12 @@ const router = [
     isProtected: true,
     layout: AdminLayout,
     element: AdminAllMembersPage,
+  },
+  {
+    path: "/admin/:id/manager-bill",
+    isProtected: true,
+    layout: AdminLayout,
+    element: AdminManagerBillPage,
   },
   {
     path: "/admin/:id/all-rooms",

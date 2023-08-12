@@ -228,6 +228,16 @@ function AdminAllRoomsPage() {
 
   return (
     <div className={cx("wrap")}>
+      <nav aria-label="breadcrumb">
+        <ol className="breadcrumb p-2 my-2 ">
+          <li className="breadcrumb-item">
+            <a href="#">Admin</a>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            All Room
+          </li>
+        </ol>
+      </nav>
       <button
         onClick={() => setShowModal(true)}
         className="btn btn-primary ms-1"

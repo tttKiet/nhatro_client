@@ -185,7 +185,7 @@ function MotelDetailsPage() {
           <div className="col-lg-8">
             <div className={cx("infomation")}>
               <div className="row">
-                <div className={cx("col-6")}>
+                <div className={cx("col-md-6 col-12")}>
                   <div className="d-flex justify-content-start align-items-center ">
                     <div className="d-flex justify-content-start align-items-center me-1">
                       <CiLocationOn size={24} />
@@ -198,34 +198,28 @@ function MotelDetailsPage() {
                   </div>
                 </div>
 
-                <div className="col-6">
+                <div className="col-md-6 col-12">
                   <div className="d-flex justify-content-start align-items-center ">
                     <div className="d-flex justify-content-start align-items-center me-1">
                       <MdOutlineContactless size={24} />
                     </div>
                     <h4 className={cx("title")}>CONTACT US</h4>
                   </div>
-                  <div className={cx("desc", "ctact")}>
+                  <div
+                    className={cx("desc", "ctact")}
+                    onClick={() => handleClickCopy(boardHouseInfo?.phone)}
+                  >
                     <FiPhone color="#81f398d1" size={16} />
                     {boardHouseInfo?.phone}
-                    <div
-                      className={cx("copy")}
-                      onClick={() => handleClickCopy(boardHouseInfo?.phone)}
-                    >
-                      <MdOutlineContentCopy size={20} color="#ff" />
-                    </div>
                   </div>
-                  <div className={cx("desc", "ctact")}>
+                  <div
+                    className={cx("desc", "ctact")}
+                    onClick={() =>
+                      handleClickCopy(boardHouseInfo?.userId?.email)
+                    }
+                  >
                     <HiOutlineMail color="#81f398d1" size={16} />
                     {boardHouseInfo?.userId?.email}
-                    <div
-                      className={cx("copy")}
-                      onClick={() =>
-                        handleClickCopy(boardHouseInfo?.userId?.email)
-                      }
-                    >
-                      <MdOutlineContentCopy size={20} color="#fff" />
-                    </div>
                   </div>
                 </div>
 
@@ -328,7 +322,7 @@ function MotelDetailsPage() {
                   <div className={cx("info-room-text", "mt-3", "p-4")}>
                     <div>
                       <div className="row">
-                        <div className="col-4">
+                        <div className="col-md-4 col-12">
                           <div className={cx("room_gr")}>
                             <h3 className={cx("title")}>Room number:</h3>
                             <b>
@@ -340,7 +334,7 @@ function MotelDetailsPage() {
                           </div>
                         </div>
 
-                        <div className="col-4">
+                        <div className="col-md-4 col-12">
                           <div className={cx("room_gr")}>
                             <h3 className={cx("title")}>Price on month:</h3>
                             <b>
@@ -420,7 +414,7 @@ function MotelDetailsPage() {
                     </div>
                     <div className={cx("date", "my-0")}>
                       <div className="row">
-                        <div className="col-5">
+                        <div className="col-12 col-md-5">
                           <div className={cx("desc")}>
                             <span>
                               Start moving in on the
@@ -428,7 +422,7 @@ function MotelDetailsPage() {
                             </span>
                           </div>
                         </div>
-                        <div className="col-7">
+                        <div className="col-12 col-md-7">
                           <div className="d-flex justify-content-end">
                             <Calendar
                               className="fs-s"
@@ -490,9 +484,9 @@ function MotelDetailsPage() {
                       </div>
                     </div>
                     <div className={cx("date-item")}>
-                      <div className={cx("date-name")}>To</div>
+                      <div className={cx("date-name")}>Bill</div>
                       <div className={cx("date-value")}>
-                        {moment().calendar()}
+                        First month payment
                       </div>
                     </div>
                   </div>

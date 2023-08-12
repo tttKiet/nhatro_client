@@ -144,55 +144,51 @@ function AdminAllMembersPage() {
 
   return (
     <div className={cx("wrap")}>
-      <div className="container-lg">
-        <nav aria-label="breadcrumb ">
-          <ol className="breadcrumb p-2 my-2">
-            <li className="breadcrumb-item">
-              <a href="#">Admin</a>
-            </li>
-            <li className="breadcrumb-item active" aria-current="page">
-              All Members
-            </li>
-          </ol>
-        </nav>
+      <nav aria-label="breadcrumb ">
+        <ol className="breadcrumb p-2 my-2">
+          <li className="breadcrumb-item">
+            <a href="#">Admin</a>
+          </li>
+          <li className="breadcrumb-item active" aria-current="page">
+            All Members
+          </li>
+        </ol>
+      </nav>
 
-        <hr className="my-2" />
+      <div className={cx("wrap-select")}>
+        <div className="row mt-3 ms-1 ">
+          <div
+            style={{ width: "250px" }}
+            className="p-2 rounded-3 border border-primary-subtle shadow border-2"
+          >
+            <p className="fs-m">Select your board house here: </p>
 
-        <div className={cx("wrap-select")}>
-          <div className="row mt-3 ms-1 ">
-            <div
-              style={{ width: "250px" }}
-              className="p-2 rounded-3 border border-primary-subtle shadow border-2"
+            <select
+              ref={selectRef}
+              className="form-select"
+              aria-label="Default select example"
+              defaultValue={allBoardHouse && allBoardHouse[0]?._id}
+              onChange={() => getAllRentsByBoardHouseId()}
             >
-              <p className="fs-m">Select your board house here: </p>
-
-              <select
-                ref={selectRef}
-                className="form-select"
-                aria-label="Default select example"
-                defaultValue={allBoardHouse && allBoardHouse[0]?._id}
-                onChange={() => getAllRentsByBoardHouseId()}
-              >
-                {allBoardHouse &&
-                  allBoardHouse.map((bh) => (
-                    <option value={bh?._id} key={bh?._id}>
-                      {bh?.name}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              {allBoardHouse &&
+                allBoardHouse.map((bh) => (
+                  <option value={bh?._id} key={bh?._id}>
+                    {bh?.name}
+                  </option>
+                ))}
+            </select>
           </div>
         </div>
+      </div>
 
-        <div className={cx("table")}>
-          {allRentReq.length > 0 ? (
-            <TableSort data={allRentReq} columns={columns}></TableSort>
-          ) : (
-            <p className="fs-m m-0 mt-5 fst-italic text-center shadow-sm py-3 rounded-3 border">
-              This board house hasn&apos;t any members
-            </p>
-          )}
-        </div>
+      <div className={cx("table")}>
+        {allRentReq.length > 0 ? (
+          <TableSort data={allRentReq} columns={columns}></TableSort>
+        ) : (
+          <p className="fs-m m-0 mt-5 fst-italic text-center shadow-sm py-3 rounded-3 border">
+            This board house hasn&apos;t any members
+          </p>
+        )}
       </div>
     </div>
   );

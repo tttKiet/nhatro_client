@@ -3,29 +3,31 @@
   // padding: 60px 0;
   position: relative;
   // background-color: #f0f2f5;
-  background: url(https://res.cloudinary.com/dvvg4xwoy/image/upload/v1689858116/Ocean-2.5s-1685px_uqpbie.png) no-repeat center center fixed;
+  background: url(https://res.cloudinary.com/dvvg4xwoy/image/upload/v1689858116/Ocean-2.5s-1685px_uqpbie.png)
+    no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  min-height: 100vh;
 
-  .blur{
+  .blur {
     position: absolute;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.35);
     display: block;
     z-index: 10;
-    animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   }
 
-  .header-responsive{
+  .header-responsive {
     display: none;
     background-color: #3c4b4b95;
     // background-color: #439A97;
-    backdrop-filter: grayscale(.7) blur(15px) opacity(1);
-    -webkit-backdrop-filter:  grayscale(.7) blur(15px) opacity(1);
-    
+    backdrop-filter: grayscale(0.7) blur(15px) opacity(1);
+    -webkit-backdrop-filter: grayscale(0.7) blur(15px) opacity(1);
+
     top: -2px;
     border-radius: 0 0 10px 10px;
     width: 100%;
@@ -34,10 +36,9 @@
     z-index: 10;
     padding: 8px 0;
     box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px;
-    animation: slide-in-blurred-top 0.6s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+    animation: slide-in-blurred-top 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
 
-    .icon-menu{
-      
+    .icon-menu {
       font-size: 23px;
       margin-left: 22px;
       cursor: pointer;
@@ -51,31 +52,30 @@
     }
   }
 
-  .header-responsive-exit{
-    animation: slide-out-top 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  .header-responsive-exit {
+    animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
   }
 
-  .nav-reponsive{
+  .nav-reponsive {
     background-color: #2c333395;
     // background-color: #439A97;
-    backdrop-filter: grayscale(.7) blur(15px) opacity(1);
-    -webkit-backdrop-filter:  grayscale(.7) blur(15px) opacity(1);
+    backdrop-filter: grayscale(0.7) blur(15px) opacity(1);
+    -webkit-backdrop-filter: grayscale(0.7) blur(15px) opacity(1);
     display: none;
     font-size: 16px;
     max-width: 300px;
     position: fixed;
     // background-color: #2C3333;
-    height: 100vh;
+    min-height: 100vh;
     z-index: 50;
-    animation: fade-in-left 0.7s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: fade-in-left 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
   }
 
-  .nav-exit{
-    animation: slide-out-left 0.7s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  .nav-exit {
+    animation: slide-out-left 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
   }
 
   .contai {
-   
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -83,7 +83,6 @@
     border-radius: 1rem;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
       0 4px 6px -4px rgb(0 0 0 / 0.1), 0 -2px 15px -3px rgba(0, 0, 0, 0.1);
-
 
     .nav {
       font-size: 16px;
@@ -109,7 +108,6 @@
     }
 
     .child {
-   
       position: relative;
       flex: 1;
       padding: 48px 20px 20px 20px;
@@ -117,19 +115,15 @@
       border-radius: 8px;
     }
   }
-
- 
-  
 }
 
 @media screen and (max-width: 991px) {
-  .wrap{
-    .header-responsive{
+  .wrap {
+    .header-responsive {
       display: block !important;
     }
   }
 }
-
 
 @keyframes fade-in-left {
   0% {
@@ -141,7 +135,6 @@
     opacity: 1;
   }
 }
-
 
 @keyframes slide-out-left {
   0% {

@@ -323,41 +323,6 @@
         }
       }
     }
-    .show_more_cmt {
-      padding-left: 20px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      opacity: 0.8;
-      cursor: pointer;
-      font-size: 14px;
-
-      &:last-child {
-        padding-left: 8px;
-        border-left: 1px solid #ccc;
-      }
-
-      &:first-child {
-        padding-left: 8px;
-        border-radius: 2px;
-        border-left: 3px solid #3c21ee;
-      }
-
-      &:hover {
-        opacity: 1;
-      }
-      .show_more_cmt-icon {
-        padding: 0 4px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        svg {
-          width: 16px;
-          transition: all 0.2 linear;
-          cursor: pointer;
-        }
-      }
-    }
   }
 
   .input_comment {
@@ -366,7 +331,7 @@
   }
 }
 
-.wrap-lg{
+.wrap-lg {
   width: 700px;
 }
 

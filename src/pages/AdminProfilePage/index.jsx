@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import RegisterForm from "../../components/RegisterForm";
-import styles from "./AdminProfilePage.module.scss";
-import classNames from "classNames/bind";
 import { boardHouseServices, userServices } from "../../services";
 import { useAuth } from "../../hooks";
 import { useParams } from "react-router-dom";
@@ -9,6 +7,8 @@ import AdminCardRoom from "../../components/AdminCardRoom";
 import ModalCustom from "../../components/ModalCustom";
 import Image from "react-bootstrap/Image";
 
+import classNames from "classNames/bind";
+import styles from "./AdminProfilePage.module.scss";
 const cx = classNames.bind(styles);
 
 function AdminProfilePage() {

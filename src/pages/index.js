@@ -34,3 +34,4 @@ export { default as AdminProfilePage } from "./AdminProfilePage";
 export { default as AdminAllMembersPage } from "./AdminAllMembersPage";
 export { default as AdminAllRoomsPage } from "./AdminAllRoomsPage";
 export { default as AdminAllRequestsPage } from "./AdminAllRequestsPage";
+export { default as AdminManagerBillPage } from "./AdminManagerBillPage";
