@@ -13,6 +13,12 @@
   padding-top: 30px;
   --width-nav: 420px;
 
+  
+
+  .btn-menu{
+    display: none;
+  }
+
   .child {
     margin-left: calc(var(--width-nav) + 20px);
     background-color: #fff;
@@ -25,4 +31,40 @@
     padding: 20px;
     border-radius: 0.4rem;
   }
+}
+
+
+
+@media screen and (max-width: 970px) {
+  .wrap{
+    padding-bottom: 30px;
+    .responsive{
+      display: none;
+    }
+
+    .child{
+      margin-left: 10px;
+      margin-right: 10px;
+      
+    }
+
+    .btn-menu {
+      display: block;
+      padding-left: 10px;
+      padding-bottom: 10px;
+    
+      button{
+        background-color: #fff;
+        border: none;
+        padding: 3px 6px;
+        border-radius: 6px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        &:hover{
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+  
 }

@@ -8,6 +8,7 @@ import moment from "moment";
 import TableSort from "../../components/TableSort";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +18,7 @@ function AdminAllMembersPage() {
   const [allRentReq, setAllRentReq] = useState([]);
   const selectRef = useRef();
   const columnHelper = createColumnHelper();
+  const [isLoading, setIsLoading] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -72,7 +74,7 @@ function AdminAllMembersPage() {
       }),
 
       columnHelper.accessor("EndDate", {
-        cell: (info) => moment(info.getValue()).format("lll"),
+        cell: (info) => <p className="fs-m m-0">Coming soon...</p>,
       }),
 
       columnHelper.accessor("Bill", {
@@ -91,6 +93,7 @@ function AdminAllMembersPage() {
     try {
       const res = await boardHouseServices.getBoardHouseById(admin._id);
       if (res.err === 0) {
+        setIsLoading(false);
         setAllBoardHouse(res.data);
       } else {
         console.log(res.message);
@@ -103,11 +106,12 @@ function AdminAllMembersPage() {
   const getAllRentsByBoardHouseId = useCallback(async () => {
     try {
       const res = await rentServices.getRentsFromBoardHouseId(
-        selectRef.current.value,
+        selectRef.current?.value,
         1
       );
 
       if (res.err === 0) {
+        setIsLoading(false);
         setAllRentReq(
           res.data.length > 0 &&
             res.data.map((req, index) => ({
@@ -117,10 +121,9 @@ function AdminAllMembersPage() {
               InfoUser: req.user,
               Room: req.room.number,
               IdRoom: req.room._id,
-              BoardHouseId: selectRef.current.value,
+              BoardHouseId: selectRef.current?.value,
               StartDate: req.startDate,
               // EndDate: req.endDate,
-              EndDate: req.createdAt,
               Status: req.status,
             }))
         );
@@ -133,14 +136,29 @@ function AdminAllMembersPage() {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllBoardHouseByAdminId();
   }, [getAllBoardHouseByAdminId]);
 
   useEffect(() => {
     if (allBoardHouse.length > 0) {
+      setIsLoading(true);
       getAllRentsByBoardHouseId();
     }
   }, [allBoardHouse, getAllRentsByBoardHouseId]);
+
+  if (isLoading === true) {
+    return (
+      <div
+        className={cx(
+          "container d-flex justify-content-center align-items-center"
+        )}
+        style={{ height: "90vh" }}
+      >
+        <PulseLoader color="rgb(120, 193, 243)" margin={6} size={15} />
+      </div>
+    );
+  }
 
   return (
     <div className={cx("wrap")}>

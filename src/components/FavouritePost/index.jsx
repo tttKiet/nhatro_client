@@ -100,7 +100,7 @@ function FavouritePost({ post, getFvPost }) {
           {/* Action */}
           <div>
             <Link
-              to={`/post/${post.postId._id}`}
+              to={`/post/${post?.postId?._id}`}
               state={{ source: "other-page" }}
             >
               <button className={cx("btn-action", "bg-primary shadow-sm")}>
@@ -109,7 +109,7 @@ function FavouritePost({ post, getFvPost }) {
             </Link>
 
             <button
-              onClick={() => handleToggleConfirm(user._id, post._id)}
+              onClick={() => handleToggleConfirm(user?._id, post?._id)}
               className={cx("btn-action", "shadow-sm")}
             >
               <AiOutlineDelete className="fs-l" />

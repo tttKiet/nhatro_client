@@ -10,6 +10,7 @@ import { BsCheckCircle } from "react-icons/bs";
 import { toast } from "react-toastify";
 
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { PulseLoader } from "react-spinners";
 
 const cx = classNames.bind(styles);
 
@@ -53,7 +54,6 @@ function AdminAllRequestsPage() {
       btnref.current.disabled = true;
       let toastId = null;
       toastId = toast.loading("Loading...");
-      setIsLoading(true);
       try {
         const res = await rentServices.rejectReqRent(reqId);
         if (res.err === 0) {
@@ -64,7 +64,6 @@ function AdminAllRequestsPage() {
             isLoading: false,
             autoClose: 2000,
           });
-          setIsLoading(false);
         } else {
           toast.update(toastId, {
             render: res.message,
@@ -72,7 +71,6 @@ function AdminAllRequestsPage() {
             isLoading: false,
             autoClose: 2000,
           });
-          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -83,8 +81,6 @@ function AdminAllRequestsPage() {
   }
 
   const handleAccepRentReq = async (reqId) => {
-    setIsLoading(true);
-
     btnref.current.disabled = true;
 
     let toastId = null;
@@ -180,6 +176,7 @@ function AdminAllRequestsPage() {
       const res = await boardHouseServices.getBoardHouseById(admin._id);
       if (res.err === 0) {
         setAllBoardHouse(res.data);
+        setIsLoading(false);
       } else {
         console.log(res.message);
       }
@@ -191,11 +188,12 @@ function AdminAllRequestsPage() {
   const getAllRentsByBoardHouseId = useCallback(async () => {
     try {
       const res = await rentServices.getRentsFromBoardHouseId(
-        selectRef.current.value,
+        selectRef.current?.value,
         0
       );
 
       if (res.err === 0) {
+        setIsLoading(false);
         setAllRentReq(
           res.data.length > 0 &&
             res.data.map((req, index) => ({
@@ -220,19 +218,32 @@ function AdminAllRequestsPage() {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllBoardHouseByAdminId();
   }, [getAllBoardHouseByAdminId]);
 
   useEffect(() => {
     if (allBoardHouse.length > 0) {
+      setIsLoading(true);
       getAllRentsByBoardHouseId();
     }
   }, [allBoardHouse, getAllRentsByBoardHouseId]);
 
+  if (isLoading === true) {
+    return (
+      <div
+        className={cx(
+          "container d-flex justify-content-center align-items-center"
+        )}
+        style={{ height: "90vh" }}
+      >
+        <PulseLoader color="rgb(120, 193, 243)" margin={6} size={15} />
+      </div>
+    );
+  }
+
   return (
     <div className={cx("wrap")}>
-      {/* {console.log("all board house", allBoardHouse)} */}
-      {/* {console.log("ref", selectRef.current?.value)} */}
       <div className={cx("wrap-select")}>
         <div className="row mt-3 ms-1 ">
           <div

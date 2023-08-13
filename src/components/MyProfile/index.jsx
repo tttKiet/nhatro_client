@@ -234,8 +234,8 @@ function MyProfile() {
           </div>
 
           <div className={cx("info")}>
-            <h2>{userInfo?.fullName}</h2>
-            <div className={cx("info-item")}>An Giang</div>
+            <h2 className="fs-l">{userInfo?.fullName}</h2>
+            <div className={cx("info-item")}>{userInfo?.address}</div>
             <div className={cx("info-item")}>
               Joined on the {moment(userInfo?.createdAt).format("MMM Do YY")}
             </div>

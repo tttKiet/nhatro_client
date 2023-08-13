@@ -7,6 +7,7 @@ import classNames from "classNames/bind";
 import FavouritePost from "../../components/FavouritePost";
 import { VscTriangleLeft } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 
 const cx = classNames.bind(styles);
 
@@ -17,11 +18,12 @@ function MyFavouritePostPage() {
   const [posts, setPosts] = useState([]);
   const [fvPost, setFvPost] = useState([]);
   const [isFilter, setIsFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const mergePostsNew = () => {
     postServices
-      .getPostUser({ _author: user._id, page: 1 })
+      .getPostUser({ _author: user?._id, page: 1 })
       .then((res) => {
         console.log(res);
         if (res?.status === 200) {
@@ -35,12 +37,14 @@ function MyFavouritePostPage() {
 
   const getFavouritePost = useCallback(async () => {
     try {
-      const res = await favouritePostServices.getFavouritePost(user._id);
+      const res = await favouritePostServices.getFavouritePost(user?._id);
       if (res.err === 0) {
-        if (selectRef.current.value === "newest") {
+        if (selectRef.current?.value === "newest") {
+          setIsLoading(false);
           const fvReverse = [...res.data].reverse();
           setFvPost(fvReverse);
         } else {
+          setIsLoading(false);
           setFvPost(res.data);
         }
       }
@@ -67,8 +71,21 @@ function MyFavouritePostPage() {
   }
 
   useEffect(() => {
+    setIsLoading(true);
     getFavouritePost();
   }, [getFavouritePost]);
+
+  if (isLoading) {
+    return (
+      <div
+        className={cx(
+          "container d-flex justify-content-center mt-5 pt-5 align-items-center"
+        )}
+      >
+        <PulseLoader color="rgb(120, 193, 243)" margin={6} size={15} />
+      </div>
+    );
+  }
 
   return (
     <div className={cx("wrap")}>

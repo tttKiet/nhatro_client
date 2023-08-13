@@ -88,6 +88,33 @@
         }
       }
 
+      .location-filter{
+        width: 280px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        color: #000;
+
+        -webkit-line-clamp: 2;
+        svg {
+          font-size: 18px;
+          color: #db5353;
+        }
+
+        .tooltip-style{
+          background-color: #FF9B9B;
+          color: white;
+          box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        }
+
+        .text-description{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+
       .price {
         .alone_price {
           color: #000;
@@ -104,5 +131,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .location-filter{
+    width: 330px !important;
   }
 }

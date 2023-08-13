@@ -231,13 +231,12 @@ function FeedbackOfBoardHouse() {
               <HiOutlineEye className="fs-l"></HiOutlineEye>
             </button>
           )}
-
-          {!canReview && (
-            <p className="m-0 mt-3 fs-m fst-italic text-danger">
-              You must rent a room of this board house to able create review
-            </p>
-          )}
         </div>
+        {!canReview && (
+          <p className="m-0 mt-3 fs-m fst-italic text-danger">
+            You must rent a room of this board house to able create review
+          </p>
+        )}
       </div>
 
       {/* Modal view all reviews */}
