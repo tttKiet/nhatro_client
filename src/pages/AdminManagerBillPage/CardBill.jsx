@@ -9,8 +9,8 @@ import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
 function CardBill({ bill, getBillOnMonth }) {
-  const [electricInput, setElectricInput] = useState("");
-  const [waterInput, setWaterInput] = useState("");
+  const [electricInput, setElectricInput] = useState(bill.electricNumber || "");
+  const [waterInput, setWaterInput] = useState(bill.waterNumber || "");
   const [load, setLoad] = useState(false);
   const regex = /[a-zA-Z]/;
 
@@ -23,7 +23,9 @@ function CardBill({ bill, getBillOnMonth }) {
       }
   }
 
-  async function handleCLickSave(billId) {
+  async function handleCLickSave(e, billId) {
+    e.preventDefault();
+    toast.clearWaitingQueue();
     try {
       const res = await billServices.saveBill({
         electric: electricInput,
@@ -72,7 +74,10 @@ function CardBill({ bill, getBillOnMonth }) {
             </span>
           </div>
           <div className={cx("collapse", "content")} id="collapseExample">
-            <div className={cx("card card-body", "ctet")}>
+            <form
+              onSubmit={(e) => handleCLickSave(e, bill._id)}
+              className={cx("card card-body", "ctet")}
+            >
               <div className="row">
                 <div className={cx("col-12", "name-price")}>Electric (kg)</div>
                 <div className="col-4">
@@ -86,7 +91,7 @@ function CardBill({ bill, getBillOnMonth }) {
                     <b>NEW:</b>
                     <input
                       type="text"
-                      placeholder={bill.electricNumber || "../"}
+                      placeholder={"../"}
                       value={electricInput}
                       onChange={(e) => changeInput("electric", e.target.value)}
                     />
@@ -106,7 +111,7 @@ function CardBill({ bill, getBillOnMonth }) {
                     <b>NEW:</b>
                     <input
                       type="text"
-                      placeholder={bill.waterNumber || "../"}
+                      placeholder={"../"}
                       value={waterInput}
                       onChange={(e) => changeInput("water", e.target.value)}
                     />
@@ -119,16 +124,12 @@ function CardBill({ bill, getBillOnMonth }) {
                   <button type="button" className={cx("checkout")}>
                     Room check out
                   </button>
-                  <button
-                    type="button"
-                    className={cx("save")}
-                    onClick={() => handleCLickSave(bill._id)}
-                  >
+                  <button type="submit" className={cx("save")}>
                     Save
                   </button>
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>

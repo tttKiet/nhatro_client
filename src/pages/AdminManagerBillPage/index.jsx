@@ -1,17 +1,19 @@
 import moment from "moment";
-import classNames from "classNames/bind";
-import styles from "./AdminManagerBillPage.module.scss";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { boardHouseServices, billServices } from "../../services";
 import { useAuth } from "../../hooks";
 import CardBill from "./CardBill";
 import MyCalendar from "./Calendar";
+import ModalCheckBill from "../../components/modal/ModalCheckBill";
 
+import classNames from "classNames/bind";
+import styles from "./AdminManagerBillPage.module.scss";
 const cx = classNames.bind(styles);
 
 function AdminManagerBillPage() {
   const [showDate, setShowDate] = useState(false);
   const [load, setLoad] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dateRef = useRef(null);
   const calendarRef = useRef(null);
   const [, , admin] = useAuth();
@@ -19,6 +21,10 @@ function AdminManagerBillPage() {
   const [allBoardHouse, setAllBoardHouse] = useState([]);
   const [bhIdSlected, setBhIdSlected] = useState("");
   const [date, setDate] = useState(new Date());
+
+  function handleCloseModal() {
+    setShowModal(false);
+  }
 
   function toggleShowDate() {
     setShowDate((s) => !s);
@@ -89,6 +95,11 @@ function AdminManagerBillPage() {
   }, []);
   return (
     <div className={cx("wrapper")}>
+      <ModalCheckBill
+        boardHouse={allBoardHouse.find((b) => b._id === bhIdSlected)}
+        show={showModal}
+        handleClose={handleCloseModal}
+      />
       <nav aria-label="breadcrumb ">
         <ol className="breadcrumb p-2 my-2">
           <li className="breadcrumb-item">
@@ -104,49 +115,72 @@ function AdminManagerBillPage() {
       {/*  Bills */}
       <div className="row mb-4">
         <div className="col-4">
-          <div className="p-2 rounded-3 border border-primary-subtle shadow border-2">
-            <p className="fs-m">Select your board house here: </p>
+          <div className={cx("func_item")}>
+            <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content flex-column algin-items-center border-2">
+              <p className="fs-m">Select your board house here: </p>
 
-            <select
-              // ref={selectRef}
-              className="form-select"
-              aria-label="Default select example"
-              defaultValue={bhIdSlected}
-              onChange={(e) => handleChangeSelect(e)}
-            >
-              {allBoardHouse &&
-                allBoardHouse.map((bh) => (
-                  <option value={bh?._id} key={bh?._id}>
-                    {bh?.name}
-                  </option>
-                ))}
-            </select>
+              <select
+                // ref={selectRef}
+                className="form-select"
+                aria-label="Default select example"
+                defaultValue={bhIdSlected}
+                onChange={(e) => handleChangeSelect(e)}
+              >
+                {allBoardHouse &&
+                  allBoardHouse.map((bh) => (
+                    <option value={bh?._id} key={bh?._id}>
+                      {bh?.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
           </div>
         </div>
         <div className="col-3">
-          <div className="rounded-3 p-2 ps-0  border border-primary-subtle shadow border-2">
-            <p className="fs-m ps-2 pb-0">Select bill viewing date: </p>
-            <div className="p-2">
-              <span
-                className={cx("date_vl")}
-                ref={dateRef}
-                onClick={toggleShowDate}
-              >
-                {moment(date).format("l")}
-              </span>
-            </div>
-            <div className={cx("date")}>
-              {showDate && (
-                <div
-                  ref={calendarRef}
-                  className={cx(
-                    "calendar",
-                    '"p-2 rounded-3 border border-primary-subtle shadow border-2'
-                  )}
+          <div className={cx("func_item")}>
+            <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex  flex-column algin-items-center border-2">
+              <p className="fs-m ps-2 pb-0">Select bill viewing date: </p>
+              <div className="p-2">
+                <span
+                  className={cx("date_vl")}
+                  ref={dateRef}
+                  onClick={toggleShowDate}
                 >
-                  <MyCalendar handleChangeDate={handleChangeDate} date={date} />
-                </div>
-              )}
+                  {moment(date).format("l")}
+                </span>
+              </div>
+              <div className={cx("date")}>
+                {showDate && (
+                  <div
+                    ref={calendarRef}
+                    className={cx(
+                      "calendar",
+                      '"p-2 rounded-3 border border-primary-subtle shadow border-2'
+                    )}
+                  >
+                    <MyCalendar
+                      handleChangeDate={handleChangeDate}
+                      date={date}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-3">
+          <div className={cx("func_item")}>
+            <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content-center flex-column algin-items-center border-2">
+              <div className="ps-2">
+                <button
+                  type="button"
+                  className={cx("checkbtn")}
+                  onClick={() => setShowModal(true)}
+                >
+                  Check Bill
+                </button>
+              </div>
             </div>
           </div>
         </div>

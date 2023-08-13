@@ -19,6 +19,11 @@ const billServices = {
     });
     return res;
   },
+
+  async getillByRentId({ rentId }) {
+    const res = await axios.get(`/api/v1/bill/rent/${rentId}`);
+    return res;
+  },
 };
 
 export default billServices;

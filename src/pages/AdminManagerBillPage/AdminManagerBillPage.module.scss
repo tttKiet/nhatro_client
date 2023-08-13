@@ -6,6 +6,31 @@
     padding-top: 0;
   }
 
+  .func_item {
+    height: 110px;
+
+    .checkbtn {
+      width: 100%;
+      padding: 4px 2px;
+      background-color: transparent;
+      border-radius: 0.4rem;
+      outline: none;
+      color: #000;
+      border: 1px solid #979797;
+      transition: all 0.2s linear;
+
+      &:hover {
+        color: #000000;
+        border: 1px solid #09859e;
+      }
+
+      &:active {
+        color: #0c0a0a;
+        border: 1px solid #1aa7c3;
+      }
+    }
+  }
+
   .date_vl {
     padding: 7px 16px;
     border: 1px solid #ddd;
