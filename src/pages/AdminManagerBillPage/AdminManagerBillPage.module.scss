@@ -8,6 +8,7 @@
 
   .func_item {
     height: 110px;
+    position: relative;
 
     .checkbtn {
       width: 100%;
@@ -38,18 +39,13 @@
     height: 38px;
   }
 
-  .date {
-    position: relative;
-
-    .calendar {
-      background-color: #fff;
-      z-index: 100;
-      width: auto;
-      position: absolute;
-      top: 14px;
-      left: 0;
-      padding: 10px;
-    }
+  .calendar {
+    background-color: #fff;
+    z-index: 100;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    padding: 10px;
   }
 
   .bill-rooms {
@@ -131,14 +127,17 @@
                   }
                 }
               }
-
+              .createdAt {
+                font-size: 14px;
+                font-weight: 500;
+              }
               .actions {
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
                 gap: 8px;
                 button {
-                  padding: 4px 30px;
+                  padding: 4px 8px;
                   border: 1px solid #ddd;
 
                   border-radius: 0.4rem;

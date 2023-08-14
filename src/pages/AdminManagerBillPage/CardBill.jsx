@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BsCheck2Circle } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import classNames from "classNames/bind";
+import { Collapse } from "react-bootstrap";
 import styles from "./AdminManagerBillPage.module.scss";
 import { billServices } from "../../services";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const cx = classNames.bind(styles);
 
-function CardBill({ bill, getBillOnMonth }) {
+function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
   const [electricInput, setElectricInput] = useState(bill.electricNumber || "");
   const [waterInput, setWaterInput] = useState(bill.waterNumber || "");
   const [load, setLoad] = useState(false);
   const regex = /[a-zA-Z]/;
+  const [show, setShow] = useState(false);
+
+  function tgleshow() {
+    setShow((s) => !s);
+  }
+
+  const ref = useRef(null);
 
   function changeInput(type, value) {
     if (!regex.test(value))
@@ -25,6 +34,7 @@ function CardBill({ bill, getBillOnMonth }) {
 
   async function handleCLickSave(e, billId) {
     e.preventDefault();
+    setLoad(true);
     toast.clearWaitingQueue();
     try {
       const res = await billServices.saveBill({
@@ -43,6 +53,8 @@ function CardBill({ bill, getBillOnMonth }) {
     } catch (e) {
       console.log(e);
       toast.error(e.message || "Failed! Please try again!!!");
+    } finally {
+      setLoad(false);
     }
   }
 
@@ -53,10 +65,9 @@ function CardBill({ bill, getBillOnMonth }) {
           <div className="d-flex justify-content-between align-items-center">
             <button
               type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseExample"
-              aria-expanded="false"
-              aria-controls="collapseExample"
+              onClick={tgleshow}
+              aria-controls="example-collapse-text"
+              aria-expanded={show}
             >
               Room {bill?.rent?.room?.number} -
               <span className="hight-pink ms-2">
@@ -73,64 +84,83 @@ function CardBill({ bill, getBillOnMonth }) {
               )}
             </span>
           </div>
-          <div className={cx("collapse", "content")} id="collapseExample">
-            <form
-              onSubmit={(e) => handleCLickSave(e, bill._id)}
-              className={cx("card card-body", "ctet")}
-            >
-              <div className="row">
-                <div className={cx("col-12", "name-price")}>Electric (kg)</div>
-                <div className="col-4">
-                  <div className={cx("gr")}>
-                    <b>OLD:</b>
-                    <span>{bill.oldElectricNumber}</span>
+          <Collapse in={show}>
+            <div className={cx("content")}>
+              <form
+                onSubmit={(e) => handleCLickSave(e, bill._id)}
+                className={cx("card card-body", "ctet")}
+              >
+                <div className="row">
+                  <div className={cx("col-12", "name-price")}>
+                    Electric (kw)
+                  </div>
+                  <div className="col-md-4 col-12">
+                    <div className={cx("gr")}>
+                      <b>OLD:</b>
+                      <span>{bill.oldElectricNumber}</span>
+                    </div>
+                  </div>
+                  <div className="col-md-4 col-12">
+                    <div className={cx("gr")}>
+                      <b>NEW:</b>
+                      <input
+                        type="text"
+                        placeholder={"../"}
+                        value={electricInput}
+                        onChange={(e) =>
+                          changeInput("electric", e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="col-4">
-                  <div className={cx("gr")}>
-                    <b>NEW:</b>
-                    <input
-                      type="text"
-                      placeholder={"../"}
-                      value={electricInput}
-                      onChange={(e) => changeInput("electric", e.target.value)}
-                    />
+                <div className="row mt-2">
+                  <div className={cx("col-12", "name-price")}>Water (m2)</div>
+                  <div className="col-md-4 col-12">
+                    <div className={cx("gr")}>
+                      <b>OLD:</b>
+                      <span>{bill.oldWaterNumber}</span>
+                    </div>
+                  </div>
+                  <div className="col-md-4 col-12">
+                    <div className={cx("gr")}>
+                      <b>NEW:</b>
+                      <input
+                        type="text"
+                        placeholder={"../"}
+                        value={waterInput}
+                        onChange={(e) => changeInput("water", e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="row mt-2">
-                <div className={cx("col-12", "name-price")}>Water (m2)</div>
-                <div className="col-4">
-                  <div className={cx("gr")}>
-                    <b>OLD:</b>
-                    <span>{bill.oldWaterNumber}</span>
-                  </div>
-                </div>
-                <div className="col-4">
-                  <div className={cx("gr")}>
-                    <b>NEW:</b>
-                    <input
-                      type="text"
-                      placeholder={"../"}
-                      value={waterInput}
-                      onChange={(e) => changeInput("water", e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
 
-              <div className="row">
-                <div className={cx("actions")}>
-                  <button type="button" className={cx("checkout")}>
-                    Room check out
-                  </button>
-                  <button type="submit" className={cx("save")}>
-                    Save
-                  </button>
+                <div className="row">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <span className={cx("createdAt")}>
+                      On | {moment(bill.createdAt).format("l")}
+                    </span>
+                    <div className={cx("actions")}>
+                      <button
+                        type="button"
+                        className={cx("checkout")}
+                        onClick={() => handleCheckOut()}
+                      >
+                        Check out
+                      </button>
+                      <button
+                        type="submit"
+                        className={cx("save")}
+                        disabled={load}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </form>
-          </div>
+              </form>
+            </div>
+          </Collapse>
         </div>
       </div>
     </div>

@@ -5,9 +5,49 @@ import { MdClose } from "react-icons/md";
 
 const cx = classNames.bind(styles);
 import moment from "moment";
+import { billServices } from "../../../services";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-function CardBill({ bill }) {
-  console.log(bill);
+function CardBill({ bill, getBills, rentId, bhId, getBillOnMonth, setDate }) {
+  const [load, setLoad] = useState(false);
+
+  async function handleToggleStt(stt) {
+    if (load) return;
+    setLoad(true);
+    toast.clearWaitingQueue();
+    const id = toast.loading("Saving ... !");
+    try {
+      const res = await billServices.editStatus({
+        billId: bill._id,
+        status: stt == 1 ? 0 : 1,
+      });
+
+      if (res.status === 200 && res.data.err === 0) {
+        toast.update(id, {
+          render: "Changes saved!!!",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        getBills(rentId);
+        getBillOnMonth(new Date(), bhId);
+        setDate(new Date());
+      }
+    } catch (err) {
+      console.log(err);
+      toast.update(id, {
+        render: err?.response?.data?.message || "Error!!",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    } finally {
+      setLoad(false);
+      toast.clearWaitingQueue();
+    }
+  }
+
   return (
     <div className={cx("card__item")}>
       <div className={cx("card__item_header")}>
@@ -24,11 +64,13 @@ function CardBill({ bill }) {
           )}
         </div>
 
-        {bill.status == 1 ? (
-          <span className={cx("status")}>Marked as unpaid.</span>
-        ) : (
-          <span className={cx("status", "no")}>Marked as paid.</span>
-        )}
+        <div onClick={() => handleToggleStt(bill.status)}>
+          {bill.status == 1 ? (
+            <span className={cx("status")}>Marked as unpaid.</span>
+          ) : (
+            <span className={cx("status", "no")}>Marked as paid.</span>
+          )}
+        </div>
       </div>
       <hr />
 
@@ -39,14 +81,16 @@ function CardBill({ bill }) {
               <h5>Old electric number:</h5>
 
               <span>
-                {bill.electricNumber ? `${bill.electricNumber}kw` : "../"}
+                {bill.oldElectricNumber ? `${bill.oldElectricNumber}kw` : "../"}
               </span>
             </div>
           </div>
           <div className="col-12 col-md-4">
             <div className={cx("price")}>
-              <h5>Old electric number:</h5>
-              <span>{bill.oldElectricNumber}kw</span>
+              <h5>Electricity reading:</h5>
+              <span>
+                {bill.electricNumber ? `${bill.electricNumber}kw` : "../"}
+              </span>
             </div>
           </div>
           <div className="col-12 col-md-4">
@@ -65,13 +109,15 @@ function CardBill({ bill }) {
             <div className={cx("price")}>
               <h5>Old water number:</h5>
 
-              <span>{bill.waterNumber ? `${bill.waterNumber}kw` : "../"}</span>
+              <span>
+                {bill.oldWaterNumber ? `${bill.oldWaterNumber}kw` : "../"}
+              </span>
             </div>
           </div>
           <div className="col-12 col-md-4">
             <div className={cx("price")}>
-              <h5>Old water number:</h5>
-              <span>{bill.oldWaterNumber}kw</span>
+              <h5>Water reading:</h5>
+              <span>{bill.waterNumber ? `${bill.waterNumber}kw` : "../"}</span>
             </div>
           </div>
           <div className="col-12 col-md-4">

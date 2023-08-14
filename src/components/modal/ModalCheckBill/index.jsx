@@ -8,29 +8,35 @@ import classNames from "classNames/bind";
 import styles from "./ModalCheckBill.module.scss";
 const cx = classNames.bind(styles);
 
-function ModalCheckBill({ show, handleClose, boardHouse }) {
-  // /api/v1/board-house/all-rent/:_id?status=
-
+function ModalCheckBill({
+  show,
+  handleClose,
+  boardHouse,
+  getBillOnMonth,
+  setDate,
+}) {
   const [members, setMembers] = useState([]);
   const [bills, setBills] = useState([]);
   const [mberSlected, setMberSlected] = useState("");
 
   function handleChangeSelect(e) {
     setMberSlected(e.target.value);
+    getBills(e.target.value);
   }
 
   const getBills = useCallback(async (rentId) => {
-    billServices
-      .getillByRentId({ rentId: rentId })
-      .then((res) => {
-        console.log(res);
-        res.status === 200 &&
-          res.data.err === 0 &&
-          setBills(res?.data?.bills || []);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (rentId) {
+      billServices
+        .getillByRentId({ rentId: rentId })
+        .then((res) => {
+          res.status === 200 &&
+            res.data.err === 0 &&
+            setBills(res?.data?.bills || []);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -38,11 +44,12 @@ function ModalCheckBill({ show, handleClose, boardHouse }) {
       rentServices
         .getRentsFromBoardHouseId(boardHouse?._id, 1)
         .then((res) => {
-          console.log(res);
-          res.err === 0 &&
-            setMembers(res.data || []) &&
-            setMberSlected(res?.data?.[0] || "");
-          getBills(res?.data?.[0]._id);
+          // console.log(res);
+          res.err === 0 && setMembers(res.data || []);
+          // console.log("res?.data?.[0]", res?.data?.[0]);
+          setMberSlected(res?.data?.[0]?._id || "");
+          console.log("res", res);
+          res?.data?.[0]?._id ? getBills(res?.data?.[0]?._id) : setBills([]);
         })
         .catch((err) => {
           console.log(err);
@@ -51,7 +58,6 @@ function ModalCheckBill({ show, handleClose, boardHouse }) {
   return (
     <Modal show={show} onHide={handleClose} centered size="lg" keyboard={false}>
       <Modal.Header closeButton>
-        {console.log(boardHouse)}
         <Modal.Title>Check Bill For `{boardHouse?.name}`</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -61,22 +67,26 @@ function ModalCheckBill({ show, handleClose, boardHouse }) {
               <div className="col-6">
                 <div className={cx("func_item")}>
                   <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content flex-column algin-items-center border-2">
-                    <p className="fs-m">Choose room - name: </p>
-
-                    <select
-                      // ref={selectRef}
-                      className="form-select"
-                      aria-label="Default select example"
-                      defaultValue={mberSlected}
-                      onChange={(e) => handleChangeSelect(e)}
-                    >
-                      {members &&
-                        members.map((mb) => (
-                          <option value={mb?._id} key={mb?._id}>
-                            {mb?.room?.number} - {mb?.user?.fullName}
-                          </option>
-                        ))}
-                    </select>
+                    {members.length > 0 ? (
+                      <>
+                        <p className="fs-m">Choose room - name: </p>
+                        <select
+                          // ref={selectRef}
+                          className="form-select"
+                          aria-label="Default select example"
+                          defaultValue={mberSlected}
+                          onChange={(e) => handleChangeSelect(e)}
+                        >
+                          {members.map((mb) => (
+                            <option value={mb?._id} key={mb?._id}>
+                              {mb?.room?.number} - {mb?.user?.fullName}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    ) : (
+                      <div>You are not any member!</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -86,7 +96,15 @@ function ModalCheckBill({ show, handleClose, boardHouse }) {
               {bills.length > 0 ? (
                 <>
                   {bills.map((bill) => (
-                    <CardBill key={bill._id} bill={bill} />
+                    <CardBill
+                      setDate={setDate}
+                      bhId={boardHouse._id}
+                      getBillOnMonth={getBillOnMonth}
+                      key={bill._id}
+                      bill={bill}
+                      getBills={getBills}
+                      rentId={mberSlected}
+                    />
                   ))}
                 </>
               ) : (
