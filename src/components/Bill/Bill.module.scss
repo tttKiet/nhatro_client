@@ -1,14 +1,18 @@
 .wrap{
+
   .box{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     display: flex;
     padding: 10px 20px;
+
     // justify-content: center;
     align-items: center;
+    background-color: white;
     width: 550px;
     margin: auto;
     gap: 20px;
     border-radius: 10px;
+    z-index: 100;
 
     border-left: 6px solid #436fe9;
     .title{
@@ -17,12 +21,21 @@
       }
     }
 
+    
+
     .information{
       p{
         margin-bottom: 7px;
       }
     }
+
+    // .status{
+    //   background-color: #ebd548;
+    // }
   }
+
+
+ 
 }
 
 @media screen and (max-width: 610px) {

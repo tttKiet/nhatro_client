@@ -24,6 +24,11 @@ const billServices = {
     const res = await axios.get(`/api/v1/bill/rent/${rentId}`);
     return res;
   },
+
+  async getRoomFromBillId({ billId }) {
+    const res = await axios.get(`/api/v1/bill/${billId}/room`);
+    return res.data;
+  },
 };
 
 export default billServices;
