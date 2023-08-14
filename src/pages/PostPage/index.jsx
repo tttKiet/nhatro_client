@@ -78,7 +78,14 @@ function PostPage() {
 
               <div className={cx("banner", "d-none d-xxl-inline-block")}>
                 <div className={cx("data")}>
-                  <div className={cx("content")}>Quang cao</div>
+                  <div className={cx("content")}>
+                    * Contact with admin to working:
+                    <label>buiikiet0104@gmail.com</label>
+                  </div>
+                  <div className={cx("content")}>
+                    * Member:
+                    <label>fcthevan123@gmail.com</label>
+                  </div>
                 </div>
               </div>
               <div className={cx("posts")}>

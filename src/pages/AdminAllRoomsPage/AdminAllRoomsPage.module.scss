@@ -1,18 +1,19 @@
-.wrap{
-    margin: 20px 0;
-    .text-description{
-        width: 100px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-    .icon-action{
-        height: 25px;
-        cursor: pointer;
-        transition: all 0.15s ease-in;
-    }
-    .icon-action:hover{
-        opacity: 0.7;
-        scale: 1.2;
-    }
+.wrap {
+  margin: 20px 0;
+  margin-top: 0;
+  .text-description {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .icon-action {
+    height: 25px;
+    cursor: pointer;
+    transition: all 0.15s ease-in;
+  }
+  .icon-action:hover {
+    opacity: 0.7;
+    scale: 1.2;
+  }
 }

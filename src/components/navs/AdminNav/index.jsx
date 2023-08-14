@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "../../../hooks";
 import { TbSwitchHorizontal } from "react-icons/tb";
 import { AiOutlinePullRequest } from "react-icons/ai";
+import { RiBillLine } from "react-icons/ri";
 
 const cx = classNames.bind(styles);
 function AdminNav({ handleClose }) {
@@ -129,6 +130,14 @@ function AdminNav({ handleClose }) {
             />
           </svg>
           All Rooms
+        </Link>
+
+        <Link
+          className={cx("link", { active: url.includes("bill") })}
+          to={`/admin/${dataAdmin._id}/manager-bill`}
+        >
+          <RiBillLine className="fs-xl" />
+          Mananger bill
         </Link>
 
         <button className={cx("link", "btn")} onClick={handleSwitchUserPage}>

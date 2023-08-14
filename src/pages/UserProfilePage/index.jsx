@@ -1,13 +1,11 @@
 import NavLeft from "../../components/navs/NavLeft";
-import { Button, Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import { Container } from "react-bootstrap";
-import StarsCanvas from "../../components/StarsCanvas";
 import MyProfile from "../../components/MyProfile";
 import { useEffect, useRef, useState } from "react";
 import VerifyEmail from "../../components/VerifyEmail";
 import { useSearchParams } from "react-router-dom";
 import ReqUpOwner from "../../components/ReqUpOwner";
-import Offcanvas from "react-bootstrap/Offcanvas";
 
 // scss
 import styles from "./UserProfilePage.module.scss";

@@ -263,21 +263,21 @@ function Comment({
                   <h4 className={cx("author")}>
                     <Link className={cx("name")} to={`/user/${user?._id}`}>
                       {user?.fullName}
+                      {user?.emailVerified && <EmailVerified />}
                     </Link>
-                    {true && <EmailVerified />}
                   </h4>
 
                   {commentParent && commentParent._id !== user._id && (
                     <>
-                      <VscTriangleRight />
                       <h4 className={cx("author")}>
+                        <VscTriangleRight className="me-1" />
                         <Link
                           className={cx("name")}
                           to={`/user/${commentParent._id}`}
                         >
                           {commentParent.fullName}
+                          {true && <EmailVerified />}
                         </Link>
-                        {true && <EmailVerified />}
                       </h4>
                     </>
                   )}

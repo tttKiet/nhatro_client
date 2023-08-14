@@ -153,29 +153,31 @@
             .info {
               display: flex;
               justify-content: flex-start;
+              flex-wrap: wrap;
               align-items: center;
-              gap: 6px;
+              gap: 6px 6px;
               svg {
                 font-size: 14px;
               }
 
               .author {
                 margin-bottom: 0;
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
+
                 user-select: none;
 
                 .name {
-                  line-height: 22px;
+                  line-height: 18x;
                   font-weight: 500;
                   color: #000;
                   font-size: 14px;
                   text-decoration: none;
+                  flex-grow: 1;
+                  // flex-shrink: 0;
                 }
               }
             }
             .description {
+              margin-top: 4px;
               color: #000;
               font-size: 16px;
               line-height: 22px;

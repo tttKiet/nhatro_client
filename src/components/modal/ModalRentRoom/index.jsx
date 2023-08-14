@@ -24,8 +24,10 @@ function ModalRentRoom({
 }) {
   const [, , user] = useAuth();
   const [loadding, setLoadding] = useState(false);
+  const [checkBox, setCheckBox] = useState(false);
 
   const handleClickAgree = () => {
+    toast.clearWaitingQueue();
     setLoadding(true);
     rentServices
       .createRent({ userId: user._id, roomId: roomId, startDate })
@@ -51,7 +53,6 @@ function ModalRentRoom({
       size="lg"
       show={show}
       onHide={toggleShow}
-      backdrop="static"
       keyboard={false}
       dialogClassName={cx("wrap")}
     >
@@ -62,7 +63,7 @@ function ModalRentRoom({
       <Modal.Body>
         <div className={cx("wrapper")}>
           <div className="row">
-            <div className="col-7">
+            <div className="col-md-7 col-12">
               <div className={cx("gr")}>
                 <div className={cx("boardH-name")}>
                   <h5 className={cx("title")}>{boardHouseName}</h5>
@@ -96,24 +97,29 @@ function ModalRentRoom({
                   </div>
                 </div>
               </div>
-              <div className={cx("gr", "mt-3")}>
-                <h5 className={cx("title", "d-flex align-items-center ")}>
-                  <FormCheck
-                    inline
-                    type="checkbox"
-                    variant="secondary"
-                    className="me-1"
-                  ></FormCheck>
-                  By clicking agree, you agree to our terms.
-                </h5>
-              </div>
             </div>
-            <div className="col-5">
+            <div className="col-md-5 col-12">
               <div className={cx("gr")}>
                 <h5 className={cx("title")}>Owner:</h5>
                 <div className={cx("ctent")}>{owner?.fullName}</div>
               </div>
             </div>
+          </div>
+          <div className={cx("gr", "mt-3")}>
+            <h5 className={cx("title", "d-flex align-items-center ")}>
+              <FormCheck
+                inline
+                type="checkbox"
+                variant="secondary"
+                className="me-1"
+                checked={checkBox}
+                id="checkbox"
+                onChange={(e) => setCheckBox(e.target.checked)}
+              ></FormCheck>
+              <label htmlFor="checkbox">
+                By clicking agree, you agree to our terms.
+              </label>
+            </h5>
           </div>
         </div>
       </Modal.Body>
@@ -130,7 +136,7 @@ function ModalRentRoom({
             className={cx("btn-send")}
             type="button"
             onClick={handleClickAgree}
-            disabled={loadding}
+            disabled={loadding || !checkBox}
           >
             {loadding ? <PulseLoader size={7} color="#fff" /> : "Agree"}
           </button>

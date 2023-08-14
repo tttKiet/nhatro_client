@@ -22,22 +22,14 @@
     .show_more_cmt {
       padding-left: 20px;
       display: flex;
-      justify-content: flex-start;
+      justify-content: center;
       align-items: center;
       opacity: 0.8;
       cursor: pointer;
       font-size: 14px;
-
-      &:last-child {
-        padding-left: 8px;
-        border-left: 1px solid #ccc;
-      }
-
-      &:first-child {
-        padding-left: 8px;
-        border-radius: 2px;
-        border-left: 3px solid #3c21ee;
-      }
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 4px 16px;
 
       &:hover {
         opacity: 1;

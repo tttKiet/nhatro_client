@@ -8,4 +8,13 @@ export default defineConfig({
       include: ["**/*.jsx", "**/*.scss"],
     }),
   ],
+
+  // In production, let comment code below
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:8080",
+      },
+    },
+  },
 });
