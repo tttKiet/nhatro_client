@@ -82,7 +82,6 @@ function AdminAllRoomsPage() {
         options: room?.options,
       }))
     );
-
     setIsChanged(e.target.value);
   }
 
@@ -193,7 +192,7 @@ function AdminAllRoomsPage() {
   }, [handleGetRoom]);
 
   useEffect(() => {
-    if (dataRoom?.length > 0 && isChanged?.length == 0) {
+    if (dataRoom && dataRoom?.length > 0 && isChanged?.length == 0) {
       const filterDataRoom = dataRoom.filter(
         (item) => item.boardHouseId === boardHouse[0]?.boardHouseId
       );
@@ -278,7 +277,9 @@ function AdminAllRoomsPage() {
             className="form-select"
             aria-label="Default select example"
             defaultValue={
-              boardHouse?.length > 0 ? boardHouse[0]?.boardHouseId : ""
+              boardHouse && boardHouse?.length > 0
+                ? boardHouse[0]?.boardHouseId
+                : ""
             }
             onChange={handleSelectChange}
           >
