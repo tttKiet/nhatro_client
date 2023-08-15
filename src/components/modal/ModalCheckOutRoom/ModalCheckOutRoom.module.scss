@@ -1,0 +1,25 @@
+.wrapper {
+  .grs {
+    margin-top: 12px;
+    .gr {
+      margin-bottom: 10px;
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 12px;
+
+      .date_v {
+        margin-left: 8px;
+        color: blue;
+        font-weight: 500;
+      }
+
+      input {
+        &:checked {
+          border: none;
+        }
+      }
+    }
+  }
+}

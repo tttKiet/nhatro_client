@@ -29,6 +29,23 @@ const billServices = {
     const res = await axios.get(`/api/v1/bill/${billId}/room`);
     return res.data;
   },
+
+  async editStatus({ billId, status }) {
+    const res = await axios.post(`/api/v1/bill/toggle-status`, {
+      billId,
+      status,
+    });
+    return res;
+  },
+
+  async checkOut({ billId, rentId, date }) {
+    const res = await axios.post(`/api/v1/bill/check-out`, {
+      billId,
+      rentId,
+      date,
+    });
+    return res;
+  },
 };
 
 export default billServices;

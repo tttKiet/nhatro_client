@@ -8,12 +8,20 @@ import ModalCheckBill from "../../components/modal/ModalCheckBill";
 
 import classNames from "classNames/bind";
 import styles from "./AdminManagerBillPage.module.scss";
+import ModalCheckOutRoom from "../../components/modal/ModalCheckOutRoom";
+import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 
 function AdminManagerBillPage() {
   const [showDate, setShowDate] = useState(false);
   const [load, setLoad] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [checkOutOptions, setCheckOutOptions] = useState({
+    billId: "",
+    rentId: "",
+  });
+  const [showCheckOut, setShowCheckOut] = useState(false);
+
   const dateRef = useRef(null);
   const calendarRef = useRef(null);
   const [, , admin] = useAuth();
@@ -24,6 +32,9 @@ function AdminManagerBillPage() {
 
   function handleCloseModal() {
     setShowModal(false);
+  }
+  function handleCloseModalCO() {
+    setShowCheckOut(false);
   }
 
   function toggleShowDate() {
@@ -55,7 +66,6 @@ function AdminManagerBillPage() {
 
   function handleChangeSelect(e) {
     setBhIdSlected(e.target.value);
-    getBillOnMonth(new Date(), e.target.value);
   }
 
   const getAllBoardHouseByAdminId = useCallback(async () => {
@@ -72,12 +82,39 @@ function AdminManagerBillPage() {
     }
   }, [admin._id]);
 
+  function handleCheckOut(billId, rentId) {
+    setShowCheckOut(true);
+    setCheckOutOptions(() => ({
+      rentId: rentId,
+      billId: billId,
+    }));
+  }
+  async function handleClickArgee(date) {
+    try {
+      const res = await billServices.checkOut({
+        ...checkOutOptions,
+        date: date,
+      });
+      if (res.status === 200 && res.data.err === 0) {
+        await getBillOnMonth(new Date(), bhIdSlected);
+        toast.success("OK!!!");
+        setShowCheckOut(false);
+      }
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getAllBoardHouseByAdminId();
   }, [getAllBoardHouseByAdminId]);
 
   useEffect(() => {
-    bhIdSlected && getBillOnMonth(date, bhIdSlected);
+    bhIdSlected &&
+      getBillOnMonth(date, bhIdSlected) &&
+      setBhIdSlected((p) => p);
   }, [bhIdSlected, date, getBillOnMonth]);
 
   useEffect(() => {
@@ -95,9 +132,16 @@ function AdminManagerBillPage() {
   }, []);
   return (
     <div className={cx("wrapper")}>
+      <ModalCheckOutRoom
+        handleClickArgee={handleClickArgee}
+        show={showCheckOut}
+        handleClose={handleCloseModalCO}
+      />
       <ModalCheckBill
         boardHouse={allBoardHouse.find((b) => b._id === bhIdSlected)}
         show={showModal}
+        setDate={setDate}
+        getBillOnMonth={getBillOnMonth}
         handleClose={handleCloseModal}
       />
       <nav aria-label="breadcrumb ">
@@ -113,8 +157,8 @@ function AdminManagerBillPage() {
       <h4 className={cx("title")}>BILL</h4>
 
       {/*  Bills */}
-      <div className="row mb-4">
-        <div className="col-4">
+      <div className="row g-3 mb-4">
+        <div className="col-12 col-sm-12 col-md-4">
           <div className={cx("func_item")}>
             <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content flex-column algin-items-center border-2">
               <p className="fs-m">Select your board house here: </p>
@@ -136,7 +180,7 @@ function AdminManagerBillPage() {
             </div>
           </div>
         </div>
-        <div className="col-3">
+        <div className="col-12 col-sm-6 col-md-3">
           <div className={cx("func_item")}>
             <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex  flex-column algin-items-center border-2">
               <p className="fs-m ps-2 pb-0">Select bill viewing date: </p>
@@ -149,27 +193,22 @@ function AdminManagerBillPage() {
                   {moment(date).format("l")}
                 </span>
               </div>
-              <div className={cx("date")}>
-                {showDate && (
-                  <div
-                    ref={calendarRef}
-                    className={cx(
-                      "calendar",
-                      '"p-2 rounded-3 border border-primary-subtle shadow border-2'
-                    )}
-                  >
-                    <MyCalendar
-                      handleChangeDate={handleChangeDate}
-                      date={date}
-                    />
-                  </div>
-                )}
-              </div>
+              {showDate && (
+                <div
+                  ref={calendarRef}
+                  className={cx(
+                    "calendar",
+                    "p-2 rounded-3 border border-primary-subtle shadow border-2"
+                  )}
+                >
+                  <MyCalendar handleChangeDate={handleChangeDate} date={date} />
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="col-3">
+        <div className="col-12 col-sm-6 col-md-3">
           <div className={cx("func_item")}>
             <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content-center flex-column algin-items-center border-2">
               <div className="ps-2">
@@ -190,9 +229,11 @@ function AdminManagerBillPage() {
           <>
             {billOnMonths.map((bill) => (
               <CardBill
+                setBhIdSlected={setBhIdSlected}
                 getBillOnMonth={() => getBillOnMonth(date, bhIdSlected)}
                 key={bill._id}
                 bill={bill}
+                handleCheckOut={() => handleCheckOut(bill._id, bill.rent._id)}
               />
             ))}
           </>
