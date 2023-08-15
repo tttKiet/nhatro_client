@@ -64,7 +64,7 @@ function ModalCheckBill({
         <div className={cx("wrapper")}>
           <div className={cx("body")}>
             <div className="row">
-              <div className="col-6">
+              <div className="col-md-6 col-12">
                 <div className={cx("func_item")}>
                   <div className="h-100 p-2 rounded-3 border border-primary-subtle shadow d-flex justify-content flex-column algin-items-center border-2">
                     {members.length > 0 ? (

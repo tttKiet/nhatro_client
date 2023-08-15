@@ -48,9 +48,9 @@ function AdminManagerBillPage() {
         month: month,
         boardHouseId: boardHouseId,
       });
-
+      console.log("res", res);
       if (res.status === 200 && res.data.err === 0) {
-        setBillOnMonths(res.data.data);
+        setBillOnMonths(res.data.data.filter((e) => e != null));
       }
     } catch (e) {
       console.log(e);
@@ -231,14 +231,14 @@ function AdminManagerBillPage() {
               <CardBill
                 setBhIdSlected={setBhIdSlected}
                 getBillOnMonth={() => getBillOnMonth(date, bhIdSlected)}
-                key={bill._id}
+                key={bill?._id}
                 bill={bill}
                 handleCheckOut={() => handleCheckOut(bill._id, bill.rent._id)}
               />
             ))}
           </>
         ) : (
-          <p>Yout are not any member!!!</p>
+          <p>Yout are not any bill!!!</p>
         )}
       </div>
     </div>
