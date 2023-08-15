@@ -8,11 +8,11 @@
 
   .responsive-nav {
     display: none;
-   
   }
 
   .child {
     background-color: #fcfcfc;
+    min-height: 100vh;
     flex: 1;
     padding: 40px 20px 20px 20px;
     margin-left: 0;
@@ -20,14 +20,13 @@
   }
 }
 
-
 @media screen and (max-width: 1050px) {
-  .wrap{
+  .wrap {
     display: block;
     position: relative;
     padding-top: 10px;
-    
-    .nav{
+
+    .nav {
       display: none;
     }
     // position: relative;
@@ -42,7 +41,7 @@
     //   border-radius: 0 10px 10px 0;
     //   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     //  }
-    .responsive-nav{
+    .responsive-nav {
       position: fixed;
       z-index: 1000;
       display: block;
@@ -50,30 +49,24 @@
       width: 100%;
       background-color: white;
       box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-     
-      
-      
-      .icon-wrap{
+
+      .icon-wrap {
         display: block;
         padding: 10px 20px;
-       .icon-menu{
-        font-size: 28px;
-        cursor: pointer;
-        transition: all 0.3s ease-in;
-        &:hover{
-          opacity: 0.7;
+        .icon-menu {
+          font-size: 28px;
+          cursor: pointer;
+          transition: all 0.3s ease-in;
+          &:hover {
+            opacity: 0.7;
+          }
         }
-       }
       }
-
-     
     }
   }
-  
 }
 
-
- @keyframes fade-in-left {
+@keyframes fade-in-left {
   0% {
     transform: translateX(-50px);
     opacity: 0;
