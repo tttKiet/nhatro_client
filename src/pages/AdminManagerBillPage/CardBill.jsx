@@ -64,7 +64,7 @@ function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
     <div className={cx("bill")} key={bill._id}>
       {/* modal detail room */}
       <ModalDetailRoom
-        show={show}
+        show={showModal}
         onHide={() => setShowModal(false)}
         data={bill.rent}
       ></ModalDetailRoom>

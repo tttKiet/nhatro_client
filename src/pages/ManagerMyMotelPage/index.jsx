@@ -5,6 +5,7 @@ import { rentServices } from "../../services";
 import classNames from "classNames/bind";
 import { useEffect, useState } from "react";
 import ModalRoomDetails from "../../components/modal/ModalRoomDetails";
+import { BsHouse } from "react-icons/bs";
 const cx = classNames.bind(styles);
 
 function ManagerMyMotelPage() {
@@ -55,7 +56,8 @@ function ManagerMyMotelPage() {
               >
                 <div className={cx("room")}>
                   <h5 className={cx("number")}>
-                    Room {rent?.room?.number} <GiSuperMushroom />
+                    Room {rent?.room?.number}{" "}
+                    <BsHouse className="fs-l mb-1 ms-1" />
                   </h5>
                   <div className="d-flex justify-content-center flex-column align-items-center g-2 mt-2">
                     <div className={cx("info")}>
@@ -66,7 +68,7 @@ function ManagerMyMotelPage() {
 
                     <div className={cx("info")}>
                       <div className={cx("item", "price")}>
-                        {rent?.room?.price}M
+                        {Number(rent?.room?.price).toLocaleString() + " VND"}
                       </div>
                     </div>
                   </div>
