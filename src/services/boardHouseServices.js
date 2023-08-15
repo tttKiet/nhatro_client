@@ -56,6 +56,10 @@ const boardHouseServices = {
     );
     return res;
   },
+  async filterBoardHouse(data) {
+    const res = await axios.post(`/api/v1/board-house/filter`, { data });
+    return res.data;
+  },
 };
 
 export default boardHouseServices;

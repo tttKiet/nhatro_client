@@ -9,6 +9,7 @@ import TableSort from "../../components/TableSort";
 import ModalCustom from "../../components/ModalCustom";
 import RoomForm from "../../components/RoomForm";
 import InfoToDelete from "../../components/InfoToDelete";
+import { ClockLoader, PulseLoader } from "react-spinners";
 
 import { Tooltip } from "react-tooltip";
 
@@ -25,6 +26,7 @@ function AdminAllRoomsPage() {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [dataRoomToEdit, setDataRoomToEdit] = useState([]);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetBoardHouseById = useCallback(async () => {
     const res = await boardHouseServices.getBoardHouseById(adminData._id);
@@ -36,14 +38,16 @@ function AdminAllRoomsPage() {
           boardHouseName: boardHouse.name,
         }))
       );
+      setIsLoading(false);
     }
   }, [adminData._id]);
 
   const handleGetRoom = useCallback(async () => {
     const res = await roomServices.getAllRoomsByAdminId(adminData._id);
-
+    setIsLoading(true);
     if (res.err === 0) {
       setDataRoom(res.data);
+      setIsLoading(false);
     }
   }, [adminData._id]);
 
@@ -78,7 +82,6 @@ function AdminAllRoomsPage() {
         options: room?.options,
       }))
     );
-
     setIsChanged(e.target.value);
   }
 
@@ -179,12 +182,17 @@ function AdminAllRoomsPage() {
   );
 
   useEffect(() => {
+    setIsLoading(true);
     handleGetBoardHouseById();
-    handleGetRoom();
-  }, [handleGetBoardHouseById, handleGetRoom]);
+  }, [handleGetBoardHouseById]);
 
   useEffect(() => {
-    if (dataRoom?.length > 0 && isChanged?.length == 0) {
+    setIsLoading(true);
+    handleGetRoom();
+  }, [handleGetRoom]);
+
+  useEffect(() => {
+    if (dataRoom && dataRoom?.length > 0 && isChanged?.length == 0) {
       const filterDataRoom = dataRoom.filter(
         (item) => item.boardHouseId === boardHouse[0]?.boardHouseId
       );
@@ -226,6 +234,19 @@ function AdminAllRoomsPage() {
     }
   }, [boardHouse, dataRoom, isChanged]);
 
+  if (isLoading) {
+    return (
+      <div
+        className={cx(
+          "container d-flex justify-content-center h-75 align-items-center"
+        )}
+        style={{ height: "90vh" }}
+      >
+        <PulseLoader color="rgb(120, 193, 243)" margin={6} size={15} />
+      </div>
+    );
+  }
+
   return (
     <div className={cx("wrap")}>
       <nav aria-label="breadcrumb">
@@ -256,7 +277,9 @@ function AdminAllRoomsPage() {
             className="form-select"
             aria-label="Default select example"
             defaultValue={
-              boardHouse?.length > 0 ? boardHouse[0]?.boardHouseId : ""
+              boardHouse && boardHouse?.length > 0
+                ? boardHouse[0]?.boardHouseId
+                : ""
             }
             onChange={handleSelectChange}
           >
@@ -271,12 +294,11 @@ function AdminAllRoomsPage() {
       </div>
 
       <div className="row mt-2">
-        {rooms && rooms.length === 0 && (
+        {rooms && rooms?.length === 0 ? (
           <p className=" mt-5 w-25 m-auto text-center rounded text-bg-primary p-2 shadow">
             You don&apos;t have any rooms, let&apos;s create it!
           </p>
-        )}
-        {rooms && rooms.length > 0 && (
+        ) : (
           <TableSort data={rooms} columns={columns}></TableSort>
         )}
       </div>

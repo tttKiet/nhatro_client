@@ -164,7 +164,9 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text text-break">{admin.address}</p>
+                  <p className="card-text text-break">
+                    {admin.address ? admin.address : "../"}
+                  </p>
                 </div>
                 <div className="info-box d-flex align-items-center mb-2">
                   <svg
@@ -183,14 +185,16 @@ function AdminProfilePage() {
                     />
                   </svg>
 
-                  <p className="card-text">{admin.phone}</p>
+                  <p className="card-text">
+                    {admin.phone ? admin.phone : "../"}
+                  </p>
                 </div>
-                <button
+                {/* <button
                   className="btn btn-primary p-1 px-2 mt-2"
                   onClick={handleShowUpdateInformation}
                 >
                   <small>Update Information</small>
-                </button>
+                </button> */}
               </div>
               <span className={cx("line-admin-profile")}></span>
             </div>

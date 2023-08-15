@@ -6,6 +6,7 @@ import { Collapse } from "react-bootstrap";
 import styles from "./AdminManagerBillPage.module.scss";
 import { billServices } from "../../services";
 import { toast } from "react-toastify";
+import ModalDetailRoom from "./ModalDetailRoom/ModalDetailRoom";
 import moment from "moment";
 
 const cx = classNames.bind(styles);
@@ -15,6 +16,7 @@ function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
   const [waterInput, setWaterInput] = useState(bill.waterNumber || "");
   const [load, setLoad] = useState(false);
   const regex = /[a-zA-Z]/;
+  const [showModal, setShowModal] = useState(false);
   const [show, setShow] = useState(false);
 
   function tgleshow() {
@@ -60,6 +62,13 @@ function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
 
   return (
     <div className={cx("bill")} key={bill._id}>
+      {/* modal detail room */}
+      <ModalDetailRoom
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        data={bill.rent}
+      ></ModalDetailRoom>
+
       <div className={cx("room")}>
         <div className={cx("pay")}>
           <div className="d-flex justify-content-between align-items-center">
@@ -75,8 +84,12 @@ function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
               </span>
             </button>
 
-            <span className={cx("price", { pay_h: bill.status == 1 })}>
-              {bill.priceSum}
+            <span
+              className={cx("price", {
+                pay_h: bill.status == 1,
+              })}
+            >
+              {Number(bill.priceSum).toLocaleString() + " VND"}
               {bill?.status == 1 ? (
                 <BsCheck2Circle color="6b38ff" />
               ) : (
@@ -84,6 +97,11 @@ function CardBill({ bill, getBillOnMonth, handleCheckOut }) {
               )}
             </span>
           </div>
+
+          <button className={cx("")} onClick={() => setShowModal(true)}>
+            View room
+          </button>
+
           <Collapse in={show}>
             <div className={cx("content")}>
               <form

@@ -40,6 +40,7 @@ const UserProfilePage = lazy(() => import("../pages/UserProfilePage"));
 const MyPostPage = lazy(() => import("../pages/MyPostPage"));
 const PostDetailsPage = lazy(() => import("../pages/PostDetailsPage"));
 const ManagerMyMotelPage = lazy(() => import("../pages/ManagerMyMotelPage"));
+const ManagerMyBillPage = lazy(() => import("../pages/ManagerMyBillPage"));
 
 const MyFavouritePostPage = lazy(() => import("../pages/MyFavouritePostPage"));
 const AnotherProfilePage = lazy(() => import("../pages/AnotherProfilePage"));
@@ -157,6 +158,12 @@ const router = [
     isProtected: true,
     layout: ManagerRoomLayout,
     element: ManagerRentRoomPage,
+  },
+  {
+    path: "/user/my-bill",
+    isProtected: true,
+    layout: ManagerRoomLayout,
+    element: ManagerMyBillPage,
   },
   {
     path: "/user/my-favourite-post",

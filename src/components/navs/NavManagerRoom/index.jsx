@@ -8,9 +8,10 @@ import { BsArrowLeftSquare } from "react-icons/bs";
 
 import { Link } from "react-router-dom";
 import { LuHotel } from "react-icons/lu";
+import { RiBillLine } from "react-icons/ri";
 
 const cx = classNames.bind(styles);
-function NavManagerRoom() {
+function NavManagerRoom({ handleClose }) {
   const navigation = useNavigate();
   const location = useLocation();
   const url = location.pathname;
@@ -51,7 +52,7 @@ function NavManagerRoom() {
           <div className={cx("control")}>
             <h5 className={cx("title")}>Control</h5>
             <ul className={cx("list")}>
-              <li>
+              <li onClick={handleClose}>
                 <Link
                   to={"/user/manager-my-room"}
                   className={cx("item", {
@@ -62,7 +63,7 @@ function NavManagerRoom() {
                   My room
                 </Link>
               </li>
-              <li>
+              <li onClick={handleClose}>
                 <Link
                   to="/user/rent-room"
                   className={cx("item", {
@@ -73,9 +74,14 @@ function NavManagerRoom() {
                   Rent room
                 </Link>
               </li>
-              <li>
-                <Link to="/motel" className={cx("item")}>
-                  <LuHotel />
+              <li onClick={handleClose}>
+                <Link
+                  to="/user/my-bill"
+                  className={cx("item", {
+                    active: url.includes("my-bill"),
+                  })}
+                >
+                  <RiBillLine />
                   Bill
                 </Link>
               </li>

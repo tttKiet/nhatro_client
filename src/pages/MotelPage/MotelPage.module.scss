@@ -1,7 +1,7 @@
 .wrap {
   .sitebar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     .doc {
       font-size: 14px;
@@ -14,22 +14,43 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 2px solid #222;
+      border: none;
       background-color: transparent;
       cursor: pointer;
       border-radius: 12px;
-      padding: 7px 16px;
+      padding: 4px 8px;
       transition: all 0.2s linear;
+      background-color: #E48586;
 
       .text {
         font-size: 14px;
         padding-left: 6px;
-        color: #000;
+        color: white;
       }
 
       &:hover {
-        background-color: rgba(210, 210, 210, 0.853);
+        background-color: #FF9B9B;
       }
+
+      svg{
+        color: white;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .sitebar {
+    display: block !important;
+    .right {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .text-title{
+      text-align: center;
+      font-size: 18px;
     }
   }
 }

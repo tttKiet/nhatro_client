@@ -2,8 +2,13 @@ import { Image } from "react-bootstrap";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { Fragment, useCallback, useEffect, useRef } from "react";
-import { HiAtSymbol, HiOutlineMail } from "react-icons/hi";
-import { MdOutlineContactless, MdOutlineContentCopy } from "react-icons/md";
+import { HiAtSymbol, HiOutlineMail, HiOutlineNewspaper } from "react-icons/hi";
+import {
+  MdOutlineContactless,
+  MdOutlineContentCopy,
+  MdOutlineWaterDrop,
+} from "react-icons/md";
+import { IoPricetagOutline } from "react-icons/io5";
 
 import { FiPhone } from "react-icons/fi";
 
@@ -26,6 +31,10 @@ import styles from "./MotelDetailsPage.module.scss";
 import classNames from "classNames/bind";
 import FeedbackOfBoardHouse from "../../components/FeedbackOfBoardHouse";
 import ModalFullScreen from "../../components/Post/ModalFullScreen";
+import { feedbackOfBoardHouseServices } from "../../services";
+import { BsLightning } from "react-icons/bs";
+import { BarLoader } from "react-spinners";
+
 const cx = classNames.bind(styles);
 
 function MotelDetailsPage() {
@@ -36,6 +45,8 @@ function MotelDetailsPage() {
   const [showFullImgRoom, setShowFullImgRoom] = useState(false);
   const chooseDateRef = useRef(null);
   const chooseRoomRef = useRef(null);
+  const [allReviews, setAllReviews] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   let [search] = useSearchParams();
 
@@ -72,15 +83,30 @@ function MotelDetailsPage() {
     boardHouseServices
       .getBoardHouseInfoById({ id })
       .then((res) => {
-        if (res.status === 200 && res?.data?.err == 0) return res.data;
+        if (res.status === 200 && res?.data?.err == 0) {
+          setIsLoading(false);
+          return res.data;
+        }
       })
       .then((data) => {
-        console.log(data);
         setBoardHouseInfo({ ...data.data });
       })
       .catch((err) => {
         console.log(err);
       });
+  }, [id]);
+
+  const getAllFeedback = useCallback(async () => {
+    try {
+      const res = await feedbackOfBoardHouseServices.getAllFeedback(id);
+      if (res.err === 0 && res.data.length > 0) {
+        setAllReviews(res.data);
+      } else {
+        setAllReviews([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }, [id]);
 
   useEffect(() => {
@@ -89,12 +115,26 @@ function MotelDetailsPage() {
   });
 
   useEffect(() => {
+    getAllFeedback();
+  }, [getAllFeedback]);
+
+  useEffect(() => {
+    setIsLoading(true);
     getBoardHouseInfo();
   }, [getBoardHouseInfo]);
+
+  if (isLoading) {
+    return (
+      <div className={cx("mt-5 pt-5")}>
+        <BarLoader color="#E48586" height={8} width={350} className="mx-auto" />
+      </div>
+    );
+  }
 
   return (
     <div className={cx("wrapper")}>
       {/* {console.log("board house info", boardHouseInfo)} */}
+
       <ModalRentRoom
         boardHouseName={boardHouseInfo?.name}
         roomNumber={boardHouseInfo?.rooms?.[currChooseRoom - 1]?.number}
@@ -137,9 +177,13 @@ function MotelDetailsPage() {
           <span className="pe-1">
             <AiFillStar />
           </span>
-          <b>4,84</b>
+          <b>
+            {boardHouseInfo?.starAndPrice?.star
+              ? boardHouseInfo?.starAndPrice?.star
+              : "5"}
+          </b>
           <span className="px-2">|</span>
-          <span>140 Evaluate</span>
+          <span>{allReviews.length} Reviews</span>
         </div>
 
         <div className={cx("images")}>
@@ -190,7 +234,7 @@ function MotelDetailsPage() {
                     <div className="d-flex justify-content-start align-items-center me-1">
                       <CiLocationOn size={24} />
                     </div>
-                    <h4 className={cx("title")}>ADDRESS</h4>
+                    <h4 className={cx("title")}>Address</h4>
                   </div>
                   <div className={cx("desc")}>
                     <span>{boardHouseInfo?.address}</span>
@@ -203,7 +247,7 @@ function MotelDetailsPage() {
                     <div className="d-flex justify-content-start align-items-center me-1">
                       <MdOutlineContactless size={24} />
                     </div>
-                    <h4 className={cx("title")}>CONTACT US</h4>
+                    <h4 className={cx("title")}>Contact us</h4>
                   </div>
                   <div
                     className={cx("desc", "ctact")}
@@ -213,7 +257,7 @@ function MotelDetailsPage() {
                     {boardHouseInfo?.phone}
                   </div>
                   <div
-                    className={cx("desc", "ctact")}
+                    className={cx("desc", "ctact", "text-break")}
                     onClick={() =>
                       handleClickCopy(boardHouseInfo?.userId?.email)
                     }
@@ -225,13 +269,16 @@ function MotelDetailsPage() {
 
                 <div className="col-12">
                   <div className="d-flex justify-content-start align-items-center ">
-                    <h4 className={cx("title")}>ELECTRIC</h4>
+                    <h4 className={cx("title")}>
+                      <BsLightning size={20} className="me-1"></BsLightning>
+                      Electric
+                    </h4>
                   </div>
                   <div className={cx("desc")}>
                     <span>
                       Tenants have to pay
                       <span className={cx("hl")}>
-                        {boardHouseInfo?.electricPrice}
+                        {Number(boardHouseInfo?.electricPrice).toLocaleString()}
                       </span>
                       VND per kilo of electricity and get unlimited use.
                     </span>
@@ -239,13 +286,19 @@ function MotelDetailsPage() {
                 </div>
                 <div className="col-12 py-4">
                   <div className="d-flex justify-content-start align-items-center ">
-                    <h4 className={cx("title")}>WATER</h4>
+                    <h4 className={cx("title")}>
+                      <MdOutlineWaterDrop
+                        size={20}
+                        className="me-1"
+                      ></MdOutlineWaterDrop>
+                      Water
+                    </h4>
                   </div>
                   <div className={cx("desc")}>
                     <span>
                       Tenants have to pay
                       <span className={cx("hl")}>
-                        {boardHouseInfo?.waterPrice}
+                        {Number(boardHouseInfo?.waterPrice).toLocaleString()}
                       </span>
                       VND per block of water
                     </span>
@@ -254,11 +307,32 @@ function MotelDetailsPage() {
 
                 <div className="col-12 ">
                   <div className="d-flex justify-content-start align-items-center ">
-                    <h4 className={cx("title")}>MIN RENT PRICE</h4>
+                    <h4 className={cx("title")}>
+                      <IoPricetagOutline
+                        size={20}
+                        className="me-1"
+                      ></IoPricetagOutline>
+                      Min - Max price
+                    </h4>
                   </div>
                   <div className={cx("desc")}>
                     <span>
-                      <span className={cx("hl")}>1.800.000vnd </span>/ room
+                      <span className={cx("hl")}>
+                        {boardHouseInfo?.starAndPrice?.minPrice
+                          ? Number(
+                              boardHouseInfo?.starAndPrice?.minPrice
+                            ).toLocaleString() + " VND"
+                          : "Coming soon..."}
+                      </span>
+                      -
+                      <span className={cx("hl")}>
+                        {boardHouseInfo?.starAndPrice?.maxPrice
+                          ? Number(
+                              boardHouseInfo?.starAndPrice?.maxPrice
+                            ).toLocaleString() + " VND"
+                          : "Coming soon..."}
+                      </span>
+                      room
                     </span>
                   </div>
                 </div>
@@ -268,17 +342,17 @@ function MotelDetailsPage() {
               <div>
                 <div className="d-flex justify-content-start align-items-center ">
                   <div className="d-flex justify-content-start align-items-center me-1">
-                    <CiMemoPad size={24} />
+                    <HiOutlineNewspaper size={20}></HiOutlineNewspaper>
                   </div>
-                  <h4 className={cx("title")}>DESCRIPTION ABOUT BOARDHOUSE</h4>
+                  <h4 className={cx("title")}>Description of motel</h4>
                 </div>
                 <div className={cx("desc")}>{boardHouseInfo?.description}</div>
               </div>
               <hr />
 
               <div className={cx("")}>
-                <div className="d-flex justify-content-start align-items-center">
-                  <h4 className={cx("title")}>ABOUT HERE</h4>
+                <div className="d-flex justify-content-start align-items-center ">
+                  <h4 className={cx("title")}>About here</h4>
                 </div>
                 <div className={cx("row g-2 my-2")}>
                   {boardHouseInfo.options &&
@@ -322,7 +396,7 @@ function MotelDetailsPage() {
                   <div className={cx("info-room-text", "mt-3", "p-4")}>
                     <div>
                       <div className="row">
-                        <div className="col-md-4 col-12">
+                        <div className="col-md-5 col-12">
                           <div className={cx("room_gr")}>
                             <h3 className={cx("title")}>Room number:</h3>
                             <b>
@@ -334,15 +408,17 @@ function MotelDetailsPage() {
                           </div>
                         </div>
 
-                        <div className="col-md-4 col-12">
+                        <div className="col-md-5 col-12">
                           <div className={cx("room_gr")}>
-                            <h3 className={cx("title")}>Price on month:</h3>
+                            <h3 className={cx("title")}>Price per month:</h3>
                             <b>
-                              {
-                                boardHouseInfo?.rooms?.[currChooseRoom - 1]
-                                  ?.price
-                              }
-                              VND
+                              {boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                                ?.price
+                                ? Number(
+                                    boardHouseInfo?.rooms?.[currChooseRoom - 1]
+                                      ?.price
+                                  ).toLocaleString() + " VND"
+                                : "Coming soon..."}
                             </b>
                           </div>
                         </div>

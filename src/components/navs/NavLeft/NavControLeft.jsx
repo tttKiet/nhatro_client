@@ -18,6 +18,7 @@ import { userServices } from "../../../services";
 import { userSlice } from "../../../redux/reducers";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../../hooks";
+import { AiOutlineHome } from "react-icons/ai";
 
 const cx = classNames.bind(styles);
 function NavControlLeft({ setActive, active, onHide }) {
@@ -50,11 +51,19 @@ function NavControlLeft({ setActive, active, onHide }) {
   return (
     <div className={cx("nav-control")}>
       <div className={cx("hi")}>
-        <Link onClick={() => navigate(-1)}>
-          <TiArrowBack />
-          Back
-        </Link>
-        <h4>Thanks you so used our services!</h4>
+        <div className={cx("back-group")}>
+          <Link onClick={() => navigate(-1)}>
+            <TiArrowBack />
+            Back
+          </Link>
+
+          <Link onClick={() => navigate("/")}>
+            <AiOutlineHome />
+            Home
+          </Link>
+        </div>
+
+        <h4>Thanks you for use our services!</h4>
       </div>
       <ul className={cx("list-menu-control")}>
         <hr />

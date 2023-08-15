@@ -25,6 +25,11 @@ const billServices = {
     return res;
   },
 
+  async getRoomFromBillId({ billId }) {
+    const res = await axios.get(`/api/v1/bill/${billId}/room`);
+    return res.data;
+  },
+
   async editStatus({ billId, status }) {
     const res = await axios.post(`/api/v1/bill/toggle-status`, {
       billId,

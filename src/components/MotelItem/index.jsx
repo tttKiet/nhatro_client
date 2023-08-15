@@ -2,12 +2,12 @@ import Carousel from "react-responsive-carousel/lib/js/components/Carousel";
 import styles from "./MotelItem.module.scss";
 import { AiFillStar } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { CiLocationArrow1 } from "react-icons/ci";
-import { MdAttachMoney, MdOutlineLocationOn } from "react-icons/md";
+import { MdAttachMoney, MdMap, MdOutlineLocationOn } from "react-icons/md";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import classNames from "classNames/bind";
 import { Image } from "react-bootstrap";
+import { Tooltip } from "react-tooltip";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +20,7 @@ function MotelItem({
   maxPrice,
   minPrice,
   star,
+  addressFilter,
   _id,
 }) {
   return (
@@ -64,6 +65,29 @@ function MotelItem({
           </div>
           <div className={cx("location", "mb-2")}>
             <MdOutlineLocationOn /> {address}
+          </div>
+          <div className={cx("location-filter", "mb-2")}>
+            <Tooltip id="my-tooltip" className={cx("tooltip-style")} />
+            <span
+              data-tooltip-id="my-tooltip"
+              data-tooltip-content={
+                addressFilter?.ward?.label +
+                " - " +
+                addressFilter?.district?.label +
+                " - " +
+                addressFilter?.province?.label
+              }
+            >
+              <div className={cx("text-description")}>
+                {" "}
+                <MdMap />{" "}
+                {addressFilter?.ward?.label +
+                  " - " +
+                  addressFilter?.district?.label +
+                  " - " +
+                  addressFilter?.province?.label}
+              </div>
+            </span>
           </div>
           <div className={cx("price", "mb-2", "pt-1")}>
             <h4 className={cx("alone_price")}>

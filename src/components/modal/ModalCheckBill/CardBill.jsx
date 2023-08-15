@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import classNames from "classNames/bind";
 import styles from "./ModalCheckBill.module.scss";
 import { BsCheck2All } from "react-icons/bs";
@@ -5,8 +6,9 @@ import { MdClose } from "react-icons/md";
 
 const cx = classNames.bind(styles);
 import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
 import { billServices } from "../../../services";
-import { useState } from "react";
+import ModalDetailBill from "./ModalDetailBill/ModalDetalBill";
 import { toast } from "react-toastify";
 
 function CardBill({ bill, getBills, rentId, bhId, getBillOnMonth, setDate }) {
@@ -48,8 +50,32 @@ function CardBill({ bill, getBills, rentId, bhId, getBillOnMonth, setDate }) {
     }
   }
 
+  const [show, setShow] = useState(false);
+  const [data, setData] = useState([]);
+
+  const getInfoRoom = useCallback(async () => {
+    try {
+      const res = await billServices.getRoomFromBillId({ billId: bill._id });
+      if (res.err === 0) {
+        setData(res.data[0]);
+      } else {
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [bill._id]);
+
+  useEffect(() => {
+    getInfoRoom();
+  }, [getInfoRoom]);
   return (
     <div className={cx("card__item")}>
+      <ModalDetailBill
+        data={data}
+        show={show}
+        onHide={() => setShow(false)}
+      ></ModalDetailBill>
       <div className={cx("card__item_header")}>
         <div className={cx("createdAt")}>
           {moment(bill.createdAt).format("l")} | status
@@ -72,6 +98,7 @@ function CardBill({ bill, getBills, rentId, bhId, getBillOnMonth, setDate }) {
           )}
         </div>
       </div>
+
       <hr />
 
       <div className={cx("card__item_body")}>
@@ -136,8 +163,17 @@ function CardBill({ bill, getBills, rentId, bhId, getBillOnMonth, setDate }) {
           <div className="col-12">
             <div className="price">
               <div className={cx("title")}>Total have much pay:</div>
-              <div className={cx("total")}>{bill.priceSum} vnd</div>
+              <div className={cx("total")}>
+                {Number(bill?.priceSum).toLocaleString()} VND
+              </div>
             </div>
+            <button
+              style={{ background: "#749BC2" }}
+              className="float-end border-0 py-1 text-white px-2 rounded"
+              onClick={() => setShow(true)}
+            >
+              View detail
+            </button>
           </div>
         </div>
       </div>

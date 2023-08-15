@@ -14,6 +14,7 @@ export { default as MotelPage } from "./MotelPage";
 export { default as MotelDetailsPage } from "./MotelDetailsPage";
 export { default as ManagerMyMotelPage } from "./ManagerMyMotelPage";
 export { default as ManagerRentRoomPage } from "./ManagerRentRoomPage";
+export { default as ManagerMyBillPage } from "./ManagerMyBillPage";
 
 // Root pages
 export { default as RootAccount } from "./RootAccount";
