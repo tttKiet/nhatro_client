@@ -276,7 +276,7 @@ function Comment({
                           to={`/user/${commentParent._id}`}
                         >
                           {commentParent.fullName}
-                          {true && <EmailVerified />}
+                          {commentParent?.emailVerified && <EmailVerified />}
                         </Link>
                       </h4>
                     </>

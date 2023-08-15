@@ -494,7 +494,7 @@ function MotelDetailsPage() {
                           <div className={cx("desc")}>
                             <span>
                               Start moving in on the
-                              <span className={cx("hl")}>22/4/2022</span>.
+                              <span className={cx("hl")}>Coming soon...</span>.
                             </span>
                           </div>
                         </div>
@@ -529,10 +529,16 @@ function MotelDetailsPage() {
                 <div className={cx("gr")}>
                   <h4 className={cx("title", "mb-4")}>Renting an apartment</h4>
                   <div className={cx("feedback")}>
-                    <AiFillStar size={18} />
-                    <b className="ps-1">4,84</b>
+                    <span className="pe-1">
+                      <AiFillStar />
+                    </span>
+                    <b>
+                      {boardHouseInfo?.starAndPrice?.star
+                        ? boardHouseInfo?.starAndPrice?.star
+                        : "5"}
+                    </b>
                     <span className="px-2">|</span>
-                    <span>140 Evaluate</span>
+                    <span>{allReviews.length} Reviews</span>
                   </div>
                 </div>
 
@@ -574,9 +580,10 @@ function MotelDetailsPage() {
                     onClick={() => windowScrollToElement(chooseRoomRef)}
                   >
                     <div className="d-flex align-items-center">
-                      <CiDollar size={22} />
                       <b>
-                        {boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price}
+                        {Number(
+                          boardHouseInfo?.rooms?.[currChooseRoom - 1]?.price
+                        ).toLocaleString() + " vnd"}
                       </b>
                     </div>
                   </div>

@@ -92,7 +92,7 @@ function ModalRentRoom({
                 <h5 className={cx("title")}>Price on month:</h5>
                 <div className={cx("ctent")}>
                   <div className="d-flex align-items-center">
-                    {roomPrice}
+                    {Number(roomPrice).toLocaleString()}
                     <CiDollar size={22} color="#000" />
                   </div>
                 </div>

@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MenuPropDown from "../../MenuDropDowns";
 import { userServices } from "../../../services";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 function UserControl() {
@@ -66,6 +67,10 @@ function UserControl() {
     });
   }
 
+  function handleCheckVersion() {
+    toast("Version v1.0. Updating...");
+  }
+
   const bodyMenuUser = useMemo(() => {
     return (
       <div className={cx("menu", "User_Control-user-menu")}>
@@ -118,6 +123,7 @@ function UserControl() {
           />
 
           <MenuItem
+            onClick={handleCheckVersion}
             title="Check version"
             svg={
               <svg
